@@ -1,2 +1,18 @@
-# Lica
-Lica es un reproductor de música, es un prototipo para probar la potencia de Rea 
+# Lica — Reproductor de Música
+
+**Lica** es un prototipo de **reproductor de música** creado para probar la potencia de React.
+
+> 🚧 Estado actual: el repositorio solo contiene esta descripción. El código de la aplicación todavía no se ha subido.
+
+## Objetivo
+
+- Reproducir música desde la biblioteca del usuario.
+- Servir de banco de pruebas para medir rendimiento y fluidez de la interfaz.
+
+## Licencia
+
+Copyright 2026 SiriusMagic
+
+Este proyecto se distribuye bajo la **Licencia Apache 2.0**. Consulta el archivo [`LICENSE`](./LICENSE) para ver el texto completo.
+
+En resumen: cualquiera puede usar, copiar, modificar y distribuir este código, siempre que conserve el aviso de copyright y la licencia. El software se entrega **"tal cual", sin garantías de ningún tipo**, y los autores no se hacen responsables de daños derivados de su uso.
