@@ -1,6 +1,13 @@
+# Solo actualizaciones de SEGURIDAD, agrupadas en un PR por carpeta.
+# open-pull-requests-limit: 0 apaga las actualizaciones de versión normales.
 version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
+    open-pull-requests-limit: 0
+    groups:
+      seguridad:
+        applies-to: security-updates
+        patterns: ["*"]
