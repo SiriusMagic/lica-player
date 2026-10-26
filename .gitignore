@@ -1,0 +1,4 @@
+# Variables de entorno (nunca subir)
+.env
+.env.*
+!.env.example
