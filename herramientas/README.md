@@ -25,4 +25,6 @@ Antes era `Copia de Untitled9.ipynb`. Cambios:
 
 > Úsala solo con música que tengas derecho a descargar.
 
+Las librerías están en [`requirements.txt`](./requirements.txt), que vigila Dependabot.
+
 El descargador anterior con `pytube` (`Untitled0.ipynb`) no se trajo: `pytube` dejó de funcionar y este cuaderno lo reemplaza.
