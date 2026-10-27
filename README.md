@@ -9,6 +9,10 @@
 - Reproducir música desde la biblioteca del usuario.
 - Servir de banco de pruebas para medir rendimiento y fluidez de la interfaz.
 
+## Herramientas
+
+La carpeta [`herramientas/`](./herramientas) reúne prototipos de apoyo: **SARAP**, un asistente que convierte frases en acciones de la app, y un cuaderno de Colab para armar una **biblioteca musical** clasificada por estado de ánimo.
+
 ## Licencia
 
 Copyright 2026 SiriusMagic
