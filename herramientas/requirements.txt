@@ -2,4 +2,4 @@
 # SARAP (sarap/sarap.py) solo usa Python estándar.
 # Dependabot avisa si alguna tiene fallos de seguridad.
 yt-dlp>=2025.10.22
-mutagen>=1.47
+mutagen>=1.48.1
