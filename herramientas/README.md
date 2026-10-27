@@ -28,3 +28,12 @@ Antes era `Copia de Untitled9.ipynb`. Cambios:
 Las librerías están en [`requirements.txt`](./requirements.txt), que vigila Dependabot.
 
 El descargador anterior con `pytube` (`Untitled0.ipynb`) no se trajo: `pytube` dejó de funcionar y este cuaderno lo reemplaza.
+
+## Pruebas
+
+```bash
+pip install pytest
+pytest -q
+```
+
+Comprueban la navegación de SARAP y que el cuaderno no tenga llaves ni resultados guardados. GitHub las ejecuta en cada cambio.
