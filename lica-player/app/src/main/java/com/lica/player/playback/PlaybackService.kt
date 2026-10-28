@@ -19,7 +19,7 @@ import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import com.lica.player.MainActivity
 import com.lica.player.data.settings.AudioProfile
-import com.lica.player.data.settings.PlaybackSettings
+import com.lica.player.data.settings.AppSettings
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +41,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class PlaybackService : MediaSessionService() {
 
-    @Inject lateinit var settings: PlaybackSettings
+    @Inject lateinit var settings: AppSettings
+    @Inject lateinit var tracker: PlayTracker
 
     private var session: MediaSession? = null
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -89,6 +90,7 @@ class PlaybackService : MediaSessionService() {
 
     override fun onDestroy() {
         scope.cancel()
+        tracker.stop()
         session?.run {
             player.release()
             release()
@@ -113,7 +115,10 @@ class PlaybackService : MediaSessionService() {
             // pause, and also while the DSP plays offloaded audio.
             .setWakeMode(C.WAKE_MODE_LOCAL)
             .build()
-            .also { applyOffload(it, profile) }
+            .also {
+                applyOffload(it, profile)
+                it.addListener(tracker) // listening history, event-driven
+            }
 
     /**
      * Swaps in a player with a different audio sink, keeping queue, position and

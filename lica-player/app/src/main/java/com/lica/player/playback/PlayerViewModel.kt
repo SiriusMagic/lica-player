@@ -9,6 +9,7 @@ import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import com.lica.player.core.media.MediaUris
 import com.lica.player.data.model.Song
+import com.lica.player.data.repository.MediaRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -32,6 +33,7 @@ import javax.inject.Inject
 class PlayerViewModel @Inject constructor(
     private val connection: PlaybackConnection,
     private val palette: PaletteCache,
+    private val repository: MediaRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PlayerUiState())
@@ -99,6 +101,15 @@ class PlayerViewModel @Inject constructor(
             controller.setMediaItems(songs.map { it.toMediaItem() }, startIndex, 0L)
             controller.prepare()
             controller.play()
+        }
+    }
+
+    /** From the daily suggestion: plays the song's whole album, starting at that song. */
+    fun playAlbumOf(songId: Long) {
+        viewModelScope.launch {
+            val album = repository.albumOf(songId)
+            val index = album.indexOfFirst { it.id == songId }
+            if (index >= 0) playSongs(album, index)
         }
     }
 

@@ -1,5 +1,10 @@
 package com.lica.player.ui.navigation
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -13,7 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -28,6 +35,7 @@ import com.lica.player.ui.player.NowPlayingBar
 import com.lica.player.ui.screens.LibraryViewModel
 import com.lica.player.ui.screens.PlaceholderScreen
 import com.lica.player.ui.screens.settings.SettingsScreen
+import com.lica.player.ui.screens.settings.SettingsViewModel
 import com.lica.player.ui.screens.songs.SongsScreen
 import com.lica.player.ui.screens.videos.VideosScreen
 
@@ -48,6 +56,8 @@ fun LicaNavHost() {
     LaunchedEffect(lifecycle) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) { library.watchWhileVisible() }
     }
+
+    RequestNotificationsOnce()
 
     val tabs = Destination.entries
     val backStack by navController.currentBackStackEntryAsState()
@@ -101,6 +111,26 @@ fun LicaNavHost() {
             composable(Destination.Settings.route) {
                 SettingsScreen()
             }
+        }
+    }
+}
+
+/**
+ * Android 13+: asks for notification access once, on first launch, for the daily
+ * suggestion. Media controls do not need it. If the user says no, it is never
+ * asked again here; Settings can still turn the suggestion on.
+ */
+@Composable
+private fun RequestNotificationsOnce() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+    val settings: SettingsViewModel = hiltViewModel()
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
+    LaunchedEffect(Unit) {
+        val granted = ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
+            PackageManager.PERMISSION_GRANTED
+        if (!granted && settings.claimNotificationPrompt()) {
+            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 }

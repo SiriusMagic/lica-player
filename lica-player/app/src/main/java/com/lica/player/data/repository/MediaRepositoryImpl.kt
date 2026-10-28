@@ -30,6 +30,11 @@ class MediaRepositoryImpl @Inject constructor(
 
     override fun songs(): Flow<List<Song>> = songDao.observeAll()
 
+    override suspend fun albumOf(songId: Long): List<Song> {
+        val albumId = songDao.byIds(listOf(songId)).firstOrNull()?.albumId ?: return emptyList()
+        return songDao.byAlbum(albumId)
+    }
+
     override fun videos(): Flow<List<Video>> = videoDao.observeAll()
 
     override fun albums(): Flow<List<Album>> = songDao.observeAlbums()

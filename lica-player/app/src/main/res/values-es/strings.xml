@@ -14,4 +14,11 @@
     <string name="profile_balanced_body">Ahorra batería con el chip de audio solo si las canciones siguen sonando una tras otra sin cortes. Recomendado.</string>
     <string name="profile_high_fidelity">Alta fidelidad</string>
     <string name="profile_high_fidelity_body">Audio con precisión completa (32 bits) para archivos de alta resolución, sin ahorro de batería. Para audiófilos.</string>
+
+    <string name="settings_advanced">Control avanzado</string>
+    <string name="setting_daily_suggestion">Recomendación diaria</string>
+    <string name="setting_daily_suggestion_body">Una vez al día, una canción de los álbumes que más escuchas. Toca la notificación para escucharla.</string>
+    <string name="suggestion_channel">Recomendación diaria</string>
+    <string name="suggestion_channel_body">Una canción al día de tus álbumes favoritos</string>
+    <string name="suggestion_text">Del álbum %1$s · Toca para escuchar</string>
 </resources>

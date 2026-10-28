@@ -1,6 +1,21 @@
 package com.lica.player.ui.screens.settings
 
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.material3.Switch
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import com.lica.player.suggestion.SuggestionScheduler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,34 +40,51 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.lica.player.R
 import com.lica.player.data.settings.AudioProfile
-import com.lica.player.data.settings.PlaybackSettings
+import com.lica.player.data.settings.AppSettings
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val settings: PlaybackSettings,
+    private val settings: AppSettings,
+    private val scheduler: SuggestionScheduler,
 ) : ViewModel() {
     val profile: StateFlow<AudioProfile> = settings.profile
+    val dailySuggestion: StateFlow<Boolean> = settings.dailySuggestion
+
     fun select(profile: AudioProfile) = settings.setProfile(profile)
+
+    /** True the first time only: the caller may show the notification prompt now. */
+    fun claimNotificationPrompt(): Boolean {
+        if (settings.notificationPermissionAsked) return false
+        settings.notificationPermissionAsked = true
+        return true
+    }
+
+    fun setDailySuggestion(enabled: Boolean) {
+        settings.setDailySuggestion(enabled)
+        scheduler.sync()
+    }
 }
 
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
     val selected by viewModel.profile.collectAsStateWithLifecycle()
+    val dailySuggestion by viewModel.dailySuggestion.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    // Turning the suggestion on without notification access: ask once, or open the
+    // system screen if Android no longer shows the prompt.
+    val askPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { ok ->
+        if (!ok) context.openNotificationSettings()
+    }
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(vertical = 8.dp),
     ) {
-        Text(
-            stringResource(R.string.settings_audio_profile),
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-        )
+        SectionTitle(R.string.settings_audio_profile)
         Column(Modifier.selectableGroup()) {
             AudioProfile.entries.forEach { profile ->
                 ProfileRow(
@@ -63,7 +95,70 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
                 )
             }
         }
+
+        SectionTitle(R.string.settings_advanced)
+        SwitchRow(
+            title = R.string.setting_daily_suggestion,
+            body = R.string.setting_daily_suggestion_body,
+            checked = dailySuggestion,
+            onChange = { on ->
+                viewModel.setDailySuggestion(on)
+                if (on && !context.notificationsAllowed()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        askPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+                    } else {
+                        context.openNotificationSettings()
+                    }
+                }
+            },
+        )
     }
+}
+
+@Composable
+private fun SectionTitle(@StringRes text: Int) {
+    Text(
+        stringResource(text),
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
+    )
+}
+
+@Composable
+private fun SwitchRow(@StringRes title: Int, @StringRes body: Int, checked: Boolean, onChange: (Boolean) -> Unit) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .toggleable(value = checked, onValueChange = onChange, role = Role.Switch)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(Modifier.weight(1f).padding(end = 16.dp)) {
+            Text(stringResource(title), style = MaterialTheme.typography.bodyLarge)
+            Text(
+                stringResource(body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Switch(checked = checked, onCheckedChange = null)
+    }
+}
+
+private fun Context.notificationsAllowed(): Boolean =
+    (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+        ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+        PackageManager.PERMISSION_GRANTED) &&
+        NotificationManagerCompat.from(this).areNotificationsEnabled()
+
+private fun Context.openNotificationSettings() {
+    val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+    } else {
+        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null))
+    }
+    runCatching { startActivity(intent) }
 }
 
 @Composable

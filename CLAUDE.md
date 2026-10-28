@@ -113,6 +113,15 @@ Release is signed with the debug key for personal testing (2.8 MB, non-debuggabl
 User test (debug build, speaker 50 %, screen off): ~4.5 %/h.
 The user has another app (sleep timer, screen-off mode, more) to merge into Lica.
 
+Daily suggestion (2026-10-28, Settings → Control avanzado, on by default): `PlayTracker` counts a
+play after 30 s or half the track (event-driven, no timers) into a separate `stats.db`
+(`StatsDatabase`, user data, NO destructive migration — write real migrations). `SuggestionPicker`
+picks the least-played song of one of the 5 most-played albums (skips last 3 days and yesterday's
+pick). Inexact non-wakeup `AlarmManager.RTC` ~18:00, re-armed on app start and by `BootReceiver`.
+Silent channel, cover as large icon (Coil, 256 px), tap plays the whole album. Skipped while music
+plays. POST_NOTIFICATIONS asked once on first launch (Android 13+).
+Owner rule: remove unused code and libraries (media3-ui and Compose tooling were removed).
+
 Not done: sleep timer (coming from the user's other app), equalizer, audio offload, shuffle/repeat UI, queue
 persistence, full-screen Now Playing, album/artist screens, video player,
 playlists/favorites/history tables.

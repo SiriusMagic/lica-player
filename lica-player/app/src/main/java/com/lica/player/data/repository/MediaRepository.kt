@@ -16,6 +16,9 @@ interface MediaRepository {
     /** Albums derived from the song cache — no extra MediaStore query. */
     fun albums(): Flow<List<Album>>
 
+    /** The album that contains [songId], in track order, or empty if the song is gone. */
+    suspend fun albumOf(songId: Long): List<Song>
+
     /** True while a scan is writing to Room. */
     val isSyncing: StateFlow<Boolean>
 

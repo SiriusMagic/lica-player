@@ -5,6 +5,8 @@ import androidx.room.Room
 import com.lica.player.data.local.db.LicaDatabase
 import com.lica.player.data.local.db.dao.SongDao
 import com.lica.player.data.local.db.dao.VideoDao
+import com.lica.player.data.stats.PlayStatsDao
+import com.lica.player.data.stats.StatsDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -29,4 +31,13 @@ object DatabaseModule {
 
     @Provides
     fun provideVideoDao(db: LicaDatabase): VideoDao = db.videoDao()
+
+    /** Listening history: user data, kept apart from the disposable library cache. No destructive migration. */
+    @Provides
+    @Singleton
+    fun provideStatsDatabase(@ApplicationContext context: Context): StatsDatabase =
+        Room.databaseBuilder(context, StatsDatabase::class.java, "stats.db").build()
+
+    @Provides
+    fun providePlayStatsDao(db: StatsDatabase): PlayStatsDao = db.playStatsDao()
 }

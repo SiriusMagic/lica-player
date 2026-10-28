@@ -15,4 +15,11 @@
     <string name="profile_balanced_body">Saves battery with the audio chip only when tracks still play back to back without gaps. Recommended.</string>
     <string name="profile_high_fidelity">High fidelity</string>
     <string name="profile_high_fidelity_body">Full-precision audio (32-bit) for hi-res files, no battery savings. For audiophiles.</string>
+
+    <string name="settings_advanced">Advanced control</string>
+    <string name="setting_daily_suggestion">Daily suggestion</string>
+    <string name="setting_daily_suggestion_body">Once a day, a song from the albums you listen to most. Tap the notification to play it.</string>
+    <string name="suggestion_channel">Daily suggestion</string>
+    <string name="suggestion_channel_body">One song a day from your favorite albums</string>
+    <string name="suggestion_text">From %1$s · Tap to play</string>
 </resources>

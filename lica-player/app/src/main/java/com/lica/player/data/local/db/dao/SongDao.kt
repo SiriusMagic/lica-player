@@ -43,4 +43,14 @@ interface SongDao {
 
     @Query("SELECT COUNT(*) FROM songs")
     suspend fun count(): Int
+
+    /** Callers pass at most 500 IDs per call. */
+    @Query("SELECT * FROM songs WHERE id IN (:ids)")
+    suspend fun byIds(ids: List<Long>): List<Song>
+
+    @Query("SELECT * FROM songs WHERE albumId = :albumId ORDER BY trackNumber, title")
+    suspend fun byAlbum(albumId: Long): List<Song>
+
+    @Query("SELECT * FROM songs ORDER BY RANDOM() LIMIT 1")
+    suspend fun random(): Song?
 }
