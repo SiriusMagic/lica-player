@@ -26,6 +26,9 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            // Personal test builds: debug key so the APK installs over the debug one.
+            // Replace with a private release key before publishing to a store.
+            signingConfig = signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",

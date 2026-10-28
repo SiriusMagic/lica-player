@@ -103,7 +103,17 @@ Done:
   placeholders, NowPlayingBar mini player with cover-color gradient
   (soft-blue fallback 0xFF1E3A5F / 0xFF2F6690).
 
-Not done: sleep timer, equalizer, audio offload, shuffle/repeat UI, queue
+Audio profiles (2026-10-28, Settings tab): `AudioProfile` LONG_LIFE / BALANCED (default) /
+HIGH_FIDELITY in `PlaybackSettings` (SharedPreferences `playback_settings`). LONG_LIFE = offload
+without gapless requirement + UI capped to the lowest refresh rate >= 60 Hz; BALANCED = offload only
+if gapless works; HIGH_FIDELITY = no offload, float output (player rebuilt via `MediaSession.setPlayer`).
+Verified in Media3 1.5.1 bytecode: the wake lock is released while sleeping for offload.
+Lowering bitrate was rejected on purpose: re-encoding costs more battery than it saves.
+Release is signed with the debug key for personal testing (2.8 MB, non-debuggable).
+User test (debug build, speaker 50 %, screen off): ~4.5 %/h.
+The user has another app (sleep timer, screen-off mode, more) to merge into Lica.
+
+Not done: sleep timer (coming from the user's other app), equalizer, audio offload, shuffle/repeat UI, queue
 persistence, full-screen Now Playing, album/artist screens, video player,
 playlists/favorites/history tables.
 
@@ -136,8 +146,7 @@ JAVA_HOME=/home/codespace/java/21.0.12+1-ms ./gradlew --no-daemon --max-workers=
   -Pkotlin.compiler.execution.strategy=in-process :app:assembleDebug
 ```
 
-"Gradle build daemon disappeared" = out of memory. `assembleRelease` (R8) still runs
-out of memory here; it would need those VS Code Gradle daemons stopped first (ask the
-user before killing them).
+"Gradle build daemon disappeared" = out of memory. `assembleRelease` (R8) works when ~5 GB are free; if VS Code's Gradle daemons are
+running and memory is short, the user allows stopping them.
 
 Nothing is committed to git yet. Commit only when the user asks.
