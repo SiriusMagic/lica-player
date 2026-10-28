@@ -122,7 +122,7 @@ Silent channel, cover as large icon (Coil, 256 px), tap plays the whole album. S
 plays. POST_NOTIFICATIONS asked once on first launch (Android 13+).
 Owner rule: remove unused code and libraries (media3-ui and Compose tooling were removed).
 
-Not done: sleep timer (coming from the user's other app), equalizer, audio offload, shuffle/repeat UI, queue
+Not done: sleep timer (coming from the user's other app), equalizer, shuffle/repeat UI, queue
 persistence, full-screen Now Playing, album/artist screens, video player,
 playlists/favorites/history tables.
 
@@ -158,4 +158,4 @@ JAVA_HOME=/home/codespace/java/21.0.12+1-ms ./gradlew --no-daemon --max-workers=
 "Gradle build daemon disappeared" = out of memory. `assembleRelease` (R8) works when ~5 GB are free; if VS Code's Gradle daemons are
 running and memory is short, the user allows stopping them.
 
-Nothing is committed to git yet. Commit only when the user asks.
+Code is on GitHub (SiriusMagic/lica-player). Work on a branch and open a PR to `main`.
