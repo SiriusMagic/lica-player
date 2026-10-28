@@ -5,3 +5,20 @@
 
 __pycache__/
 .pytest_cache/
+
+# APKs de terceros (LarkPlayer): no se redistribuyen en un repo público
+*.apk
+*.aab
+apk/
+
+# Herramienta REA: repo público aparte (github.com/INTECHNetworks/morluto-rea)
+morluto-rea/
+
+# Android / Gradle
+.gradle/
+.kotlin/
+build/
+local.properties
+.idea/
+*.iml
+.DS_Store

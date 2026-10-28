@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Lica Player</string>
+    <string name="tab_songs">Songs</string>
+    <string name="tab_videos">Videos</string>
+    <string name="tab_playlists">Playlists</string>
+    <string name="tab_settings">Settings</string>
+    <string name="perm_title">Media access needed</string>
+    <string name="perm_body">Lica Player needs access to the audio and video on your device to build your library. Nothing leaves your phone.</string>
+    <string name="perm_grant">Grant access</string>
+</resources>
