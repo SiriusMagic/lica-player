@@ -7,15 +7,27 @@ import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import androidx.media3.common.Player
+import androidx.media3.common.TrackSelectionParameters.AudioOffloadPreferences
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.Renderer
 import androidx.media3.exoplayer.RenderersFactory
+import androidx.media3.exoplayer.audio.DefaultAudioSink
 import androidx.media3.exoplayer.audio.MediaCodecAudioRenderer
 import androidx.media3.exoplayer.mediacodec.MediaCodecSelector
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
 import com.lica.player.MainActivity
+import com.lica.player.data.settings.AudioProfile
+import com.lica.player.data.settings.PlaybackSettings
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Background audio playback. Runs in the app's single process (no `:playback`
@@ -26,36 +38,39 @@ import com.lica.player.MainActivity
  * and Bluetooth/Android Auto integration from the [MediaSession] alone.
  */
 @OptIn(UnstableApi::class)
+@AndroidEntryPoint
 class PlaybackService : MediaSessionService() {
 
+    @Inject lateinit var settings: PlaybackSettings
+
     private var session: MediaSession? = null
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     override fun onCreate() {
         super.onCreate()
-        val player = ExoPlayer.Builder(this, audioOnlyRenderers(this))
-            // Music usage + automatic audio focus: pauses for calls, ducks for navigation prompts.
-            .setAudioAttributes(
-                AudioAttributes.Builder()
-                    .setUsage(C.USAGE_MEDIA)
-                    .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
-                    .build(),
-                /* handleAudioFocus = */ true,
-            )
-            // Pause when headphones are unplugged — event-driven, no polling.
-            .setHandleAudioBecomingNoisy(true)
-            // Partial wake lock only while playing; the screen can sleep. Released on pause.
-            .setWakeMode(C.WAKE_MODE_LOCAL)
-            .build()
-
+        val profile = settings.profile.value
         val openApp = PendingIntent.getActivity(
             this,
             0,
             Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
-        session = MediaSession.Builder(this, player)
+        session = MediaSession.Builder(this, buildPlayer(profile))
             .setSessionActivity(openApp)
             .build()
+
+        // Event-driven: reacts only when the user picks another profile.
+        scope.launch {
+            var current = profile
+            settings.profile.drop(1).collect { next ->
+                if (next.usesFloatOutput != current.usesFloatOutput) {
+                    rebuildPlayer(next) // the audio sink is fixed at build time
+                } else {
+                    session?.player?.let { applyOffload(it as ExoPlayer, next) }
+                }
+                current = next
+            }
+        }
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = session
@@ -73,6 +88,7 @@ class PlaybackService : MediaSessionService() {
     }
 
     override fun onDestroy() {
+        scope.cancel()
         session?.run {
             player.release()
             release()
@@ -80,6 +96,69 @@ class PlaybackService : MediaSessionService() {
         session = null
         super.onDestroy()
     }
+
+    private fun buildPlayer(profile: AudioProfile): ExoPlayer =
+        ExoPlayer.Builder(this, audioOnlyRenderers(this, profile.usesFloatOutput))
+            // Music usage + automatic audio focus: pauses for calls, ducks for navigation prompts.
+            .setAudioAttributes(
+                AudioAttributes.Builder()
+                    .setUsage(C.USAGE_MEDIA)
+                    .setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+                    .build(),
+                /* handleAudioFocus = */ true,
+            )
+            // Pause when headphones are unplugged — event-driven, no polling.
+            .setHandleAudioBecomingNoisy(true)
+            // Partial wake lock only while playing; the screen can sleep. Released on
+            // pause, and also while the DSP plays offloaded audio.
+            .setWakeMode(C.WAKE_MODE_LOCAL)
+            .build()
+            .also { applyOffload(it, profile) }
+
+    /**
+     * Swaps in a player with a different audio sink, keeping queue, position and
+     * play state. Only happens when switching to or from [AudioProfile.HIGH_FIDELITY].
+     */
+    private fun rebuildPlayer(profile: AudioProfile) {
+        val session = session ?: return
+        val old = session.player
+        val new = buildPlayer(profile)
+        if (old.mediaItemCount > 0) {
+            new.setMediaItems(
+                List(old.mediaItemCount) { old.getMediaItemAt(it) },
+                old.currentMediaItemIndex,
+                old.currentPosition,
+            )
+            new.repeatMode = old.repeatMode
+            new.shuffleModeEnabled = old.shuffleModeEnabled
+            new.playWhenReady = old.playWhenReady
+            if (old.playbackState != Player.STATE_IDLE) new.prepare()
+        }
+        session.player = new
+        old.release()
+    }
+}
+
+/**
+ * Audio offload hands decoding to the phone's audio DSP. If the device or the
+ * file format does not support it, Media3 silently plays the normal way.
+ */
+@OptIn(UnstableApi::class)
+private fun applyOffload(player: ExoPlayer, profile: AudioProfile) {
+    val offload = when (profile) {
+        AudioProfile.LONG_LIFE -> AudioOffloadPreferences.Builder()
+            .setAudioOffloadMode(AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
+            .setIsGaplessSupportRequired(false)
+            .build()
+        AudioProfile.BALANCED -> AudioOffloadPreferences.Builder()
+            .setAudioOffloadMode(AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
+            .setIsGaplessSupportRequired(true)
+            .build()
+        AudioProfile.HIGH_FIDELITY -> AudioOffloadPreferences.DEFAULT // disabled
+    }
+    player.trackSelectionParameters = player.trackSelectionParameters.buildUpon()
+        .setAudioOffloadPreferences(offload)
+        .build()
 }
 
 /**
@@ -87,11 +166,16 @@ class PlaybackService : MediaSessionService() {
  * and metadata renderers, which a music service never uses. Fewer renderers
  * means fewer objects and threads. [MediaCodecSelector.DEFAULT] picks the
  * hardware decoder first, so the CPU does almost no decoding work.
+ *
+ * [floatOutput] keeps a 32-bit float pipeline for hi-res files (high-fidelity profile).
  */
 @OptIn(UnstableApi::class)
-private fun audioOnlyRenderers(context: Context) =
+private fun audioOnlyRenderers(context: Context, floatOutput: Boolean) =
     RenderersFactory { handler, _, audioListener, _, _ ->
+        val sink = DefaultAudioSink.Builder(context)
+            .setEnableFloatOutput(floatOutput)
+            .build()
         arrayOf<Renderer>(
-            MediaCodecAudioRenderer(context, MediaCodecSelector.DEFAULT, handler, audioListener),
+            MediaCodecAudioRenderer(context, MediaCodecSelector.DEFAULT, handler, audioListener, sink),
         )
     }

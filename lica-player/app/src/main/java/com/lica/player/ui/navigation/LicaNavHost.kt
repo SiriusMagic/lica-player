@@ -27,6 +27,7 @@ import com.lica.player.playback.PlayerViewModel
 import com.lica.player.ui.player.NowPlayingBar
 import com.lica.player.ui.screens.LibraryViewModel
 import com.lica.player.ui.screens.PlaceholderScreen
+import com.lica.player.ui.screens.settings.SettingsScreen
 import com.lica.player.ui.screens.songs.SongsScreen
 import com.lica.player.ui.screens.videos.VideosScreen
 
@@ -98,10 +99,7 @@ fun LicaNavHost() {
                 )
             }
             composable(Destination.Settings.route) {
-                PlaceholderScreen(
-                    title = stringResource(Destination.Settings.labelRes),
-                    icon = Destination.Settings.icon,
-                )
+                SettingsScreen()
             }
         }
     }
