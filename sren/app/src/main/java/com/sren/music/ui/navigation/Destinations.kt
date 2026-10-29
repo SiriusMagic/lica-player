@@ -1,19 +1,17 @@
 package com.sren.music.ui.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.QueueMusic
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.MusicNote
+import androidx.compose.material.icons.filled.LibraryMusic
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Videocam
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.sren.music.R
 
-/** The top-level tabs of the app. Each maps to a route and a bottom-bar entry. */
+/** Sren's bottom tabs. Each maps to a route and a bottom-bar entry. */
 enum class Destination(val route: String, val labelRes: Int, val icon: ImageVector) {
     Home("home", R.string.tab_home, Icons.Filled.Home),
-    Songs("songs", R.string.tab_songs, Icons.Filled.MusicNote),
-    Videos("videos", R.string.tab_videos, Icons.Filled.Videocam),
-    Playlists("playlists", R.string.tab_playlists, Icons.AutoMirrored.Filled.QueueMusic),
+    Library("library", R.string.tab_library, Icons.Filled.LibraryMusic),
+    Search("search", R.string.tab_search, Icons.Filled.Search),
     Settings("settings", R.string.tab_settings, Icons.Filled.Settings),
 }

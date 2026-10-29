@@ -1,6 +1,8 @@
 package com.sren.music.data.repository
 
 import com.sren.music.data.model.Album
+import com.sren.music.data.model.Artist
+import com.sren.music.data.model.Folder
 import com.sren.music.data.model.Song
 import com.sren.music.data.model.Video
 import kotlinx.coroutines.flow.Flow
@@ -24,6 +26,19 @@ interface MediaRepository {
 
     /** The album that contains [songId], in track order, or empty if the song is gone. */
     suspend fun albumOf(songId: Long): List<Song>
+
+    fun artists(): Flow<List<Artist>>
+
+    fun folders(): Flow<List<Folder>>
+
+    fun songsOfAlbum(albumId: Long): Flow<List<Song>>
+
+    fun songsOfArtist(artist: String): Flow<List<Song>>
+
+    fun songsInFolder(folder: String): Flow<List<Song>>
+
+    /** Songs whose title, artist or album contains [text] (case-insensitive), at most 200. */
+    fun search(text: String): Flow<List<Song>>
 
     /** True while a scan is writing to Room. */
     val isSyncing: StateFlow<Boolean>

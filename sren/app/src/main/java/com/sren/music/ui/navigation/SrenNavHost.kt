@@ -44,12 +44,18 @@ import androidx.navigation.compose.rememberNavController
 import com.sren.music.playback.PlayerViewModel
 import com.sren.music.ui.player.NowPlayingBar
 import com.sren.music.ui.screens.LibraryViewModel
-import com.sren.music.ui.screens.PlaceholderScreen
 import com.sren.music.ui.screens.home.HomeScreen
 import com.sren.music.ui.screens.settings.SettingsScreen
 import com.sren.music.ui.screens.settings.SettingsViewModel
-import com.sren.music.ui.screens.songs.SongsScreen
-import com.sren.music.ui.screens.videos.VideosScreen
+import com.sren.music.ui.screens.library.CollectionKind
+import com.sren.music.ui.screens.library.CollectionScreen
+import com.sren.music.ui.screens.library.CollectionViewModel
+import com.sren.music.ui.screens.library.LibraryScreen
+import com.sren.music.ui.screens.library.SearchScreen
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import android.net.Uri
 
 /** Root scaffold: bottom bar across four tabs, each tab owns its screen. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,7 +87,10 @@ fun SrenNavHost() {
         contentWindowInsets = if (onPlayer) WindowInsets(0, 0, 0, 0) else ScaffoldDefaults.contentWindowInsets,
         topBar = {
             if (onPlayer) return@Scaffold
-            val title = tabs.firstOrNull { currentRoute?.route == it.route }?.labelRes ?: R.string.app_name
+            val title = when {
+                currentRoute?.route == COLLECTION_ROUTE -> R.string.tab_library
+                else -> tabs.firstOrNull { currentRoute?.route == it.route }?.labelRes ?: R.string.app_name
+            }
             val playerState by player.state.collectAsStateWithLifecycle()
             val syncing by library.isSyncing.collectAsStateWithLifecycle()
             SrenTopBar(
@@ -100,16 +109,12 @@ fun SrenNavHost() {
                 )
                 NavigationBar {
                     tabs.forEach { tab ->
-                        val selected = currentRoute?.hierarchy?.any { it.route == tab.route } == true
+                        // An opened album/artist/folder belongs to the Library tab.
+                        val selected = currentRoute?.hierarchy?.any { it.route == tab.route } == true ||
+                            (tab == Destination.Library && currentRoute?.route == COLLECTION_ROUTE)
                         NavigationBarItem(
                             selected = selected,
-                            onClick = {
-                                navController.navigate(tab.route) {
-                                    popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
-                            },
+                            onClick = { navController.navigateToTab(tab) },
                             icon = { Icon(tab.icon, contentDescription = null) },
                             label = { Text(stringResource(tab.labelRes)) },
                         )
@@ -130,20 +135,32 @@ fun SrenNavHost() {
                 HomeScreen(
                     onPlay = player::playSongs,
                     onPlayAlbumOf = player::playAlbumOf,
-                    onOpenLibrary = { navController.navigate(Destination.Songs.route) { launchSingleTop = true } },
+                    onOpenLibrary = { navController.navigateToTab(Destination.Library) },
                 )
             }
-            composable(Destination.Songs.route) {
-                SongsScreen(onSongClick = player::playSongs)
-            }
-            composable(Destination.Videos.route) {
-                VideosScreen()
-            }
-            composable(Destination.Playlists.route) {
-                PlaceholderScreen(
-                    title = stringResource(Destination.Playlists.labelRes),
-                    icon = Destination.Playlists.icon,
+            composable(Destination.Library.route) {
+                LibraryScreen(
+                    onPlay = player::playSongs,
+                    onShuffle = player::playShuffled,
+                    onOpen = { kind, key, title -> navController.navigate(collectionRoute(kind, key, title)) },
                 )
+            }
+            composable(
+                COLLECTION_ROUTE,
+                arguments = listOf(
+                    navArgument(CollectionViewModel.ARG_KIND) { type = NavType.StringType },
+                    navArgument(CollectionViewModel.ARG_KEY) { type = NavType.StringType },
+                    navArgument(ARG_TITLE) { type = NavType.StringType; defaultValue = "" },
+                ),
+            ) { entry ->
+                CollectionScreen(
+                    title = entry.arguments?.getString(ARG_TITLE).orEmpty(),
+                    onPlay = player::playSongs,
+                    onShuffle = player::playShuffled,
+                )
+            }
+            composable(Destination.Search.route) {
+                SearchScreen(onPlay = player::playSongs)
             }
             composable(Destination.Settings.route) {
                 SettingsScreen()
@@ -199,4 +216,18 @@ private fun SrenTopBar(title: String, nowPlaying: String?, syncing: Boolean, onR
             }
         },
     )
+}
+
+private const val ARG_TITLE = "title"
+private const val COLLECTION_ROUTE =
+    "collection/{${CollectionViewModel.ARG_KIND}}/{${CollectionViewModel.ARG_KEY}}?$ARG_TITLE={$ARG_TITLE}"
+
+private fun collectionRoute(kind: CollectionKind, key: String, title: String) =
+    "collection/${kind.name}/${Uri.encode(key)}?$ARG_TITLE=${Uri.encode(title)}"
+
+/** Switches tab keeping each tab's own back stack and scroll position. */
+private fun NavHostController.navigateToTab(tab: Destination) = navigate(tab.route) {
+    popUpTo(graph.startDestinationId) { saveState = true }
+    launchSingleTop = true
+    restoreState = true
 }

@@ -107,6 +107,18 @@ class PlayerViewModel @Inject constructor(
         }
     }
 
+    /** Plays [songs] in random order (the "Shuffle" buttons). */
+    fun playShuffled(songs: List<Song>) {
+        if (songs.isEmpty()) return
+        viewModelScope.launch {
+            val controller = connection.controller.filterNotNull().first()
+            controller.shuffleModeEnabled = true
+            controller.setMediaItems(songs.map { it.toMediaItem() }, songs.indices.random(), 0L)
+            controller.prepare()
+            controller.play()
+        }
+    }
+
     /** From the daily suggestion: plays the song's whole album, starting at that song. */
     fun playAlbumOf(songId: Long) {
         viewModelScope.launch {

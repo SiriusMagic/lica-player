@@ -22,6 +22,18 @@ class AppSettings @Inject constructor(
     private val _profile = MutableStateFlow(readProfile())
     val profile: StateFlow<AudioProfile> = _profile.asStateFlow()
 
+    private val _songSort = MutableStateFlow(
+        prefs.getString(KEY_SONG_SORT, null)
+            ?.let { name -> SongSort.entries.firstOrNull { it.name == name } }
+            ?: SongSort.DEFAULT,
+    )
+    val songSort: StateFlow<SongSort> = _songSort.asStateFlow()
+
+    fun setSongSort(sort: SongSort) {
+        prefs.edit().putString(KEY_SONG_SORT, sort.name).apply()
+        _songSort.value = sort
+    }
+
     private val _dailySuggestion = MutableStateFlow(prefs.getBoolean(KEY_DAILY_SUGGESTION, true))
     val dailySuggestion: StateFlow<Boolean> = _dailySuggestion.asStateFlow()
 
@@ -55,6 +67,7 @@ class AppSettings @Inject constructor(
         const val KEY_PROFILE = "audio_profile"
         const val KEY_DAILY_SUGGESTION = "daily_suggestion"
         const val KEY_LAST_SUGGESTION = "last_suggested_song"
+        const val KEY_SONG_SORT = "song_sort"
         const val KEY_NOTIF_ASKED = "notification_permission_asked"
     }
 }

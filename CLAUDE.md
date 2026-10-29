@@ -132,7 +132,10 @@ Sren merge (user's own earlier app, `sren-music/` = reference copy, not built): 
 1 Home (done), 2 full player (done: route `player`, bars hidden; queue built only while its sheet
 is open; speed != 1x requires speed-capable offload). Sleep timer = `SleepTimer` + `SleepTimerEnforcer`:
 no delay/countdown (a coroutine delay freezes while the CPU sleeps in offload); on player events it
-sets `pauseAtEndOfMediaItems` when the time runs out during the current song; UI shows the end time, 3 library search/sort/albums/artists/folders, 4 playlists (in UserDatabase; never
+sets `pauseAtEndOfMediaItems` when the time runs out during the current song; UI shows the end time. 3 Library (done): tabs Home/Library/Search/Settings; Library sub-tabs
+Songs (sort in memory with Collator, saved in AppSettings), Favorites, Folders (songs.folder from
+RELATIVE_PATH/DATA, LibraryDatabase v2), Artists, Albums, Videos; route `collection/{kind}/{key}`;
+Search = LIKE with ESCAPE '\\', debounced 250 ms. 4 playlists (in UserDatabase; never
 REPLACE on parent rows), 5 hide/trash/restore + .lrc lyrics working on Android 10+,
 6 local text-command assistant (skip the empty AI stubs), 7 delete `sren-music/` with the user's OK.
 The "Sren v0.4/v0.5" APKs the user had were repackaged LarkPlayer (com.dywx.larkplayer): never use.

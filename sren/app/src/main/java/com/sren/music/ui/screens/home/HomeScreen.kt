@@ -140,7 +140,7 @@ private fun Header(songCount: Int, onOpenLibrary: () -> Unit) {
                 AssistChip(onClick = onOpenLibrary, label = { Text(stringResource(R.string.tab_library)) })
                 AssistChip(
                     onClick = onOpenLibrary,
-                    label = { Text(pluralStringResource(R.plurals.home_song_count, songCount, songCount)) },
+                    label = { Text(pluralStringResource(R.plurals.song_count, songCount, songCount)) },
                 )
             }
         }

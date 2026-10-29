@@ -9,7 +9,7 @@ import com.sren.music.data.model.Video
 
 @Database(
     entities = [Song::class, Video::class],
-    version = 1,
+    version = 2, // v2: songs.folder. A cache: a schema change drops it and rescans.
     exportSchema = false,
 )
 abstract class LibraryDatabase : RoomDatabase() {

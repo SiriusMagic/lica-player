@@ -6,6 +6,8 @@ import com.sren.music.data.local.db.dao.VideoDao
 import com.sren.music.data.local.mediastore.LibraryStampStore
 import com.sren.music.data.local.mediastore.MediaStoreScanner
 import com.sren.music.data.model.Album
+import com.sren.music.data.model.Artist
+import com.sren.music.data.model.Folder
 import com.sren.music.data.model.Song
 import com.sren.music.data.model.Video
 import kotlinx.coroutines.CancellationException
@@ -40,6 +42,24 @@ class MediaRepositoryImpl @Inject constructor(
     override fun albums(): Flow<List<Album>> = songDao.observeAlbums()
 
     override fun songCount(): Flow<Int> = songDao.observeCount()
+
+    override fun artists(): Flow<List<Artist>> = songDao.observeArtists()
+
+    override fun folders(): Flow<List<Folder>> = songDao.observeFolders()
+
+    override fun songsOfAlbum(albumId: Long): Flow<List<Song>> = songDao.observeByAlbum(albumId)
+
+    override fun songsOfArtist(artist: String): Flow<List<Song>> = songDao.observeByArtist(artist)
+
+    override fun songsInFolder(folder: String): Flow<List<Song>> = songDao.observeByFolder(folder)
+
+    override fun search(text: String): Flow<List<Song>> {
+        val escaped = text.trim()
+            .replace("\\", "\\\\")
+            .replace("%", "\\%")
+            .replace("_", "\\_")
+        return songDao.search("%$escaped%")
+    }
 
     override fun recentlyAdded(limit: Int): Flow<List<Song>> = songDao.observeRecentlyAdded(limit)
 
