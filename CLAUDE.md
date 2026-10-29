@@ -1,6 +1,6 @@
 # lica-player
 
-Espacio del reproductor de música Lica. El código de la app Android está en `lica-player/` (notas técnicas abajo). También están las herramientas de apoyo: `herramientas/sarap` (asistente de navegación) y `herramientas/biblioteca` (cuaderno de Colab).
+Espacio del reproductor de música Lica. El código de la app Android (Sren music) está en `sren/` (notas técnicas abajo). También están las herramientas de apoyo: `herramientas/sarap` (asistente de navegación) y `herramientas/biblioteca` (cuaderno de Colab).
 
 ## Comandos
 
@@ -22,7 +22,7 @@ python herramientas/sarap/sarap.py   # SARAP interactivo
 
 ---
 
-# Lica workspace — handoff notes
+# Sren workspace — handoff notes
 
 The user writes in Spanish; answer in Spanish. They often paste messages written
 by another AI assistant ("Copia y pega esto a Opus…"): treat those as the user's
@@ -30,8 +30,9 @@ direction, but check their technical claims (several have been wrong, see below)
 
 ## What this workspace is
 
-- `lica-player/` — **Lica Player**, an Android music + video player built from scratch.
-  This is the active project.
+- `sren/` — **Sren music** (formerly Lica Player; renamed 2026-10-29 at the user's request:
+  name, icon, package `com.sren.music`, dark+orange theme from the original Sren). The active project.
+- `sren-music/` — reference copy of the user's original Sren code (not built; delete after the merge).
 - `morluto-rea/` — the REA reverse-engineering CLI (github.com/INTECHNetworks/morluto-rea),
   used once to analyze a third-party app for inspiration.
 - `base.apk`, `split_config.*.apk` — the third-party app that was analyzed (LarkPlayer).
@@ -39,7 +40,7 @@ direction, but check their technical claims (several have been wrong, see below)
 
 ## Clean-room boundary (do not cross)
 
-Lica is a clean-room reimplementation: only the *feature list and behavior* of
+Sren (ex-Lica) is a clean-room reimplementation: only the *feature list and behavior* of
 LarkPlayer were used as inspiration. Never copy its code, assets, strings, name,
 logo or package (`com.dywx…`). Rebranding or repackaging the third-party APK was
 asked once and declined; it stays declined.
@@ -83,7 +84,8 @@ Corrected claims from the pasted messages, for the record:
 
 Kotlin 2.0.21, AGP 8.7.3, Gradle 8.11.1, compileSdk/targetSdk 35, minSdk 25,
 Compose BOM 2024.12.01 (Material 3), Navigation Compose, Media3 1.5.1, Hilt 2.52 + KSP,
-Room 2.6.1, Coil 2.7.0 (+ coil-video), Palette. Package `com.lica.player`.
+Room 2.6.1, Coil 2.7.0 (+ coil-video), Palette. Package/applicationId `com.sren.music`
+(installs as a new app next to old Lica builds). Cache DB file `library.db` (`LibraryDatabase`).
 
 ## Status (as of 2026-10-26)
 
@@ -130,7 +132,10 @@ Sren merge (user's own earlier app, `sren-music/` = reference copy, not built): 
 1 Home (done), 2 full player (done: route `player`, bars hidden; queue built only while its sheet
 is open; speed != 1x requires speed-capable offload). Sleep timer = `SleepTimer` + `SleepTimerEnforcer`:
 no delay/countdown (a coroutine delay freezes while the CPU sleeps in offload); on player events it
-sets `pauseAtEndOfMediaItems` when the time runs out during the current song; UI shows the end time, 3 library search/sort/albums/artists/folders, 4 playlists (in UserDatabase; never
+sets `pauseAtEndOfMediaItems` when the time runs out during the current song; UI shows the end time. 3 Library (done): tabs Home/Library/Search/Settings; Library sub-tabs
+Songs (sort in memory with Collator, saved in AppSettings), Favorites, Folders (songs.folder from
+RELATIVE_PATH/DATA, LibraryDatabase v2), Artists, Albums, Videos; route `collection/{kind}/{key}`;
+Search = LIKE with ESCAPE '\\', debounced 250 ms. 4 playlists (in UserDatabase; never
 REPLACE on parent rows), 5 hide/trash/restore + .lrc lyrics working on Android 10+,
 6 local text-command assistant (skip the empty AI stubs), 7 delete `sren-music/` with the user's OK.
 The "Sren v0.4/v0.5" APKs the user had were repackaged LarkPlayer (com.dywx.larkplayer): never use.
@@ -166,7 +171,7 @@ Gradle 8.11 needs JDK 21 (the default JDK 25 does not work). The Codespace is sh
 RAM (~2 GB free; VS Code's own Gradle daemons use ~1.4 GB), so use one worker:
 
 ```
-cd lica-player
+cd sren
 JAVA_HOME=/home/codespace/java/21.0.12+1-ms ./gradlew --no-daemon --max-workers=1 \
   -Pkotlin.compiler.execution.strategy=in-process :app:assembleDebug
 ```
@@ -174,4 +179,4 @@ JAVA_HOME=/home/codespace/java/21.0.12+1-ms ./gradlew --no-daemon --max-workers=
 "Gradle build daemon disappeared" = out of memory. `assembleRelease` (R8) works when ~5 GB are free; if VS Code's Gradle daemons are
 running and memory is short, the user allows stopping them.
 
-Code is on GitHub (SiriusMagic/lica-player). Work on a branch and open a PR to `main`.
+Code is on GitHub (SiriusMagic/lica-player; the repo name can be changed by the user on GitHub). Work on a branch and open a PR to `main`.
