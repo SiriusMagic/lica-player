@@ -40,4 +40,24 @@
     <string name="action_unfavorite">Remove from Favorites</string>
     <string name="songs_scanning">Scanning your library…</string>
     <string name="songs_empty">No songs found on this device.</string>
+
+    <string name="player_close">Close player</string>
+    <string name="player_play">Play</string>
+    <string name="player_pause">Pause</string>
+    <string name="player_next">Next</string>
+    <string name="player_previous">Previous</string>
+    <string name="player_shuffle">Shuffle</string>
+    <string name="player_repeat">Repeat</string>
+    <string name="player_speed">Playback speed</string>
+    <string name="player_queue">Queue</string>
+    <string name="player_queue_count">Queue · %1$d songs</string>
+    <string name="player_queue_remove">Remove from queue</string>
+    <string name="timer_title">Sleep timer</string>
+    <string name="timer_body">Music stops when the song playing at that time ends, so no song is cut in half.</string>
+    <string name="timer_minutes">%1$d minutes</string>
+    <string name="timer_end_of_song">When this song ends</string>
+    <string name="timer_cancel">Turn off timer</string>
+    <string name="timer_off_short">Timer</string>
+    <string name="timer_end_of_song_short">After this song</string>
+    <string name="timer_until">Until %1$s</string>
 </resources>

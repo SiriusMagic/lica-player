@@ -127,8 +127,10 @@ favorites, recently added (LazyRows, 128 dp covers at 256 px). User data now in 
 (favorites now; playlists/hide later).
 
 Sren merge (user's own earlier app, `sren-music/` = reference copy, not built): port in phases —
-1 Home (done), 2 full player + queue + repeat/shuffle + speed + sleep timer (single delayed job,
-no ticking), 3 library search/sort/albums/artists/folders, 4 playlists (in UserDatabase; never
+1 Home (done), 2 full player (done: route `player`, bars hidden; queue built only while its sheet
+is open; speed != 1x requires speed-capable offload). Sleep timer = `SleepTimer` + `SleepTimerEnforcer`:
+no delay/countdown (a coroutine delay freezes while the CPU sleeps in offload); on player events it
+sets `pauseAtEndOfMediaItems` when the time runs out during the current song; UI shows the end time, 3 library search/sort/albums/artists/folders, 4 playlists (in UserDatabase; never
 REPLACE on parent rows), 5 hide/trash/restore + .lrc lyrics working on Android 10+,
 6 local text-command assistant (skip the empty AI stubs), 7 delete `sren-music/` with the user's OK.
 The "Sren v0.4/v0.5" APKs the user had were repackaged LarkPlayer (com.dywx.larkplayer): never use.

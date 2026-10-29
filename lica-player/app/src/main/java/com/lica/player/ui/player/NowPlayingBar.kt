@@ -3,6 +3,7 @@ package com.lica.player.ui.player
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import com.lica.player.R
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -37,7 +40,7 @@ private val SoftBlue = Color(0xFF2F6690)
 
 /** Mini player above the tab bar. Hidden until something is loaded. */
 @Composable
-fun NowPlayingBar(viewModel: PlayerViewModel, modifier: Modifier = Modifier) {
+fun NowPlayingBar(viewModel: PlayerViewModel, onOpen: () -> Unit, modifier: Modifier = Modifier) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val nowPlaying = state.nowPlaying ?: return
     val accent by viewModel.accent.collectAsStateWithLifecycle()
@@ -59,6 +62,7 @@ fun NowPlayingBar(viewModel: PlayerViewModel, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
+            .clickable(onClick = onOpen)
             .background(Brush.horizontalGradient(listOf(start, end))),
     ) {
         LinearProgressIndicator(
@@ -92,17 +96,17 @@ fun NowPlayingBar(viewModel: PlayerViewModel, modifier: Modifier = Modifier) {
                 )
             }
             IconButton(onClick = viewModel::previous) {
-                Icon(Icons.Filled.SkipPrevious, contentDescription = "Previous", tint = Color.White)
+                Icon(Icons.Filled.SkipPrevious, contentDescription = stringResource(R.string.player_previous), tint = Color.White)
             }
             IconButton(onClick = viewModel::togglePlayPause) {
                 Icon(
                     if (state.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                    contentDescription = if (state.isPlaying) "Pause" else "Play",
+                    contentDescription = stringResource(if (state.isPlaying) R.string.player_pause else R.string.player_play),
                     tint = Color.White,
                 )
             }
             IconButton(onClick = viewModel::next) {
-                Icon(Icons.Filled.SkipNext, contentDescription = "Next", tint = Color.White)
+                Icon(Icons.Filled.SkipNext, contentDescription = stringResource(R.string.player_next), tint = Color.White)
             }
         }
     }

@@ -21,7 +21,9 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
@@ -34,6 +36,7 @@ class PlayerViewModel @Inject constructor(
     private val connection: PlaybackConnection,
     private val palette: PaletteCache,
     private val repository: MediaRepository,
+    private val sleepTimer: SleepTimer,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PlayerUiState())
@@ -112,6 +115,66 @@ class PlayerViewModel @Inject constructor(
             if (index >= 0) playSongs(album, index)
         }
     }
+
+    /** Active sleep timer, or null. Shown as an end time, so no countdown ticks. */
+    val timer: StateFlow<SleepTimerState?> = sleepTimer.state
+
+    /**
+     * The play queue, built only while the queue sheet is open (it collects this
+     * flow) and rebuilt only when the queue or the current song changes.
+     */
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val queue: Flow<QueueUi> = connection.controller.filterNotNull().flatMapLatest { c ->
+        callbackFlow {
+            fun snapshot() = QueueUi(
+                items = List(c.mediaItemCount) { c.getMediaItemAt(it).toQueueItem() },
+                current = c.currentMediaItemIndex,
+            )
+            trySend(snapshot())
+            val listener = object : Player.Listener {
+                override fun onEvents(player: Player, events: Player.Events) {
+                    if (events.containsAny(Player.EVENT_TIMELINE_CHANGED, Player.EVENT_MEDIA_ITEM_TRANSITION)) {
+                        trySend(snapshot())
+                    }
+                }
+            }
+            c.addListener(listener)
+            awaitClose { c.removeListener(listener) }
+        }
+    }
+
+    fun seekTo(positionMs: Long) { attached?.seekTo(positionMs) }
+
+    fun playQueueItem(index: Int) {
+        val c = attached ?: return
+        c.seekTo(index, 0L)
+        c.play()
+    }
+
+    fun removeQueueItem(index: Int) { attached?.removeMediaItem(index) }
+
+    fun toggleShuffle() {
+        val c = attached ?: return
+        c.shuffleModeEnabled = !c.shuffleModeEnabled
+    }
+
+    /** Off → all → one → off. */
+    fun cycleRepeat() {
+        val c = attached ?: return
+        c.repeatMode = when (c.repeatMode) {
+            Player.REPEAT_MODE_OFF -> Player.REPEAT_MODE_ALL
+            Player.REPEAT_MODE_ALL -> Player.REPEAT_MODE_ONE
+            else -> Player.REPEAT_MODE_OFF
+        }
+    }
+
+    fun setSpeed(speed: Float) { attached?.setPlaybackSpeed(speed) }
+
+    fun startSleepTimer(minutes: Int) = sleepTimer.start(minutes)
+
+    fun sleepAfterCurrentSong() = sleepTimer.endOfCurrentSong()
+
+    fun cancelSleepTimer() = sleepTimer.cancel()
 
     fun togglePlayPause() {
         val c = attached ?: return

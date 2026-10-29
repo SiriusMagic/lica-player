@@ -6,6 +6,9 @@ import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.material3.ScaffoldDefaults
+import com.lica.player.ui.player.PlayerScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -63,15 +66,23 @@ fun LicaNavHost() {
     val tabs = Destination.entries
     val backStack by navController.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination
+    // The full-screen player draws edge to edge, without the app's bars.
+    val onPlayer = currentRoute?.route == PLAYER_ROUTE
 
     Scaffold(
+        contentWindowInsets = if (onPlayer) WindowInsets(0, 0, 0, 0) else ScaffoldDefaults.contentWindowInsets,
         topBar = {
+            if (onPlayer) return@Scaffold
             val title = tabs.firstOrNull { currentRoute?.route == it.route }?.labelRes
             TopAppBar(title = { Text(title?.let { stringResource(it) } ?: "Lica Player") })
         },
         bottomBar = {
+            if (onPlayer) return@Scaffold
             Column {
-                NowPlayingBar(viewModel = player)
+                NowPlayingBar(
+                    viewModel = player,
+                    onOpen = { navController.navigate(PLAYER_ROUTE) { launchSingleTop = true } },
+                )
                 NavigationBar {
                     tabs.forEach { tab ->
                         val selected = currentRoute?.hierarchy?.any { it.route == tab.route } == true
@@ -97,6 +108,9 @@ fun LicaNavHost() {
             startDestination = Destination.Home.route,
             modifier = Modifier.padding(innerPadding),
         ) {
+            composable(PLAYER_ROUTE) {
+                PlayerScreen(viewModel = player, onClose = { navController.popBackStack() })
+            }
             composable(Destination.Home.route) {
                 HomeScreen(onPlay = player::playSongs, onPlayAlbumOf = player::playAlbumOf)
             }
@@ -138,3 +152,5 @@ private fun RequestNotificationsOnce() {
         }
     }
 }
+
+private const val PLAYER_ROUTE = "player"

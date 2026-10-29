@@ -43,6 +43,18 @@ class PlaybackService : MediaSessionService() {
 
     @Inject lateinit var settings: AppSettings
     @Inject lateinit var tracker: PlayTracker
+    @Inject lateinit var sleepTimer: SleepTimer
+
+    private val timerEnforcer by lazy { SleepTimerEnforcer(sleepTimer) { session?.player as? ExoPlayer } }
+
+    /** Speed changes decide whether offload is still possible on this device. */
+    private val speedListener = object : Player.Listener {
+        override fun onEvents(player: Player, events: Player.Events) {
+            if (events.contains(Player.EVENT_PLAYBACK_PARAMETERS_CHANGED)) {
+                applyOffload(player as ExoPlayer, settings.profile.value)
+            }
+        }
+    }
 
     private var session: MediaSession? = null
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
@@ -72,6 +84,8 @@ class PlaybackService : MediaSessionService() {
                 current = next
             }
         }
+        // The user set or cancelled the sleep timer.
+        scope.launch { sleepTimer.state.collect { timerEnforcer.apply() } }
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = session
@@ -118,6 +132,8 @@ class PlaybackService : MediaSessionService() {
             .also {
                 applyOffload(it, profile)
                 it.addListener(tracker) // listening history, event-driven
+                it.addListener(timerEnforcer)
+                it.addListener(speedListener)
             }
 
     /**
@@ -136,11 +152,13 @@ class PlaybackService : MediaSessionService() {
             )
             new.repeatMode = old.repeatMode
             new.shuffleModeEnabled = old.shuffleModeEnabled
+            new.playbackParameters = old.playbackParameters
             new.playWhenReady = old.playWhenReady
             if (old.playbackState != Player.STATE_IDLE) new.prepare()
         }
         session.player = new
         old.release()
+        timerEnforcer.apply()
     }
 }
 
@@ -150,14 +168,18 @@ class PlaybackService : MediaSessionService() {
  */
 @OptIn(UnstableApi::class)
 private fun applyOffload(player: ExoPlayer, profile: AudioProfile) {
+    // At a speed other than 1x, offload only where the DSP can change speed; else normal playback.
+    val speedChanged = player.playbackParameters.speed != 1f
     val offload = when (profile) {
         AudioProfile.LONG_LIFE -> AudioOffloadPreferences.Builder()
             .setAudioOffloadMode(AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
             .setIsGaplessSupportRequired(false)
+            .setIsSpeedChangeSupportRequired(speedChanged)
             .build()
         AudioProfile.BALANCED -> AudioOffloadPreferences.Builder()
             .setAudioOffloadMode(AudioOffloadPreferences.AUDIO_OFFLOAD_MODE_ENABLED)
             .setIsGaplessSupportRequired(true)
+            .setIsSpeedChangeSupportRequired(speedChanged)
             .build()
         AudioProfile.HIGH_FIDELITY -> AudioOffloadPreferences.DEFAULT // disabled
     }

@@ -40,4 +40,24 @@
     <string name="action_unfavorite">Quitar de Favoritas</string>
     <string name="songs_scanning">Buscando tu música…</string>
     <string name="songs_empty">No se encontraron canciones en este teléfono.</string>
+
+    <string name="player_close">Cerrar reproductor</string>
+    <string name="player_play">Reproducir</string>
+    <string name="player_pause">Pausar</string>
+    <string name="player_next">Siguiente</string>
+    <string name="player_previous">Anterior</string>
+    <string name="player_shuffle">Aleatorio</string>
+    <string name="player_repeat">Repetir</string>
+    <string name="player_speed">Velocidad</string>
+    <string name="player_queue">Cola</string>
+    <string name="player_queue_count">Cola · %1$d canciones</string>
+    <string name="player_queue_remove">Quitar de la cola</string>
+    <string name="timer_title">Temporizador para dormir</string>
+    <string name="timer_body">La música se detiene al terminar la canción que suene en ese momento, así ninguna se corta a la mitad.</string>
+    <string name="timer_minutes">%1$d minutos</string>
+    <string name="timer_end_of_song">Al terminar esta canción</string>
+    <string name="timer_cancel">Apagar temporizador</string>
+    <string name="timer_off_short">Temporizador</string>
+    <string name="timer_end_of_song_short">Tras esta canción</string>
+    <string name="timer_until">Hasta las %1$s</string>
 </resources>
