@@ -1,7 +1,4 @@
 <resources>
-    <string name="tab_songs">Canciones</string>
-    <string name="tab_videos">Videos</string>
-    <string name="tab_playlists">Listas</string>
     <string name="tab_settings">Ajustes</string>
     <string name="perm_title">Se necesita acceso a tu música</string>
     <string name="perm_body">Sren music necesita acceso al audio y video de tu teléfono para crear tu biblioteca. Nada sale de tu teléfono.</string>
@@ -23,11 +20,6 @@
     <string name="suggestion_text">Del álbum %1$s · Toca para escuchar</string>
 
     <string name="tab_home">Inicio</string>
-    <plurals name="home_song_count">
-        <item quantity="one">%d canción</item>
-        <item quantity="many">%d canciones</item>
-        <item quantity="other">%d canciones</item>
-    </plurals>
     <string name="home_for_you">Para ti hoy</string>
     <string name="home_from_album">Del álbum %1$s</string>
     <string name="home_recently_played">Escuchadas recientemente</string>
@@ -63,4 +55,33 @@
     <string name="tab_library">Biblioteca</string>
     <string name="home_tagline">Tu música local primero. Sin anuncios, sin nube obligatoria y con control real sobre tus archivos.</string>
     <string name="action_rescan">Buscar música</string>
+
+    <string name="tab_search">Buscar</string>
+    <string name="library_songs">Canciones</string>
+    <string name="library_folders">Carpetas</string>
+    <string name="library_artists">Artistas</string>
+    <string name="library_albums">Álbumes</string>
+    <string name="library_videos">Videos</string>
+    <string name="library_root_folder">Almacenamiento principal</string>
+    <string name="favorites_empty">Aún no tienes favoritas. Mantén pulsada una canción para añadirla.</string>
+    <string name="action_play_all">Reproducir todo</string>
+    <string name="sort_recent">Añadidas recientemente</string>
+    <string name="sort_title">Título</string>
+    <string name="sort_artist">Artista</string>
+    <string name="sort_album">Álbum</string>
+    <string name="sort_duration">Más largas</string>
+    <string name="search_hint">Canciones, artistas o álbumes</string>
+    <string name="search_clear">Borrar</string>
+    <string name="search_empty_query">Escribe para buscar en tu música.</string>
+    <string name="search_no_results">No se encontró nada.</string>
+    <plurals name="song_count">
+        <item quantity="one">%d canción</item>
+        <item quantity="many">%d canciones</item>
+        <item quantity="other">%d canciones</item>
+    </plurals>
+    <plurals name="album_count">
+        <item quantity="one">%d álbum</item>
+        <item quantity="many">%d álbumes</item>
+        <item quantity="other">%d álbumes</item>
+    </plurals>
 </resources>

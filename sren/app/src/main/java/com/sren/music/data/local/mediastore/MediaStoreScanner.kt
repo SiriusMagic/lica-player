@@ -150,6 +150,7 @@ class MediaStoreScanner @Inject constructor(
         MediaStore.Audio.Media.SIZE,
         MediaStore.Audio.Media.DATE_ADDED,
         MediaStore.Audio.Media.TRACK,
+        FOLDER_COLUMN,
     )
 
     /**
@@ -172,6 +173,7 @@ class MediaStoreScanner @Inject constructor(
             val sizeCol = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.SIZE)
             val dateCol = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATE_ADDED)
             val trackCol = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TRACK)
+            val folderCol = cursor.getColumnIndexOrThrow(FOLDER_COLUMN)
 
             val chunk = ArrayList<Song>(CHUNK_SIZE)
             while (cursor.moveToNext()) {
@@ -187,6 +189,7 @@ class MediaStoreScanner @Inject constructor(
                     size = cursor.getLong(sizeCol),
                     dateAdded = cursor.getLong(dateCol),
                     trackNumber = cursor.getInt(trackCol),
+                    folder = folderOf(cursor.getString(folderCol)),
                 )
                 if (chunk.size >= CHUNK_SIZE) {
                     emit(chunk.toList())
@@ -244,4 +247,19 @@ class MediaStoreScanner @Inject constructor(
             if (chunk.isNotEmpty()) emit(chunk)
         }
     }.flowOn(Dispatchers.IO)
+}
+
+/**
+ * Where a file lives, read from the same query (no file access).
+ * Android 10+: RELATIVE_PATH ("Music/Rock/"). Older: the absolute path in DATA.
+ */
+@Suppress("DEPRECATION") // DATA is the only option below Android 10
+private val FOLDER_COLUMN: String =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.MediaColumns.RELATIVE_PATH else MediaStore.MediaColumns.DATA
+
+/** "Music/Rock/" or "/storage/emulated/0/Music/Rock/song.mp3" → "Music/Rock". */
+private fun folderOf(raw: String?): String {
+    if (raw.isNullOrEmpty()) return ""
+    val dir = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) raw else raw.substringBeforeLast('/')
+    return dir.substringAfter("/emulated/0/", dir).trim('/')
 }

@@ -21,4 +21,5 @@ data class Song(
     val size: Long,             // Bytes
     val dateAdded: Long,        // Unix timestamp (for "Recently added" sort)
     val trackNumber: Int = 0,
+    val folder: String = "", // Folder relative to storage, e.g. "Music/Rock"
 )
