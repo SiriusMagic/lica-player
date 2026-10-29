@@ -1,13 +1,16 @@
-# Lica — Reproductor de Música
+# Sren music — Reproductor de música
 
-**Lica** es un prototipo de **reproductor de música** creado para probar la potencia de React.
+**Sren music** es un reproductor de música y video para Android, sin anuncios, pensado para gastar lo mínimo de batería, memoria y datos. Antes se llamaba **Lica**.
 
-> 🚧 Estado actual: el repositorio solo contiene esta descripción. El código de la aplicación todavía no se ha subido.
+## Dónde está cada cosa
+
+- [`sren/`](./sren): la app Android (Kotlin + Jetpack Compose + Media3).
+- [`sren-music/`](./sren-music): copia de referencia del código original de Sren, mientras sus funciones se pasan a la app. No se compila.
 
 ## Objetivo
 
-- Reproducir música desde la biblioteca del usuario.
-- Servir de banco de pruebas para medir rendimiento y fluidez de la interfaz.
+- Reproducir la música y los videos del teléfono, sin anuncios y sin nube obligatoria.
+- Durar muchas horas reproduciendo: cada función tiene que justificar lo que gasta.
 
 ## Herramientas
 

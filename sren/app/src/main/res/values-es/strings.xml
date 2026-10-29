@@ -1,0 +1,66 @@
+<resources>
+    <string name="tab_songs">Canciones</string>
+    <string name="tab_videos">Videos</string>
+    <string name="tab_playlists">Listas</string>
+    <string name="tab_settings">Ajustes</string>
+    <string name="perm_title">Se necesita acceso a tu música</string>
+    <string name="perm_body">Sren music necesita acceso al audio y video de tu teléfono para crear tu biblioteca. Nada sale de tu teléfono.</string>
+    <string name="perm_grant">Dar acceso</string>
+
+    <string name="settings_audio_profile">Audio y batería</string>
+    <string name="profile_long_life">Máxima duración de batería</string>
+    <string name="profile_long_life_body">El chip de audio del teléfono reproduce la música mientras el procesador duerme. Puede haber un mínimo silencio entre canciones. La pantalla funciona a 60 Hz.</string>
+    <string name="profile_balanced">Equilibrado</string>
+    <string name="profile_balanced_body">Ahorra batería con el chip de audio solo si las canciones siguen sonando una tras otra sin cortes. Recomendado.</string>
+    <string name="profile_high_fidelity">Alta fidelidad</string>
+    <string name="profile_high_fidelity_body">Audio con precisión completa (32 bits) para archivos de alta resolución, sin ahorro de batería. Para audiófilos.</string>
+
+    <string name="settings_advanced">Control avanzado</string>
+    <string name="setting_daily_suggestion">Recomendación diaria</string>
+    <string name="setting_daily_suggestion_body">Una vez al día, una canción de los álbumes que más escuchas. Toca la notificación para escucharla.</string>
+    <string name="suggestion_channel">Recomendación diaria</string>
+    <string name="suggestion_channel_body">Una canción al día de tus álbumes favoritos</string>
+    <string name="suggestion_text">Del álbum %1$s · Toca para escuchar</string>
+
+    <string name="tab_home">Inicio</string>
+    <plurals name="home_song_count">
+        <item quantity="one">%d canción</item>
+        <item quantity="many">%d canciones</item>
+        <item quantity="other">%d canciones</item>
+    </plurals>
+    <string name="home_for_you">Para ti hoy</string>
+    <string name="home_from_album">Del álbum %1$s</string>
+    <string name="home_recently_played">Escuchadas recientemente</string>
+    <string name="home_most_played">Las que más escuchas</string>
+    <string name="home_favorites">Favoritas</string>
+    <string name="home_recently_added">Añadidas hace poco</string>
+    <string name="home_hint">Escucha algunas canciones y esta pantalla se llenará con tu historial. Mantén pulsada una canción para añadirla a Favoritas.</string>
+    <string name="action_favorite">Añadir a Favoritas</string>
+    <string name="action_unfavorite">Quitar de Favoritas</string>
+    <string name="songs_scanning">Buscando tu música…</string>
+    <string name="songs_empty">No se encontraron canciones en este teléfono.</string>
+
+    <string name="player_close">Cerrar reproductor</string>
+    <string name="player_play">Reproducir</string>
+    <string name="player_pause">Pausar</string>
+    <string name="player_next">Siguiente</string>
+    <string name="player_previous">Anterior</string>
+    <string name="player_shuffle">Aleatorio</string>
+    <string name="player_repeat">Repetir</string>
+    <string name="player_speed">Velocidad</string>
+    <string name="player_queue">Cola</string>
+    <string name="player_queue_count">Cola · %1$d canciones</string>
+    <string name="player_queue_remove">Quitar de la cola</string>
+    <string name="timer_title">Temporizador para dormir</string>
+    <string name="timer_body">La música se detiene al terminar la canción que suene en ese momento, así ninguna se corta a la mitad.</string>
+    <string name="timer_minutes">%1$d minutos</string>
+    <string name="timer_end_of_song">Al terminar esta canción</string>
+    <string name="timer_cancel">Apagar temporizador</string>
+    <string name="timer_off_short">Temporizador</string>
+    <string name="timer_end_of_song_short">Tras esta canción</string>
+    <string name="timer_until">Hasta las %1$s</string>
+
+    <string name="tab_library">Biblioteca</string>
+    <string name="home_tagline">Tu música local primero. Sin anuncios, sin nube obligatoria y con control real sobre tus archivos.</string>
+    <string name="action_rescan">Buscar música</string>
+</resources>
