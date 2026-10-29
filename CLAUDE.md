@@ -120,6 +120,20 @@ picks the least-played song of one of the 5 most-played albums (skips last 3 day
 pick). Inexact non-wakeup `AlarmManager.RTC` ~18:00, re-armed on app start and by `BootReceiver`.
 Silent channel, cover as large icon (Coil, 256 px), tap plays the whole album. Skipped while music
 plays. POST_NOTIFICATIONS asked once on first launch (Android 13+).
+Home tab (2026-10-29, start destination): suggestion card, recently played, most played,
+favorites, recently added (LazyRows, 128 dp covers at 256 px). User data now in `UserDatabase`
+(file still `stats.db`; v2 adds `favorites`; MIGRATION_1_2; schemas exported to `app/schemas/`).
+`UserLibrary` joins user-data ids with the song cache. `SongActionsSheet` = long-press menu
+(favorites now; playlists/hide later).
+
+Sren merge (user's own earlier app, `sren-music/` = reference copy, not built): port in phases —
+1 Home (done), 2 full player + queue + repeat/shuffle + speed + sleep timer (single delayed job,
+no ticking), 3 library search/sort/albums/artists/folders, 4 playlists (in UserDatabase; never
+REPLACE on parent rows), 5 hide/trash/restore + .lrc lyrics working on Android 10+,
+6 local text-command assistant (skip the empty AI stubs), 7 delete `sren-music/` with the user's OK.
+The "Sren v0.4/v0.5" APKs the user had were repackaged LarkPlayer (com.dywx.larkplayer): never use.
+Auto-merging PRs is blocked by the permission classifier: the user merges PRs themselves.
+
 Owner rule: remove unused code and libraries (media3-ui and Compose tooling were removed).
 
 Not done: sleep timer (coming from the user's other app), equalizer, shuffle/repeat UI, queue

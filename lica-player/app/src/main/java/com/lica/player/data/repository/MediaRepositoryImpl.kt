@@ -39,6 +39,10 @@ class MediaRepositoryImpl @Inject constructor(
 
     override fun albums(): Flow<List<Album>> = songDao.observeAlbums()
 
+    override fun songCount(): Flow<Int> = songDao.observeCount()
+
+    override fun recentlyAdded(limit: Int): Flow<List<Song>> = songDao.observeRecentlyAdded(limit)
+
     private val _isSyncing = MutableStateFlow(false)
     override val isSyncing: StateFlow<Boolean> = _isSyncing.asStateFlow()
 

@@ -14,9 +14,6 @@ interface SongDao {
     @Query("SELECT * FROM songs ORDER BY title ASC")
     fun observeAll(): Flow<List<Song>>
 
-    @Query("SELECT * FROM songs ORDER BY dateAdded DESC")
-    fun observeRecentlyAdded(): Flow<List<Song>>
-
     @Query("SELECT * FROM songs WHERE artist = :artist ORDER BY album, trackNumber")
     fun observeByArtist(artist: String): Flow<List<Song>>
 
@@ -43,6 +40,12 @@ interface SongDao {
 
     @Query("SELECT COUNT(*) FROM songs")
     suspend fun count(): Int
+
+    @Query("SELECT COUNT(*) FROM songs")
+    fun observeCount(): Flow<Int>
+
+    @Query("SELECT * FROM songs ORDER BY dateAdded DESC LIMIT :limit")
+    fun observeRecentlyAdded(limit: Int): Flow<List<Song>>
 
     /** Callers pass at most 500 IDs per call. */
     @Query("SELECT * FROM songs WHERE id IN (:ids)")

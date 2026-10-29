@@ -2,7 +2,7 @@ package com.lica.player.suggestion
 
 import com.lica.player.data.local.db.dao.SongDao
 import com.lica.player.data.model.Song
-import com.lica.player.data.stats.PlayStatsDao
+import com.lica.player.data.user.PlayStatsDao
 import javax.inject.Inject
 
 /**

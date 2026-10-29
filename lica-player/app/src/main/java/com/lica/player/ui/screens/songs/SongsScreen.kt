@@ -1,6 +1,7 @@
 package com.lica.player.ui.screens.songs
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
+import com.lica.player.R
+import com.lica.player.ui.components.SongActionsSheet
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,23 +51,26 @@ fun SongsScreen(
 
 @Composable
 private fun SongList(songs: List<Song>, onSongClick: (List<Song>, Int) -> Unit) {
+    var actionsFor by remember { mutableStateOf<Song?>(null) }
     LazyColumn(
         contentPadding = PaddingValues(vertical = 8.dp),
         modifier = Modifier.fillMaxSize(),
     ) {
         itemsIndexed(items = songs, key = { _, s -> s.id }) { index, song ->
-            SongItem(song = song, onClick = { onSongClick(songs, index) })
+            SongItem(song = song, onClick = { onSongClick(songs, index) }, onLongClick = { actionsFor = song })
             if (index < songs.lastIndex) HorizontalDivider(Modifier.padding(start = 76.dp))
         }
     }
+    actionsFor?.let { SongActionsSheet(song = it, onDismiss = { actionsFor = null }) }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun SongItem(song: Song, onClick: () -> Unit) {
+private fun SongItem(song: Song, onClick: () -> Unit, onLongClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .combinedClickable(onClick = onClick, onLongClick = onLongClick)
             .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -97,7 +107,7 @@ private fun LoadingState() {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             CircularProgressIndicator()
             Text(
-                "Scanning your library…",
+                stringResource(R.string.songs_scanning),
                 modifier = Modifier.padding(top = 12.dp),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -110,7 +120,7 @@ private fun LoadingState() {
 private fun EmptyState() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(
-            "No songs found on this device.",
+            stringResource(R.string.songs_empty),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

@@ -3,7 +3,7 @@ package com.lica.player.playback
 import android.os.SystemClock
 import androidx.media3.common.C
 import androidx.media3.common.Player
-import com.lica.player.data.stats.PlayStatsDao
+import com.lica.player.data.user.PlayStatsDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

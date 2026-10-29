@@ -13,6 +13,12 @@ interface MediaRepository {
     /** Live-updating list of all videos (from Room cache). */
     fun videos(): Flow<List<Video>>
 
+    /** Number of songs in the library, live. */
+    fun songCount(): Flow<Int>
+
+    /** The [limit] most recently added songs, live. */
+    fun recentlyAdded(limit: Int): Flow<List<Song>>
+
     /** Albums derived from the song cache — no extra MediaStore query. */
     fun albums(): Flow<List<Album>>
 

@@ -21,4 +21,23 @@
     <string name="suggestion_channel">Recomendación diaria</string>
     <string name="suggestion_channel_body">Una canción al día de tus álbumes favoritos</string>
     <string name="suggestion_text">Del álbum %1$s · Toca para escuchar</string>
+
+    <string name="tab_home">Inicio</string>
+    <string name="home_title">Tu música</string>
+    <plurals name="home_song_count">
+        <item quantity="one">%d canción · sin anuncios, nada sale de tu teléfono</item>
+        <item quantity="many">%d canciones · sin anuncios, nada sale de tu teléfono</item>
+        <item quantity="other">%d canciones · sin anuncios, nada sale de tu teléfono</item>
+    </plurals>
+    <string name="home_for_you">Para ti hoy</string>
+    <string name="home_from_album">Del álbum %1$s</string>
+    <string name="home_recently_played">Escuchadas recientemente</string>
+    <string name="home_most_played">Las que más escuchas</string>
+    <string name="home_favorites">Favoritas</string>
+    <string name="home_recently_added">Añadidas hace poco</string>
+    <string name="home_hint">Escucha algunas canciones y esta pantalla se llenará con tu historial. Mantén pulsada una canción para añadirla a Favoritas.</string>
+    <string name="action_favorite">Añadir a Favoritas</string>
+    <string name="action_unfavorite">Quitar de Favoritas</string>
+    <string name="songs_scanning">Buscando tu música…</string>
+    <string name="songs_empty">No se encontraron canciones en este teléfono.</string>
 </resources>

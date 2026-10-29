@@ -34,6 +34,7 @@ import com.lica.player.playback.PlayerViewModel
 import com.lica.player.ui.player.NowPlayingBar
 import com.lica.player.ui.screens.LibraryViewModel
 import com.lica.player.ui.screens.PlaceholderScreen
+import com.lica.player.ui.screens.home.HomeScreen
 import com.lica.player.ui.screens.settings.SettingsScreen
 import com.lica.player.ui.screens.settings.SettingsViewModel
 import com.lica.player.ui.screens.songs.SongsScreen
@@ -93,9 +94,12 @@ fun LicaNavHost() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Destination.Songs.route,
+            startDestination = Destination.Home.route,
             modifier = Modifier.padding(innerPadding),
         ) {
+            composable(Destination.Home.route) {
+                HomeScreen(onPlay = player::playSongs, onPlayAlbumOf = player::playAlbumOf)
+            }
             composable(Destination.Songs.route) {
                 SongsScreen(onSongClick = player::playSongs)
             }
