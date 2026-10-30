@@ -5,7 +5,8 @@ en **Kotlin nativo** sobre la base de Lica (Jetpack Compose + Media3). Este docu
 algo que Stone 1.3.2 hace y que Stone 1.4 debe hacer igual o mejor**. Si algo se mueve en Stone, aquí está.
 
 - Código original: [`../legado/stone/`](../legado/stone) (no se borra nunca). APK: `apk/legado/stone-1.3.2.apk`.
-- Código nuevo: [`../sren/`](../sren) (pasará a llamarse `stone/` en el PR de identidad).
+- Código nuevo: [`../stone/`](../stone).
+- **Verificar:** `python3 herramientas/verificar_stone.py` comprueba que cada fila ✅ cite su código (`stone/ruta:texto`) y que ese código exista, y que los 6 idiomas estén completos. Lo corre la CI en cada PR.
 - Estado de cada fila: ⬜ pendiente · 🟡 existe en la base Lica pero falta el aspecto de Stone · ✅ hecho.
   Al terminar cada PR se actualiza la columna **Estado**.
 
@@ -25,21 +26,21 @@ algo que Stone 1.3.2 hace y que Stone 1.4 debe hacer igual o mejor**. Si algo se
 
 | Qué | En Stone 1.3.2 | Stone 1.4 | Estado |
 |---|---|---|---|
-| Nombre | "Stone" | "Stone" | ⬜ |
-| Paquete | `com.zirakusa.stone` (versión 19) | `com.zirakusa.stone`, `versionCode` 20, `versionName` 1.4.0 (firma: ver §11) | ⬜ |
-| Ícono | `frontend/android/app/src/main/res/mipmap-*` (+ `ic_stat_stone.xml` para la notificación) | Los mismos archivos copiados | ⬜ |
+| Nombre | "Stone" | "Stone" | ✅ `stone/app/src/main/res/values/strings.xml:<string name="app_name">Stone</string>` |
+| Paquete | `com.zirakusa.stone` (versión 19) | `com.zirakusa.stone`, `versionCode` 20, `versionName` 1.4.0 (firma: ver §11) | ✅ `stone/app/build.gradle.kts:applicationId = "com.zirakusa.stone"` `stone/app/build.gradle.kts:versionCode = 20` (nombre provisional 1.4.0-alfa.1 hasta publicar) |
+| Ícono | `frontend/android/app/src/main/res/mipmap-*` (+ `ic_stat_stone.xml` para la notificación) | Los mismos archivos copiados | ✅ `stone/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp` `stone/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml` `stone/app/src/main/res/drawable/ic_stat_stone.xml` |
 | Fondo según tema | Negro `#0A0A0E`, Gris `#1A1C20`, Claro `#F3F1EB` (`LibraryPage.tsx`) | Tres temas iguales | ⬜ |
-| Colores | `design_guidelines.json`: amarillo `#F5C518`, superficies `#1C1C24` / `#2A2A35`, texto gris `#A0A0A5`, rojo `#FF4C4C` | Mismo archivo pasado a `ui/theme/Color.kt` | 🟡 |
+| Colores | `design_guidelines.json`: amarillo `#F5C518`, superficies `#1C1C24` / `#2A2A35`, texto gris `#A0A0A5`, rojo `#FF4C4C` | Mismo archivo pasado a `ui/theme/Color.kt` | ✅ `stone/app/src/main/java/com/zirakusa/stone/ui/theme/Color.kt:0xFFF5C518` `stone/app/src/main/java/com/zirakusa/stone/ui/theme/Color.kt:0xFF1C1C24` |
 | Íconos de botones | Ionicons | Material Symbols equivalentes (se dibujan como vectores, sin fuente aparte) | ⬜ |
 
 ## 3. Bienvenida (primer arranque)
 
 | Apartado / gesto | En Stone 1.3.2 | Estado |
 |---|---|---|
-| Elegir idioma: tocar un idioma lo marca; botón amarillo **Empezar** | `app/onboarding/language.tsx` | ⬜ |
-| Enlaces de Términos y Privacidad (en Stone apuntan a `example.com`: faltan las páginas reales) | `language.tsx` | ⬜ |
-| "Reproduce tu música" con el pingüino y botón **Permitir acceso** (pide el permiso de música y no vuelve a salir) | `app/onboarding/welcome.tsx` | ⬜ |
-| 6 idiomas: es, en, pt, fr, it, de | `src/i18n/translations.ts` → `res/values-*/strings.xml` | ⬜ |
+| Elegir idioma: tocar un idioma lo marca; botón amarillo **Empezar** | `app/onboarding/language.tsx` | ✅ `stone/app/src/main/java/com/zirakusa/stone/ui/screens/onboarding/Onboarding.kt:fun LanguageScreen(` `stone/app/src/main/java/com/zirakusa/stone/MainActivity.kt:STEP_LANGUAGE ->` |
+| Enlaces de Términos y Privacidad (en Stone apuntan a `example.com`: faltan las páginas reales) | `language.tsx` | ✅ páginas reales en `docs/`: `docs/TERMINOS.md` `docs/PRIVACIDAD.md` `stone/app/src/main/java/com/zirakusa/stone/ui/screens/onboarding/Onboarding.kt:withLink(LinkAnnotation.Url(PRIVACY_URL` |
+| "Reproduce tu música" con el pingüino y botón **Permitir acceso** (pide el permiso de música y no vuelve a salir) | `app/onboarding/welcome.tsx` | ✅ `stone/app/src/main/java/com/zirakusa/stone/ui/screens/onboarding/Onboarding.kt:fun WelcomeScreen(` `stone/app/src/main/java/com/zirakusa/stone/MainActivity.kt:settings.onboarded = true` |
+| 6 idiomas: es, en, pt, fr, it, de | `src/i18n/translations.ts` → `res/values-*/strings.xml` | ✅ `stone/app/src/main/res/values-pt/strings.xml` `stone/app/src/main/res/values-fr/strings.xml` `stone/app/src/main/res/values-it/strings.xml` `stone/app/src/main/res/values-de/strings.xml` `stone/app/src/main/java/com/zirakusa/stone/core/locale/AppLanguage.kt:fun wrap(` (también lo comprueba este verificador) |
 
 ## 4. Biblioteca (pantalla principal)
 
@@ -48,13 +49,13 @@ algo que Stone 1.3.2 hace y que Stone 1.4 debe hacer igual o mejor**. Si algo se
 | Barra superior: buscar · carpeta de Stone · escanear · descarga rápida · ordenar · ajustes | `zones/01-header/HeaderZone.tsx` | 🟡 (sin descarga rápida, ver §10) |
 | Pestañas: Videos · Canciones · Playlists · Carpetas · Artistas · Álbumes | `LibraryTabs.tsx` | 🟡 |
 | **Deslizar a izquierda o derecha** sobre la lista cambia de pestaña (se activa con 18 px de movimiento horizontal y cambia al soltar con más de 42 px) | `LibraryPage.tsx` (`contentSwipeResponder`) → `HorizontalPager` de Compose | ⬜ |
-| Tocar una canción la reproduce y usa la lista visible como cola | `LibraryTabContent.tsx` | ✅ |
+| Tocar una canción la reproduce y usa la lista visible como cola | `LibraryTabContent.tsx` | ✅ `stone/app/src/main/java/com/zirakusa/stone/ui/navigation/StoneNavHost.kt:onPlay = player::playSongs` `stone/app/src/main/java/com/zirakusa/stone/playback/PlayerViewModel.kt:fun playSongs(` |
 | Carpetas: tocar abre la carpeta; botón atrás la cierra. Videos: lista de carpetas de video | `LibraryTabContent.tsx` | 🟡 |
 | Artistas / Álbumes: tocar reproduce el grupo | `LibraryTabContent.tsx` | 🟡 (Lica abre la página con "Reproducir todo") |
 | Playlists: **Nueva playlist** (cuadro con nombre) y abrir una playlist | `NewPlaylistDialog.tsx` | ⬜ |
 | Favoritas: reproducir todo, aleatorio, invertir orden, menú ⋮ | `FavoritesPlaylistScreen.tsx` | 🟡 |
 | Ordenar: Más recientes · Más reproducido · A a Z · Artista · Duración más larga (tocar de nuevo invierte el orden) | `LibrarySortSheet.tsx` | 🟡 |
-| Buscar por título, artista o álbum, con botón para borrar el texto | `HeaderZone.tsx` | ✅ |
+| Buscar por título, artista o álbum, con botón para borrar el texto | `HeaderZone.tsx` | ✅ `stone/app/src/main/java/com/zirakusa/stone/ui/screens/library/CollectionAndSearch.kt:fun SearchScreen(` `stone/app/src/main/java/com/zirakusa/stone/ui/screens/library/CollectionAndSearch.kt:R.string.search_clear` |
 | Escanear con animación de disco girando y porcentaje | `LibraryPage.tsx` (`spinAnim`) | ⬜ |
 | Mini reproductor: tocar abre el reproductor · ⋮ abre el reproductor con el menú abierto · play/pausa | `src/components/MiniPlayer.tsx` | 🟡 |
 
@@ -62,10 +63,10 @@ algo que Stone 1.3.2 hace y que Stone 1.4 debe hacer igual o mejor**. Si algo se
 
 | Apartado / gesto | En Stone 1.3.2 | Estado |
 |---|---|---|
-| Portada, título, artista; flecha atrás cierra | `app/player.tsx` | ✅ |
-| Corazón: favorita | `player.tsx` | ✅ |
-| Barra de progreso arrastrable (salta al soltar) | `player.tsx` (`onSlidingComplete`) | ✅ |
-| Anterior · play/pausa · siguiente | `player.tsx` | ✅ |
+| Portada, título, artista; flecha atrás cierra | `app/player.tsx` | ✅ `stone/app/src/main/java/com/zirakusa/stone/ui/player/PlayerScreen.kt:R.string.player_close` |
+| Corazón: favorita | `player.tsx` | ✅ `stone/app/src/main/java/com/zirakusa/stone/ui/player/PlayerScreen.kt:actions.toggleFavorite(songId)` |
+| Barra de progreso arrastrable (salta al soltar) | `player.tsx` (`onSlidingComplete`) | ✅ `stone/app/src/main/java/com/zirakusa/stone/ui/player/PlayerScreen.kt:onValueChangeFinished` |
+| Anterior · play/pausa · siguiente | `player.tsx` | ✅ `stone/app/src/main/java/com/zirakusa/stone/ui/player/PlayerScreen.kt:R.string.player_previous` `stone/app/src/main/java/com/zirakusa/stone/playback/PlayerViewModel.kt:fun togglePlayPause(` |
 | Fila inferior: ecualizador · letras · cola | `player.tsx` | ⬜ |
 | **Girar el teléfono** (horizontal) abre la vista **Vinilo**: disco con la portada, aguja, letras que avanzan solas, favorita y controles | `player.tsx` (`vinylVisible`) | ⬜ |
 | Chip de letras que muestra la línea actual | `LyricsChip.tsx` | ⬜ |
@@ -78,7 +79,7 @@ algo que Stone 1.3.2 hace y que Stone 1.4 debe hacer igual o mejor**. Si algo se
 | Ecualizador | `StoneEqualizer.kt` | ⬜ |
 | Agregar a la lista de reproducción | `player.tsx` (en Stone no hace nada todavía) | ⬜ |
 | Compartir | `StoneShareModule.kt` | ⬜ |
-| Velocidad: 0.5 · 0.75 · 1 · 1.25 · 1.5 · 2 | `player.tsx` | ✅ (Lica: 0.5–2x) |
+| Velocidad: 0.5 · 0.75 · 1 · 1.25 · 1.5 · 2 | `player.tsx` | ✅ (Lica: 0.5–2x) `stone/app/src/main/java/com/zirakusa/stone/playback/PlayerViewModel.kt:fun setSpeed(` |
 | Establecer como tono de llamada | `RingtoneEditor.tsx` + `StoneRingtoneModule.kt` | ⬜ |
 | Temporizador para dormir | `SleepTimerSheet.tsx` | 🟡 |
 | Modo de ahorro de energía | `EnergySaverScreen.tsx` | ⬜ |
@@ -103,8 +104,8 @@ algo que Stone 1.3.2 hace y que Stone 1.4 debe hacer igual o mejor**. Si algo se
 | Cartel propio de volumen con porcentaje | `StoneVolumeOverlay.kt` (PopupWindow) | Componente de Compose dentro de la app | ⬜ |
 | Botón atrás en ahorro de energía: sale del modo | `EnergySaverScreen.tsx` | Igual | ⬜ |
 | Volver a la app: recupera el brillo | `EnergySaverScreen.tsx` (AppState) | Igual | ⬜ |
-| Auriculares desconectados: pausa | — | Lica ✅ (`setHandleAudioBecomingNoisy`) | ✅ |
-| Controles en la notificación y en la pantalla bloqueada | `StoneMediaNotification.kt` | Lica ✅ (MediaSession) | ✅ |
+| Auriculares desconectados: pausa | — | Lica ✅ (`setHandleAudioBecomingNoisy`) | ✅ `stone/app/src/main/java/com/zirakusa/stone/playback/PlaybackService.kt:setHandleAudioBecomingNoisy(true)` |
+| Controles en la notificación y en la pantalla bloqueada | `StoneMediaNotification.kt` | Lica ✅ (MediaSession) | ✅ `stone/app/src/main/java/com/zirakusa/stone/playback/PlaybackService.kt:MediaSession.Builder` |
 
 ## 7. Ajustes (en el orden de Stone)
 
@@ -119,7 +120,7 @@ algo que Stone 1.3.2 hace y que Stone 1.4 debe hacer igual o mejor**. Si algo se
 | **Ajustes de reproducción** | Reproducir junto con otras apps · Reproducción sin pausas · Crossfade de 0 a 12 s | ⬜ |
 | └ **Perfil de batería** (nuevo en 1.4, dentro de esta pantalla) | Máxima duración · Equilibrado · Alta fidelidad | 🟡 (existe en Lica) |
 | Configuración de notificaciones | Aviso de archivos nuevos · Recomendación de música | 🟡 (la recomendación diaria existe en Lica) |
-| Idioma | Los 6 idiomas | ⬜ |
+| Idioma | Los 6 idiomas | ✅ `stone/app/src/main/java/com/zirakusa/stone/ui/screens/settings/SettingsScreen.kt:LanguageSection(` |
 | Opinión | Inicio, formulario (categoría, captura, enviar) y preguntas frecuentes | ⬜ |
 | Sobre | Versión de la app | ⬜ |
 

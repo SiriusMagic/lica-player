@@ -1,0 +1,100 @@
+<resources>
+    <string name="tab_settings">Ajustes</string>
+    <string name="perm_title">Acesso às suas mídias necessário</string>
+    <string name="perm_body">O Stone precisa acessar o áudio e os vídeos do seu aparelho para montar sua biblioteca. Nada sai do seu celular.</string>
+    <string name="perm_grant">Permitir acesso</string>
+
+    <string name="settings_audio_profile">Áudio e bateria</string>
+    <string name="profile_long_life">Máxima duração da bateria</string>
+    <string name="profile_long_life_body">O chip de áudio do celular toca a música enquanto o processador dorme. Pode haver uma pequena pausa entre as faixas. A tela funciona a 60 Hz.</string>
+    <string name="profile_balanced">Equilibrado</string>
+    <string name="profile_balanced_body">Economiza bateria com o chip de áudio só quando as faixas continuam tocando uma após a outra sem pausas. Recomendado.</string>
+    <string name="profile_high_fidelity">Alta fidelidade</string>
+    <string name="profile_high_fidelity_body">Áudio com precisão total (32 bits) para arquivos de alta resolução, sem economia de bateria. Para audiófilos.</string>
+
+    <string name="settings_advanced">Controle avançado</string>
+    <string name="setting_daily_suggestion">Sugestão diária</string>
+    <string name="setting_daily_suggestion_body">Uma vez por dia, uma música dos álbuns que você mais ouve. Toque na notificação para ouvir.</string>
+    <string name="suggestion_channel">Sugestão diária</string>
+    <string name="suggestion_channel_body">Uma música por dia dos seus álbuns favoritos</string>
+    <string name="suggestion_text">Do álbum %1$s · Toque para ouvir</string>
+
+    <string name="tab_home">Início</string>
+    <string name="home_for_you">Para você hoje</string>
+    <string name="home_from_album">Do álbum %1$s</string>
+    <string name="home_recently_played">Ouvidas recentemente</string>
+    <string name="home_most_played">As que você mais ouve</string>
+    <string name="home_favorites">Favoritas</string>
+    <string name="home_recently_added">Adicionadas recentemente</string>
+    <string name="home_hint">Ouça algumas músicas e esta tela vai se encher com seu histórico. Toque e segure uma música para adicioná-la às Favoritas.</string>
+    <string name="action_favorite">Adicionar às Favoritas</string>
+    <string name="action_unfavorite">Remover das Favoritas</string>
+    <string name="songs_scanning">Procurando suas músicas…</string>
+    <string name="songs_empty">Nenhuma música encontrada neste aparelho.</string>
+
+    <string name="player_close">Fechar player</string>
+    <string name="player_play">Reproduzir</string>
+    <string name="player_pause">Pausar</string>
+    <string name="player_next">Próxima</string>
+    <string name="player_previous">Anterior</string>
+    <string name="player_shuffle">Aleatório</string>
+    <string name="player_repeat">Repetir</string>
+    <string name="player_speed">Velocidade de reprodução</string>
+    <string name="player_queue">Fila</string>
+    <string name="player_queue_count">Fila · %1$d músicas</string>
+    <string name="player_queue_remove">Remover da fila</string>
+    <string name="timer_title">Timer para dormir</string>
+    <string name="timer_body">A música para quando a faixa que estiver tocando nesse momento terminar, para nenhuma música ser cortada no meio.</string>
+    <string name="timer_minutes">%1$d minutos</string>
+    <string name="timer_end_of_song">Quando esta música terminar</string>
+    <string name="timer_cancel">Desligar timer</string>
+    <string name="timer_off_short">Timer</string>
+    <string name="timer_end_of_song_short">Após esta música</string>
+    <string name="timer_until">Até %1$s</string>
+
+    <string name="tab_library">Biblioteca</string>
+    <string name="home_tagline">Sua música local em primeiro lugar. Sem anúncios, sem nuvem obrigatória e com controle real sobre seus arquivos.</string>
+    <string name="action_rescan">Procurar músicas</string>
+
+    <string name="tab_search">Buscar</string>
+    <string name="library_songs">Músicas</string>
+    <string name="library_folders">Pastas</string>
+    <string name="library_artists">Artistas</string>
+    <string name="library_albums">Álbuns</string>
+    <string name="library_videos">Vídeos</string>
+    <string name="library_root_folder">Armazenamento principal</string>
+    <string name="favorites_empty">Nenhuma favorita ainda. Toque e segure uma música para adicioná-la.</string>
+    <string name="action_play_all">Reproduzir tudo</string>
+    <string name="sort_recent">Recentes</string>
+    <string name="sort_title">Título</string>
+    <string name="sort_artist">Artista</string>
+    <string name="sort_album">Álbum</string>
+    <string name="sort_duration">Duração mais longa</string>
+    <string name="search_hint">Músicas, artistas ou álbuns</string>
+    <string name="search_clear">Limpar</string>
+    <string name="search_empty_query">Digite para buscar na sua música.</string>
+    <string name="search_no_results">Sem resultados</string>
+    <plurals name="song_count">
+        <item quantity="one">%d música</item>
+        <item quantity="other">%d músicas</item>
+    </plurals>
+    <plurals name="album_count">
+        <item quantity="one">%d álbum</item>
+        <item quantity="other">%d álbuns</item>
+    </plurals>
+
+    <!-- Bienvenida de Stone (app/onboarding/*.tsx). -->
+    <string name="onb_choose_language">Escolha o seu idioma</string>
+    <string name="onb_start">Começar</string>
+    <string name="onb_terms_notice">Ao tocar em \"Começar\", você reconhece que leu e aceita nossos</string>
+    <string name="onb_terms">Termos de Serviço</string>
+    <string name="onb_and">e</string>
+    <string name="onb_privacy">Política de Privacidade</string>
+    <string name="onb_title_1">Reproduza</string>
+    <string name="onb_title_2">sua música</string>
+    <string name="onb_subtitle_a">Deixe-nos acessar </string>
+    <string name="onb_subtitle_b">sua música</string>
+    <string name="onb_subtitle_c"> para reproduzir suas canções.</string>
+    <string name="onb_allow_access">Permitir acesso</string>
+    <string name="settings_language">Idioma</string>
+</resources>

@@ -16,9 +16,9 @@ El código de Stone 1.3.2 se queda en [`../legado/stone/`](../legado/stone) como
 |---|---|---|---|
 | jun–oct 2026 | Sren Kotlin, Sren Flutter, Aura Player, Sren-source | Varias | Eliminadas. Código en la etiqueta git `legado-2026-10` |
 | 26 oct 2026 | **Lica Player 0.1.0** | Kotlin + Compose + Media3 | Historial de git: es la **base** |
-| 29 oct 2026 | **Sren music 0.2.0** | Kotlin + Compose + Media3 | `sren/` (base Lica, se convierte en Stone 1.4) |
+| 29 oct 2026 | **Sren music 0.2.0** | Kotlin + Compose + Media3 | `stone/` (base Lica, se convierte en Stone 1.4) |
 | 29 oct 2026 | **Stone 1.3.2** (`com.zirakusa.stone`) | Expo / React Native + módulos Kotlin | `legado/stone/` · APK `apk/legado/stone-1.3.2.apk` (26 MB) |
-| próximo | **Stone 1.4** | Kotlin + Compose + Media3 (base Lica) | `sren/` |
+| 30 oct 2026 → | **Stone 1.4** (en curso) | Kotlin + Compose + Media3 (base Lica) | `stone/` |
 
 ## Qué se traduce de Stone 1.3.2 (pantalla por pantalla)
 
