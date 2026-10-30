@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.TopAppBarDefaults
 import com.sren.music.ui.player.PlayerScreen
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.style.TextOverflow
+import com.sren.music.ui.theme.SrenBackground
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sren.music.R
 import androidx.compose.runtime.Composable
@@ -107,7 +109,8 @@ fun SrenNavHost() {
                     viewModel = player,
                     onOpen = { navController.navigate(PLAYER_ROUTE) { launchSingleTop = true } },
                 )
-                NavigationBar {
+                // Stone 1.3.2: fondo SrenBackground, íconos/labels con primary cuando activo.
+                NavigationBar(containerColor = SrenBackground) {
                     tabs.forEach { tab ->
                         // An opened album/artist/folder belongs to the Library tab.
                         val selected = currentRoute?.hierarchy?.any { it.route == tab.route } == true ||
@@ -115,8 +118,21 @@ fun SrenNavHost() {
                         NavigationBarItem(
                             selected = selected,
                             onClick = { navController.navigateToTab(tab) },
-                            icon = { Icon(tab.icon, contentDescription = null) },
-                            label = { Text(stringResource(tab.labelRes)) },
+                            icon = {
+                                Icon(
+                                    tab.icon,
+                                    contentDescription = null,
+                                    tint = if (selected) MaterialTheme.colorScheme.primary
+                                           else MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            },
+                            label = {
+                                Text(
+                                    stringResource(tab.labelRes),
+                                    color = if (selected) MaterialTheme.colorScheme.primary
+                                            else MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            },
                         )
                     }
                 }
@@ -195,6 +211,7 @@ private const val PLAYER_ROUTE = "player"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SrenTopBar(title: String, nowPlaying: String?, syncing: Boolean, onRescan: () -> Unit) {
+    // Stone 1.3.2: fondo SrenBackground, sin elevación ni sombra.
     CenterAlignedTopAppBar(
         title = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -215,6 +232,10 @@ private fun SrenTopBar(title: String, nowPlaying: String?, syncing: Boolean, onR
                 Icon(Icons.Filled.Refresh, contentDescription = stringResource(R.string.action_rescan))
             }
         },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = SrenBackground,
+            scrolledContainerColor = SrenBackground,
+        ),
     )
 }
 
