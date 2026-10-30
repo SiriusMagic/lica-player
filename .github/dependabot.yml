@@ -2,8 +2,8 @@
 # Versiones: cada mes, un PR con las actualizaciones menores y otro con las mayores.
 version: 2
 updates:
-  - package-ecosystem: "pip"
-    directory: "/herramientas"
+  - package-ecosystem: "gradle"
+    directory: "/sren"
     schedule:
       interval: "monthly"
     open-pull-requests-limit: 3

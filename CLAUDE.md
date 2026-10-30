@@ -1,14 +1,6 @@
 # lica-player
 
-Espacio del reproductor de música Lica. El código de la app Android (Sren music) está en `sren/` (notas técnicas abajo). También están las herramientas de apoyo: `herramientas/sarap` (asistente de navegación) y `herramientas/biblioteca` (cuaderno de Colab).
-
-## Comandos
-
-```bash
-pip install pytest
-pytest -q                       # pruebas de SARAP y del cuaderno
-python herramientas/sarap/sarap.py   # SARAP interactivo
-```
+Espacio del reproductor de música Lica. El código de la app Android (Sren music) está en `sren/` (notas técnicas abajo). La meta es **Stone 1.4**: la apariencia de Stone 1.3.2 (`legado/stone/`) sobre la base de Lica. Plan en `docs/VERSIONES.md`.
 
 ## Reglas del dueño (aplican a todo cambio)
 
@@ -30,13 +22,20 @@ direction, but check their technical claims (several have been wrong, see below)
 
 ## What this workspace is
 
-- `sren/` — **Sren music** (formerly Lica Player; renamed 2026-10-29 at the user's request:
-  name, icon, package `com.sren.music`, dark+orange theme from the original Sren). The active project.
-- `sren-music/` — reference copy of the user's original Sren code (not built; delete after the merge).
-- `morluto-rea/` — the REA reverse-engineering CLI (github.com/INTECHNetworks/morluto-rea),
-  used once to analyze a third-party app for inspiration.
-- `base.apk`, `split_config.*.apk` — the third-party app that was analyzed (LarkPlayer).
-- `apk/` — empty folder.
+- `sren/` — **Sren music** (formerly Lica Player; renamed 2026-10-29: package `com.sren.music`).
+  The only app. **Read `docs/ARQUITECTURA.md` (code map) and `docs/COMPILAR.md` (build, APK paths,
+  releases, signing) first.** Gestures are listed in `docs/GESTOS.md` — keep it updated.
+- `docs/` — architecture, gestures, build guide, version history (`VERSIONES.md`), folder inventory
+  (`INVENTARIO.md`), design photos (`diseno/`). `CHANGELOG.md` at the root.
+- `legado/stone/` — source of **Stone 1.3.2** (Expo/React Native, `com.zirakusa.stone`), the user's
+  real app. NEVER delete it: it is the model for Stone 1.4. Older versions were removed (git tag `legado-2026-10`).
+- `apk/` — Codespace-only APK store by version (`vX.Y.Z/`, `legado/`); only `apk/README.md` is in git.
+
+## Goal: Stone 1.4 (user decision, 2026-10-30)
+Take Stone 1.3.2 and rebuild it on the Lica base: same name, icons, colors, screens and features, but native
+Kotlin (Lica player/service, event-driven updates, zero-scan, battery profiles), far less RAM/battery/size.
+Screen-by-screen table: `docs/VERSIONES.md`. Not ported: Stone's YouTube downloader (`backend/`, yt-dlp).
+Keep Lica extras (Home "Para ti hoy", stats, favorites, daily suggestion, audio profiles).
 
 ## Clean-room boundary (do not cross)
 
@@ -69,7 +68,7 @@ its cost. Rules already applied (keep them):
   (`GENERATION_MODIFIED > saved`) / full scan. Below API 30: count + newest
   DATE_MODIFIED signature. Stamp stored in SharedPreferences `library_sync`.
   A ContentObserver watches for changes only while the app is visible
-  (`repeatOnLifecycle(STARTED)` in `LicaNavHost`).
+  (`repeatOnLifecycle(STARTED)` in `SrenNavHost`).
 - Deletes in batches of 500 (SQLite 999-variable limit on old Android).
 - No sync without read permission (would save an "empty library" stamp).
 - `resourceConfigurations` en + es; minify + shrinkResources in release.
@@ -77,7 +76,7 @@ its cost. Rules already applied (keep them):
 Corrected claims from the pasted messages, for the record:
 - `getVersion()` alone does NOT change when songs are added; `getGeneration()` is required.
 - Media-session notifications are exempt from `POST_NOTIFICATIONS` (Android 13+);
-  the permission is not requested yet.
+  POST_NOTIFICATIONS is requested once only for the daily suggestion.
 - The app targets API 35, not Android 16 (API 36). Bumping needs an AGP upgrade.
 
 ## Stack
@@ -87,82 +86,38 @@ Compose BOM 2024.12.01 (Material 3), Navigation Compose, Media3 1.5.1, Hilt 2.52
 Room 2.6.1, Coil 2.7.0 (+ coil-video), Palette. Package/applicationId `com.sren.music`
 (installs as a new app next to old Lica builds). Cache DB file `library.db` (`LibraryDatabase`).
 
-## Status (as of 2026-10-26)
+## Status (v0.2.0, 2026-10-29)
 
-**Phases 1–4 done and `assembleDebug` compiles with zero errors and warnings.**
-`app/build/outputs/apk/debug/app-debug.apk` (21 MB, debug, unoptimized).
-Not yet tested on a real phone.
+Feature list per version: `CHANGELOG.md`. Code map: `docs/ARQUITECTURA.md`. Not yet tested on a real
+phone (user test of the old debug build: speaker 50 %, screen off ≈ 4.5 %/h).
 
-Done:
-- Data: `Song`, `Video` Room entities; `Album` derived by GROUP BY. `LicaDatabase` v1
-  (destructive migration — it is only a cache). `MediaStoreScanner`, `LibraryStamp`,
-  `MediaRepository` (sync plan + `watchLibrary`), Hilt modules.
-- Audio: `PlaybackService` (MediaSessionService, foreground `mediaPlayback`),
-  `PlaybackConnection` (shared MediaController), `PlayerViewModel`, `PaletteCache`.
-  Default Media3 notification with artwork (Android 12+ tints it from the cover).
-- UI: PermissionGate, 4-tab nav (Songs, Videos, Playlists, Settings), Songs list
-  plays on tap, Videos list (tap does nothing yet), Playlists/Settings are
-  placeholders, NowPlayingBar mini player with cover-color gradient
-  (soft-blue fallback 0xFF1E3A5F / 0xFF2F6690).
+Technical decisions worth keeping (details in the code's KDoc):
+- Audio profiles (`AudioProfile`, SharedPreferences `playback_settings` via `AppSettings`): LONG_LIFE =
+  offload without gapless + UI capped to the lowest refresh rate >= 60 Hz; BALANCED = offload only if
+  gapless works; HIGH_FIDELITY = no offload, float output (player rebuilt via `MediaSession.setPlayer`).
+  Media3 1.5.1 releases the wake lock while sleeping for offload (verified in bytecode). Speed != 1x
+  requires speed-capable offload. Lowering bitrate was rejected: re-encoding costs more than it saves.
+- Sleep timer = `SleepTimer` + `SleepTimerEnforcer`: no countdown (a coroutine delay freezes while the
+  CPU sleeps in offload); on player events it sets `pauseAtEndOfMediaItems` when time runs out during
+  the current song. UI shows the end time.
+- User data in `UserDatabase` (file `stats.db`, v2: `play_stats`, `favorites`; real migrations only,
+  schemas in `sren/app/schemas/`). `PlayTracker` counts a play after 30 s or half the track.
+- Daily suggestion: inexact non-wakeup `AlarmManager.RTC` ~18:00, re-armed on app start and by
+  `BootReceiver`; least-played song of one of the 5 most-played albums; skipped while music plays.
+- Library cache `LibraryDatabase` (`library.db`, v2 adds `songs.folder` from RELATIVE_PATH/DATA) is
+  destructive on schema change. Search = LIKE with ESCAPE '\\', debounced 250 ms.
+- Release signing: env vars `SREN_KEYSTORE_FILE/PASSWORD`, `SREN_KEY_ALIAS/PASSWORD` (GitHub secrets in
+  `publicar-apk.yml`); without them the debug key is used. Never commit keystores.
 
-Audio profiles (2026-10-28, Settings tab): `AudioProfile` LONG_LIFE / BALANCED (default) /
-HIGH_FIDELITY in `PlaybackSettings` (SharedPreferences `playback_settings`). LONG_LIFE = offload
-without gapless requirement + UI capped to the lowest refresh rate >= 60 Hz; BALANCED = offload only
-if gapless works; HIGH_FIDELITY = no offload, float output (player rebuilt via `MediaSession.setPlayer`).
-Verified in Media3 1.5.1 bytecode: the wake lock is released while sleeping for offload.
-Lowering bitrate was rejected on purpose: re-encoding costs more battery than it saves.
-Release is signed with the debug key for personal testing (2.8 MB, non-debuggable).
-User test (debug build, speaker 50 %, screen off): ~4.5 %/h.
-The user has another app (sleep timer, screen-off mode, more) to merge into Lica.
-
-Daily suggestion (2026-10-28, Settings → Control avanzado, on by default): `PlayTracker` counts a
-play after 30 s or half the track (event-driven, no timers) into a separate `stats.db`
-(`StatsDatabase`, user data, NO destructive migration — write real migrations). `SuggestionPicker`
-picks the least-played song of one of the 5 most-played albums (skips last 3 days and yesterday's
-pick). Inexact non-wakeup `AlarmManager.RTC` ~18:00, re-armed on app start and by `BootReceiver`.
-Silent channel, cover as large icon (Coil, 256 px), tap plays the whole album. Skipped while music
-plays. POST_NOTIFICATIONS asked once on first launch (Android 13+).
-Home tab (2026-10-29, start destination): suggestion card, recently played, most played,
-favorites, recently added (LazyRows, 128 dp covers at 256 px). User data now in `UserDatabase`
-(file still `stats.db`; v2 adds `favorites`; MIGRATION_1_2; schemas exported to `app/schemas/`).
-`UserLibrary` joins user-data ids with the song cache. `SongActionsSheet` = long-press menu
-(favorites now; playlists/hide later).
-
-Sren merge (user's own earlier app, `sren-music/` = reference copy, not built): port in phases —
-1 Home (done), 2 full player (done: route `player`, bars hidden; queue built only while its sheet
-is open; speed != 1x requires speed-capable offload). Sleep timer = `SleepTimer` + `SleepTimerEnforcer`:
-no delay/countdown (a coroutine delay freezes while the CPU sleeps in offload); on player events it
-sets `pauseAtEndOfMediaItems` when the time runs out during the current song; UI shows the end time. 3 Library (done): tabs Home/Library/Search/Settings; Library sub-tabs
-Songs (sort in memory with Collator, saved in AppSettings), Favorites, Folders (songs.folder from
-RELATIVE_PATH/DATA, LibraryDatabase v2), Artists, Albums, Videos; route `collection/{kind}/{key}`;
-Search = LIKE with ESCAPE '\\', debounced 250 ms. 4 playlists (in UserDatabase; never
-REPLACE on parent rows), 5 hide/trash/restore + .lrc lyrics working on Android 10+,
-6 local text-command assistant (skip the empty AI stubs), 7 delete `sren-music/` with the user's OK.
-The "Sren v0.4/v0.5" APKs the user had were repackaged LarkPlayer (com.dywx.larkplayer): never use.
-Auto-merging PRs is blocked by the permission classifier: the user merges PRs themselves.
-
-Owner rule: remove unused code and libraries (media3-ui and Compose tooling were removed).
-
-Not done: sleep timer (coming from the user's other app), equalizer, shuffle/repeat UI, queue
-persistence, full-screen Now Playing, album/artist screens, video player,
-playlists/favorites/history tables.
-
-Open question to verify on a device: whether deleting a file with the app closed
-bumps `getGeneration` (if not, the deletion shows up only after the next change).
-
-## Next: Phase 5 (approved in principle, waiting for the user's go-ahead)
-
-1. **Audio offload only while the screen is off**, disabled when the screen is on
-   (so EQ/speed work). Settings toggle, on by default, automatic fallback if the
-   device rejects it (some Xiaomi/Oppo ROMs are buggy).
-2. **Sleep timer** with coroutines, no system alarms; pauses and lets the service stop.
-
-Rejected by the user: forcing AMOLED black / auto screen-off tricks (the phone already
-has a power button and system settings).
-Saved for later: optional "video → audio-only if the user falls asleep" for the video player.
-
-Later phases: video player (gestures, subtitles, PiP), playlists/favorites/history,
-equalizer, widget, themes, targetSdk 36.
+Process notes:
+- Auto-merging PRs is blocked by the permission classifier: the user merges PRs themselves.
+- The "Sren v0.3–v0.5" APKs were repackaged LarkPlayer (`com.dywx.larkplayer`): never use.
+- Owner rule: remove unused code and libraries (media3-ui and Compose tooling were removed).
+- Rejected by the user: forcing AMOLED black / auto screen-off tricks.
+- Saved for later: video player (gestures, subtitles, PiP; optional "audio-only if the user falls
+  asleep"), equalizer, widget, queue persistence, targetSdk 36.
+- Open question to verify on a device: whether deleting a file with the app closed bumps
+  `getGeneration` (if not, the deletion shows up only after the next change).
 
 ## Building in this Codespace
 

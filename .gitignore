@@ -4,15 +4,19 @@
 !.env.example
 
 __pycache__/
-.pytest_cache/
 
-# APKs de terceros (LarkPlayer): no se redistribuyen en un repo público
+# APK: viven en apk/ del Codespace y en GitHub Releases, nunca en git.
+# Solo se sube apk/README.md, que explica cada archivo.
 *.apk
 *.aab
-apk/
+apk/*
+!apk/README.md
 
-# Herramienta REA: repo público aparte (github.com/INTECHNetworks/morluto-rea)
-morluto-rea/
+# Claves de firma: nunca en git (ver docs/COMPILAR.md).
+*.jks
+*.keystore
+keystore.properties
+
 
 # Android / Gradle
 .gradle/

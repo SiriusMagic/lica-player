@@ -5,16 +5,18 @@
 ## Dónde está cada cosa
 
 - [`sren/`](./sren): la app Android (Kotlin + Jetpack Compose + Media3).
-- [`sren-music/`](./sren-music): copia de referencia del código original de Sren, mientras sus funciones se pasan a la app. No se compila.
+- [`docs/`](./docs): cómo está hecha ([arquitectura](docs/ARQUITECTURA.md), [gestos](docs/GESTOS.md)), [cómo compilarla](docs/COMPILAR.md), [historia de versiones](docs/VERSIONES.md) e [inventario de carpetas](docs/INVENTARIO.md).
+- [`legado/stone/`](./legado/stone): código de **Stone 1.3.2**, la referencia de aspecto y funciones que se pasan a la app. Solo referencia.
+- [`CHANGELOG.md`](./CHANGELOG.md): qué cambió en cada versión.
+
+## Descargar la app
+
+La última versión está en la sección **[Releases](https://github.com/SiriusMagic/lica-player/releases)** (archivo `sren-music-X.Y.Z.apk`).
 
 ## Objetivo
 
 - Reproducir la música y los videos del teléfono, sin anuncios y sin nube obligatoria.
 - Durar muchas horas reproduciendo: cada función tiene que justificar lo que gasta.
-
-## Herramientas
-
-La carpeta [`herramientas/`](./herramientas) reúne prototipos de apoyo: **SARAP**, un asistente que convierte frases en acciones de la app, y un cuaderno de Colab para armar una **biblioteca musical** clasificada por estado de ánimo.
 
 ## Licencia
 
