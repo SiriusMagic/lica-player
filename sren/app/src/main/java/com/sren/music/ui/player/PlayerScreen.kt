@@ -1,7 +1,5 @@
 package com.sren.music.ui.player
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -53,13 +51,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.Player
@@ -70,8 +69,11 @@ import com.sren.music.playback.SleepTimerState
 import com.sren.music.ui.components.AlbumArt
 import com.sren.music.ui.components.SongActionsViewModel
 import com.sren.music.ui.components.toReadableDuration
-
-private val DarkEnd = Color(0xFF101418)
+import com.sren.music.ui.theme.SrenBackground
+import com.sren.music.ui.theme.SrenOnSurfaceVariant
+import com.sren.music.ui.theme.SrenOrange
+import com.sren.music.ui.theme.SrenSurface
+import com.sren.music.ui.theme.SrenSurfaceVariant
 
 /**
  * Full-screen player. Opened from the mini player; the tab bar is hidden here.
@@ -89,23 +91,21 @@ fun PlayerScreen(
     LaunchedEffect(nowPlaying == null) { if (nowPlaying == null) onClose() }
     if (nowPlaying == null) return
 
-    val accent by viewModel.accent.collectAsStateWithLifecycle()
     val position by viewModel.position.collectAsStateWithLifecycle(initialValue = state.positionAtEventMs)
     val timer by viewModel.timer.collectAsStateWithLifecycle()
     val favorites by actions.favoriteIds.collectAsStateWithLifecycle()
     val songId = nowPlaying.mediaId.toLongOrNull()
 
     var sheet by remember { mutableStateOf(Sheet.None) }
-    val top by animateColorAsState(
-        targetValue = accent?.let { Color(it) } ?: Color(0xFF2F6690),
-        animationSpec = tween(600),
-        label = "playerAccent",
-    )
+
+    // Cover size: 85 % of screen width, capped to a reasonable maximum.
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val coverSize = screenWidth * 0.85f
 
     Column(
         Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(top, DarkEnd)))
+            .background(SrenBackground)
             .statusBarsPadding()
             .navigationBarsPadding()
             .padding(horizontal = 24.dp),
@@ -114,29 +114,45 @@ fun PlayerScreen(
             Icon(Icons.Filled.KeyboardArrowDown, stringResource(R.string.player_close), tint = Color.White)
         }
 
-        Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+        // Album art — 85 % width, 24 dp corner radius (Stone 1.3.2 spec).
+        Box(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp, bottom = 20.dp),
+            contentAlignment = Alignment.Center,
+        ) {
             nowPlaying.albumId?.let {
                 // The one large decode in the app: 768 px, only while this screen is open.
-                AlbumArt(albumId = it, size = 300.dp, sizePx = 768, modifier = Modifier.aspectRatio(1f))
+                // Stone 1.3.2: 85 % del ancho de pantalla, cornerRadius 24 dp.
+                AlbumArt(
+                    albumId = it,
+                    size = coverSize,
+                    sizePx = 768,
+                    cornerRadius = 24.dp,
+                    modifier = Modifier.aspectRatio(1f),
+                )
             }
         }
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(Modifier.weight(1f)) {
+                // Stone 1.3.2: title White 26sp Bold
                 Text(
                     nowPlaying.title,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold,
                     color = Color.White,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
+                // Stone 1.3.2: artist SrenOnSurfaceVariant 16sp
                 Text(
                     listOf(nowPlaying.artist, nowPlaying.album).filter { it.isNotBlank() }.joinToString(" · "),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White.copy(alpha = 0.75f),
+                    fontSize = 16.sp,
+                    color = SrenOnSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(top = 4.dp),
                 )
             }
             if (songId != null) {
@@ -145,7 +161,8 @@ fun PlayerScreen(
                     Icon(
                         if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                         stringResource(if (isFavorite) R.string.action_unfavorite else R.string.action_favorite),
-                        tint = Color.White,
+                        // Stone 1.3.2: corazón activo SrenOrange, inactivo White
+                        tint = if (isFavorite) SrenOrange else Color.White,
                     )
                 }
             }
@@ -165,13 +182,15 @@ fun PlayerScreen(
                     tint = if (state.shuffle) Color.White else Color.White.copy(alpha = 0.45f),
                 )
             }
+            // Stone 1.3.2: prev/next tamaño 56 dp, icono 36 dp
             IconButton(onClick = viewModel::previous, modifier = Modifier.size(56.dp)) {
                 Icon(Icons.Filled.SkipPrevious, stringResource(R.string.player_previous), tint = Color.White, modifier = Modifier.size(36.dp))
             }
+            // Stone 1.3.2: play más grande — 72 dp contenedor, 40 dp icono, blanco
             FilledIconButton(
                 onClick = viewModel::togglePlayPause,
                 modifier = Modifier.size(72.dp),
-                colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color.White, contentColor = DarkEnd),
+                colors = IconButtonDefaults.filledIconButtonColors(containerColor = Color.White, contentColor = SrenBackground),
             ) {
                 Icon(
                     if (state.isPlaying) Icons.Filled.Pause else Icons.Filled.PlayArrow,
@@ -228,6 +247,7 @@ private fun SeekBar(position: Long, durationMs: Long, onSeek: (Long) -> Unit) {
     var dragging by remember { mutableStateOf<Float?>(null) }
     val fraction = dragging ?: if (durationMs > 0) (position.toFloat() / durationMs).coerceIn(0f, 1f) else 0f
     Column {
+        // Stone 1.3.2: activeTrack SrenOrange, inactiveTrack SrenSurfaceVariant, thumb SrenOrange
         Slider(
             value = fraction,
             onValueChange = { dragging = it },
@@ -237,15 +257,16 @@ private fun SeekBar(position: Long, durationMs: Long, onSeek: (Long) -> Unit) {
             },
             enabled = durationMs > 0,
             colors = SliderDefaults.colors(
-                thumbColor = Color.White,
-                activeTrackColor = Color.White,
-                inactiveTrackColor = Color.White.copy(alpha = 0.25f),
+                thumbColor = SrenOrange,
+                activeTrackColor = SrenOrange,
+                inactiveTrackColor = SrenSurfaceVariant,
             ),
         )
+        // Stone 1.3.2: tiempos SrenOnSurfaceVariant 12sp
         Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             val shown = dragging?.let { (it * durationMs).toLong() } ?: position
-            Text(shown.toReadableDuration(), style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = 0.75f))
-            Text(durationMs.toReadableDuration(), style = MaterialTheme.typography.bodySmall, color = Color.White.copy(alpha = 0.75f))
+            Text(shown.toReadableDuration(), fontSize = 12.sp, color = SrenOnSurfaceVariant)
+            Text(durationMs.toReadableDuration(), fontSize = 12.sp, color = SrenOnSurfaceVariant)
         }
     }
 }
@@ -271,7 +292,19 @@ private fun timerLabel(timer: SleepTimerState?): String {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SpeedSheet(current: Float, onPick: (Float) -> Unit, onDismiss: () -> Unit) {
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    // Stone 1.3.2: fondo SrenSurface, handle SrenSurfaceVariant
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = SrenSurface,
+        dragHandle = {
+            Box(
+                Modifier
+                    .padding(vertical = 10.dp)
+                    .size(width = 40.dp, height = 4.dp)
+                    .background(SrenSurfaceVariant, shape = androidx.compose.foundation.shape.CircleShape),
+            )
+        },
+    ) {
         Column(Modifier.navigationBarsPadding().padding(bottom = 16.dp)) {
             SheetTitle(stringResource(R.string.player_speed))
             SPEEDS.forEach { speed ->
@@ -284,13 +317,25 @@ private fun SpeedSheet(current: Float, onPick: (Float) -> Unit, onDismiss: () ->
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimerSheet(viewModel: PlayerViewModel, timer: SleepTimerState?, onDismiss: () -> Unit) {
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    // Stone 1.3.2: fondo SrenSurface, handle SrenSurfaceVariant
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = SrenSurface,
+        dragHandle = {
+            Box(
+                Modifier
+                    .padding(vertical = 10.dp)
+                    .size(width = 40.dp, height = 4.dp)
+                    .background(SrenSurfaceVariant, shape = androidx.compose.foundation.shape.CircleShape),
+            )
+        },
+    ) {
         Column(Modifier.navigationBarsPadding().padding(bottom = 16.dp)) {
             SheetTitle(stringResource(R.string.timer_title))
             Text(
                 stringResource(R.string.timer_body),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = SrenOnSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 24.dp, vertical = 4.dp),
             )
             listOf(15, 30, 45, 60, 90).forEach { minutes ->
@@ -322,7 +367,19 @@ private fun QueueSheet(viewModel: PlayerViewModel, onDismiss: () -> Unit) {
     LaunchedEffect(queue.current >= 0) {
         if (queue.current > 0) listState.scrollToItem(queue.current)
     }
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    // Stone 1.3.2: fondo SrenSurface, handle SrenSurfaceVariant
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        containerColor = SrenSurface,
+        dragHandle = {
+            Box(
+                Modifier
+                    .padding(vertical = 10.dp)
+                    .size(width = 40.dp, height = 4.dp)
+                    .background(SrenSurfaceVariant, shape = androidx.compose.foundation.shape.CircleShape),
+            )
+        },
+    ) {
         SheetTitle(stringResource(R.string.player_queue_count, queue.items.size))
         LazyColumn(state = listState, modifier = Modifier.fillMaxWidth().navigationBarsPadding()) {
             itemsIndexed(queue.items, key = { index, item -> "$index:${item.mediaId}" }) { index, item ->
@@ -337,10 +394,11 @@ private fun QueueSheet(viewModel: PlayerViewModel, onDismiss: () -> Unit) {
                 ) {
                     item.albumId?.let { AlbumArt(albumId = it, size = 40.dp) }
                     Column(Modifier.weight(1f)) {
+                        // Stone 1.3.2: pista activa SrenOrange, resto White
                         Text(
                             item.title,
                             style = MaterialTheme.typography.bodyLarge,
-                            color = if (isCurrent) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                            color = if (isCurrent) SrenOrange else Color.White,
                             fontWeight = if (isCurrent) FontWeight.SemiBold else FontWeight.Normal,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -348,14 +406,14 @@ private fun QueueSheet(viewModel: PlayerViewModel, onDismiss: () -> Unit) {
                         Text(
                             item.artist,
                             style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            color = SrenOnSurfaceVariant,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
                     }
                     if (!isCurrent) {
                         IconButton(onClick = { viewModel.removeQueueItem(index) }) {
-                            Icon(Icons.Filled.Close, stringResource(R.string.player_queue_remove))
+                            Icon(Icons.Filled.Close, stringResource(R.string.player_queue_remove), tint = Color.White)
                         }
                     }
                 }
@@ -366,19 +424,22 @@ private fun QueueSheet(viewModel: PlayerViewModel, onDismiss: () -> Unit) {
 
 @Composable
 private fun SheetTitle(text: String) {
+    // Stone 1.3.2: título en blanco sobre SrenSurface
     Text(
         text,
         style = MaterialTheme.typography.titleMedium,
+        color = Color.White,
         modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
     )
 }
 
 @Composable
 private fun SheetRow(text: String, selected: Boolean, onClick: () -> Unit) {
+    // Stone 1.3.2: fila activa SrenOrange, inactiva Color.White
     Text(
         text,
         style = MaterialTheme.typography.bodyLarge,
-        color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+        color = if (selected) SrenOrange else Color.White,
         fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
         modifier = Modifier
             .fillMaxWidth()
