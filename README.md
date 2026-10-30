@@ -6,7 +6,7 @@
 
 - [`sren/`](./sren): la app Android (Kotlin + Jetpack Compose + Media3).
 - [`docs/`](./docs): cómo está hecha ([arquitectura](docs/ARQUITECTURA.md), [gestos](docs/GESTOS.md)), [cómo compilarla](docs/COMPILAR.md), [historia de versiones](docs/VERSIONES.md) e [inventario de carpetas](docs/INVENTARIO.md).
-- [`legado/`](./legado): código de las versiones anteriores (Sren Kotlin, Sren-source, Sren Flutter). Solo referencia.
+- [`legado/stone/`](./legado/stone): código de **Stone 1.3.2**, la referencia de aspecto y funciones que se pasan a la app. Solo referencia.
 - [`CHANGELOG.md`](./CHANGELOG.md): qué cambió en cada versión.
 
 ## Descargar la app
@@ -17,10 +17,6 @@ La última versión está en la sección **[Releases](https://github.com/SiriusM
 
 - Reproducir la música y los videos del teléfono, sin anuncios y sin nube obligatoria.
 - Durar muchas horas reproduciendo: cada función tiene que justificar lo que gasta.
-
-## Herramientas
-
-La carpeta [`herramientas/`](./herramientas) reúne prototipos de apoyo: **SARAP**, un asistente que convierte frases en acciones de la app, y un cuaderno de Colab para armar una **biblioteca musical** clasificada por estado de ánimo.
 
 ## Licencia
 

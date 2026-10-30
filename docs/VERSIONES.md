@@ -1,44 +1,49 @@
-# Historia de versiones
+# Historia de versiones y plan de Stone 1.4
 
-Todas las apps de música que existieron, de dónde salieron y qué se toma de cada una para la Sren única. El código de las antiguas está en [`../legado/`](../legado) (etiqueta git **`legado-2026-10`**).
+## La meta
+**Stone 1.4** = la misma apariencia y funciones de **Stone 1.3.2** (pingüino, íconos, colores, pantallas),
+reconstruida sobre la base de **Lica** (Kotlin + Jetpack Compose + Media3): reproductor, servicio, escaneo
+sin repetir, tiempos de actualización por eventos y perfiles de batería. Resultado: más rápida, menos memoria,
+más batería y un APK de ~3 MB en vez de 26 MB.
+
+Stone 1.3.2 está hecha en React Native (JavaScript). Stone 1.4 traduce cada pantalla a Kotlin nativo.
+El código de Stone 1.3.2 se queda en [`../legado/stone/`](../legado/stone) como modelo hasta terminar.
 
 ## Línea de tiempo
 
-| Fecha | Versión | Tecnología | Dónde está | Estado |
-|---|---|---|---|---|
-| 27 jun 2026 | **Sren Kotlin** (`com.sren.music`) | Kotlin + Compose | `legado/sren-kotlin/` · APK `apk/legado/sren-kotlin-1.0.0.apk` | Compila |
-| 28 jun 2026 | **Sren Flutter** (`app.sren.mobile`) | Flutter | `legado/sren-flutter/` · APK `apk/legado/sren-flutter-1.0.0.apk` | Compila (con corrección) |
-| 28 jun 2026 → oct | **Pingüino Music** | Expo / React Native (web y móvil) | Repositorio [SiriusMagic/pinguino-music](https://github.com/SiriusMagic/pinguino-music) | Funciona en el navegador |
-| ? | **Aura Player** (`com.codex.auraplayer`) | Kotlin | Solo su README: `legado/aura-player/` | **Código perdido** (no estaba en ningún zip) |
-| 25 oct 2026 | **Sren-source** (`com.sren`) | Kotlin + Compose | `legado/sren-source/` · APK `apk/legado/sren-source-0.1.0.apk` | Compila (con corrección), 6 pruebas pasan |
-| 26 oct 2026 | **Lica Player 0.1.0** | Kotlin + Compose + Media3 | Este repositorio (historial de git) | Base actual |
-| 29 oct 2026 | **Sren music 0.2.0** | Kotlin + Compose + Media3 | `sren/` | **La app actual** |
+| Fecha | Versión | Tecnología | Dónde está |
+|---|---|---|---|
+| jun–oct 2026 | Sren Kotlin, Sren Flutter, Aura Player, Sren-source | Varias | Eliminadas. Código en la etiqueta git `legado-2026-10` |
+| 26 oct 2026 | **Lica Player 0.1.0** | Kotlin + Compose + Media3 | Historial de git: es la **base** |
+| 29 oct 2026 | **Sren music 0.2.0** | Kotlin + Compose + Media3 | `sren/` (base Lica, se convierte en Stone 1.4) |
+| 29 oct 2026 | **Stone 1.3.2** (`com.zirakusa.stone`) | Expo / React Native + módulos Kotlin | `legado/stone/` · APK `apk/legado/stone-1.3.2.apk` (26 MB) |
+| próximo | **Stone 1.4** | Kotlin + Compose + Media3 (base Lica) | `sren/` |
 
-**Lo que no son versiones propias:** los APK "Sren v0.3", "v0.4" y "v0.5" que había en la carpeta Codex (`output/`), y el `phone_dump/` sacado del teléfono, eran **LarkPlayer** (`com.dywx.larkplayer`) re-firmado. No se usan y se eliminan.
+## Qué se traduce de Stone 1.3.2 (pantalla por pantalla)
 
-## Qué se toma de cada una
-
-| Función | Viene de | Estado en Sren |
+| Función de Stone | Archivo en Stone | Estado en 1.4 |
 |---|---|---|
-| Servicio de reproducción, batería, escaneo sin repetir | Lica | ✅ Hecho |
-| Inicio, reproductor completo, temporizador, biblioteca, buscar, favoritas | Sren Kotlin + Lica | ✅ Hecho (0.2.0) |
-| Menú ⋮ (siguiente, playlist, compartir, usar como tono, ocultar, papelera) | Sren Kotlin | Planificado (PR C) |
-| Playlists, ocultas, papelera con restaurar | Sren Kotlin (sin su error que vaciaba playlists) | Planificado (PR C) |
-| Listas por estado de ánimo | Cuaderno de Colab (`MOOD_WORDS`, de Python a Kotlin) | Planificado (PR C) |
-| Pingüino amarillo, colores, botones píldora, chips | Fotos de diseño + Pingüino Music + Flutter | Planificado (PR B) |
-| Bienvenida: elegir idioma, "Reproduce tu música", términos | Flutter + Pingüino Music | Planificado (PR B) |
-| 6 idiomas (es, en, pt, fr, it, de) | Pingüino Music (`translations.ts`) | Planificado (PR B) |
-| Mini reproductor flotante, arrastrar la barra de progreso | Pingüino Music | Barra ✅; mini flotante planificado (PR D) |
-| Pestañas deslizables, letras `.lrc` | Sren Kotlin (letras corregidas para Android 10+) | Planificado (PR D) |
-| Volumen, gestos de deslizar, recortar audio, editar información | Ideas de lo que el usuario recordaba (hechas desde cero) | Planificado (PR D/E) |
-| Asistente: lista de acciones permitidas, aclaraciones, búsqueda sin tildes | Sren-source + SARAP (`herramientas/`) + comandos en Buscar de Aura | Planificado (PR F) |
-| Ajustes por secciones (biblioteca, limpieza, información) | Aura Player + Flutter | Planificado (PR F) |
-| Descargas de YouTube/Instagram | Aura Player | ❌ Descartado (sin código y requiere fuentes legales) |
-| Proveedores de IA (OpenAI, Gemini, Ollama, Alexa) | Sren Kotlin / Sren-source | ❌ Descartado (estaban vacíos) |
+| Nombre, íconos, colores, pingüino | `app.json`, `res/mipmap-*`, `design_guidelines.json` | Pendiente |
+| Bienvenida: idioma y "Reproduce tu música" | `app/onboarding/` | Pendiente |
+| 6 idiomas (es, en, pt, fr, it, de) | `src/i18n/translations.ts` | Pendiente |
+| Biblioteca por pestañas, orden, búsqueda | `features/library/` | Base Lica ✅, falta aspecto Stone |
+| Ocultos y papelera | `HiddenFilesModal.tsx`, `RecentDeletedModal.tsx` | Pendiente |
+| Reproductor, cola, mini reproductor | `app/player.tsx`, `QueueSheet.tsx`, `MiniPlayer.tsx` | Base Lica ✅, falta aspecto Stone |
+| Letras `.lrc` | `library-lyrics.ts`, `LyricsSheet.tsx` | Pendiente |
+| Temporizador personalizado | `CustomSleepTimerSheet.tsx` | Base Lica ✅ (más eficiente), falta aspecto |
+| Ecualizador | `StoneEqualizer.kt` | Pendiente |
+| Volumen propio en pantalla | `StoneVolumeOverlay.kt` | Pendiente |
+| Editor de tonos | `RingtoneEditor.tsx`, `StoneRingtoneModule.kt` | Pendiente |
+| Ahorro de energía | `EnergySaverScreen.tsx` | Base Lica ✅ (perfiles de audio) |
+| Temas, notificaciones, ajustes | `ThemeSheet.tsx`, `SettingsSheet.tsx` | Pendiente |
+| Opiniones y preguntas frecuentes | `Feedback*.tsx` | Pendiente |
+| Descarga de YouTube (`backend/`, yt-dlp) | `backend/` | ❌ No se pasa: necesita una PC y va contra las reglas de YouTube |
 
-## Errores aprendidos (para no repetirlos)
-1. **Reproductor sin servicio** (Sren Kotlin): la música se cortaba con la pantalla apagada. Sren usa `PlaybackService`.
-2. **Escanear abriendo cada archivo** (Sren Kotlin): lento. Sren usa los datos de MediaStore.
-3. **`REPLACE` + `CASCADE`** vaciaba las playlists (Sren Kotlin). En Sren, los datos del usuario van en `stats.db`, con migraciones y sin `REPLACE`.
-4. **Código sin compilar ni guardar en git** (Flutter, Sren-source, Aura): por eso se perdió Aura Player. Ahora todo va por PR, con CI y Releases.
-5. **APK con nombres engañosos** ("Sren v0.5" que era LarkPlayer): los APK se nombran `sren-music-X.Y.Z.apk` y se documentan en `apk/README.md`.
+## Lo de la base Lica que Stone no tenía (se queda)
+Inicio "Para ti hoy", estadísticas de lo más escuchado, favoritas, recomendación diaria, perfiles de batería,
+escaneo sin repetir, servicio en el mismo proceso.
+
+## Errores aprendidos
+1. Código sin guardar en git se pierde (Aura Player). Todo va por PR, con CI y Releases.
+2. APK con nombres engañosos: se nombran por app y versión y se documentan en `apk/README.md`.
+3. React Native gasta más: 26 MB de APK y un motor de JavaScript en memoria. Stone 1.4 es nativa.

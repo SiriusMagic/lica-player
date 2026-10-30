@@ -1,14 +1,6 @@
 # lica-player
 
-Espacio del reproductor de música Lica. El código de la app Android (Sren music) está en `sren/` (notas técnicas abajo). También están las herramientas de apoyo: `herramientas/sarap` (asistente de navegación) y `herramientas/biblioteca` (cuaderno de Colab).
-
-## Comandos
-
-```bash
-pip install pytest
-pytest -q                       # pruebas de SARAP y del cuaderno
-python herramientas/sarap/sarap.py   # SARAP interactivo
-```
+Espacio del reproductor de música Lica. El código de la app Android (Sren music) está en `sren/` (notas técnicas abajo). La meta es **Stone 1.4**: la apariencia de Stone 1.3.2 (`legado/stone/`) sobre la base de Lica. Plan en `docs/VERSIONES.md`.
 
 ## Reglas del dueño (aplican a todo cambio)
 
@@ -35,21 +27,15 @@ direction, but check their technical claims (several have been wrong, see below)
   releases, signing) first.** Gestures are listed in `docs/GESTOS.md` — keep it updated.
 - `docs/` — architecture, gestures, build guide, version history (`VERSIONES.md`), folder inventory
   (`INVENTARIO.md`), design photos (`diseno/`). `CHANGELOG.md` at the root.
-- `legado/` — source of every earlier version (Sren Kotlin, Sren-source, Sren Flutter, Aura Player README),
-  git tag `legado-2026-10`. Reference only; each folder's README says how to build it.
+- `legado/stone/` — source of **Stone 1.3.2** (Expo/React Native, `com.zirakusa.stone`), the user's
+  real app. NEVER delete it: it is the model for Stone 1.4. Older versions were removed (git tag `legado-2026-10`).
 - `apk/` — Codespace-only APK store by version (`vX.Y.Z/`, `legado/`); only `apk/README.md` is in git.
-- `herramientas/` — Python prototypes (SARAP assistant, Colab music-library notebook with mood classifier).
-- `morluto-rea/` — REA (APK analysis CLI), the only tool kept. Not part of the app.
-- `base.apk`, `split_config.*.apk` — LarkPlayer, to be deleted in the final cleanup PR.
 
-## Fusion plan (2026-10-29, approved by the user)
-One app (Sren + yellow penguin) recovering everything from the old versions. PRs, each from `main`:
-A legado + docs + CI/Releases + versioning (0.2.0) · B penguin identity, onboarding, 6 languages (es, en,
-pt, fr, it, de) · C ⋮ menu, playlists, hidden/trash, mood lists · D volume, swipe gestures, .lrc lyrics,
-floating mini player · E trim audio / ringtone (Media3 Transformer), edit info as in-app overrides ·
-F local assistant (Sren-source orchestrator + SARAP + commands in Search), sectioned settings ·
-G cleanup (delete Lark files, Codex leftovers) + v1.0.0. Full plan: `docs/VERSIONES.md` table.
-The user also found `Stone-1.3.2-arm64-v8a.apk` on their PC (not in any zip): identify it before using it.
+## Goal: Stone 1.4 (user decision, 2026-10-30)
+Take Stone 1.3.2 and rebuild it on the Lica base: same name, icons, colors, screens and features, but native
+Kotlin (Lica player/service, event-driven updates, zero-scan, battery profiles), far less RAM/battery/size.
+Screen-by-screen table: `docs/VERSIONES.md`. Not ported: Stone's YouTube downloader (`backend/`, yt-dlp).
+Keep Lica extras (Home "Para ti hoy", stats, favorites, daily suggestion, audio profiles).
 
 ## Clean-room boundary (do not cross)
 

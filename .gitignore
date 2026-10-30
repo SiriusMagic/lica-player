@@ -4,7 +4,6 @@
 !.env.example
 
 __pycache__/
-.pytest_cache/
 
 # APK: viven en apk/ del Codespace y en GitHub Releases, nunca en git.
 # Solo se sube apk/README.md, que explica cada archivo.
@@ -18,8 +17,6 @@ apk/*
 *.keystore
 keystore.properties
 
-# Herramienta REA: repo público aparte (github.com/INTECHNetworks/morluto-rea)
-morluto-rea/
 
 # Android / Gradle
 .gradle/

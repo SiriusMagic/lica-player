@@ -1,8 +1,0 @@
-.gradle/
-.gradle-user-home/
-.tools/
-app/build/
-build/
-*.apk
-*.ap_
-local.properties
