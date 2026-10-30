@@ -7,6 +7,7 @@ sin repetir, tiempos de actualización por eventos y perfiles de batería. Resul
 más batería y un APK de ~3 MB en vez de 26 MB.
 
 Stone 1.3.2 está hecha en React Native (JavaScript). Stone 1.4 traduce cada pantalla a Kotlin nativo.
+**Especificación detallada (cada apartado, gesto, señal y ajuste): [`STONE-1.4.md`](STONE-1.4.md).**
 El código de Stone 1.3.2 se queda en [`../legado/stone/`](../legado/stone) como modelo hasta terminar.
 
 ## Línea de tiempo

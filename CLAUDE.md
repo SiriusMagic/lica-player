@@ -1,6 +1,6 @@
 # lica-player
 
-Espacio del reproductor de música Lica. El código de la app Android (Sren music) está en `sren/` (notas técnicas abajo). La meta es **Stone 1.4**: la apariencia de Stone 1.3.2 (`legado/stone/`) sobre la base de Lica. Plan en `docs/VERSIONES.md`.
+Espacio del reproductor de música Lica. El código de la app Android (Sren music) está en `sren/` (notas técnicas abajo). La meta es **Stone 1.4**: la apariencia de Stone 1.3.2 (`legado/stone/`) sobre la base de Lica. Especificación completa (cada apartado, gesto y señal): `docs/STONE-1.4.md`.
 
 ## Reglas del dueño (aplican a todo cambio)
 
@@ -34,7 +34,7 @@ direction, but check their technical claims (several have been wrong, see below)
 ## Goal: Stone 1.4 (user decision, 2026-10-30)
 Take Stone 1.3.2 and rebuild it on the Lica base: same name, icons, colors, screens and features, but native
 Kotlin (Lica player/service, event-driven updates, zero-scan, battery profiles), far less RAM/battery/size.
-Screen-by-screen table: `docs/VERSIONES.md`. Not ported: Stone's YouTube downloader (`backend/`, yt-dlp).
+Full spec (every screen, gesture, signal, setting): `docs/STONE-1.4.md` — update its Estado column in every PR. Not ported: Stone's YouTube downloader (`backend/`, yt-dlp).
 Keep Lica extras (Home "Para ti hoy", stats, favorites, daily suggestion, audio profiles).
 
 ## Clean-room boundary (do not cross)

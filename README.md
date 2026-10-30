@@ -5,7 +5,7 @@
 ## Dónde está cada cosa
 
 - [`sren/`](./sren): la app Android (Kotlin + Jetpack Compose + Media3).
-- [`docs/`](./docs): cómo está hecha ([arquitectura](docs/ARQUITECTURA.md), [gestos](docs/GESTOS.md)), [cómo compilarla](docs/COMPILAR.md), [historia de versiones](docs/VERSIONES.md) e [inventario de carpetas](docs/INVENTARIO.md).
+- [`docs/`](./docs): cómo está hecha ([arquitectura](docs/ARQUITECTURA.md), [gestos](docs/GESTOS.md)), [cómo compilarla](docs/COMPILAR.md), [**especificación de Stone 1.4**](docs/STONE-1.4.md), [historia de versiones](docs/VERSIONES.md) e [inventario de carpetas](docs/INVENTARIO.md).
 - [`legado/stone/`](./legado/stone): código de **Stone 1.3.2**, la referencia de aspecto y funciones que se pasan a la app. Solo referencia.
 - [`CHANGELOG.md`](./CHANGELOG.md): qué cambió en cada versión.
 
