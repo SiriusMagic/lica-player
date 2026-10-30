@@ -4,6 +4,14 @@ Todas las versiones de la app, de la más nueva a la más vieja. Cada versión p
 
 ## [Sin publicar]
 
+## [0.3.1] - 2026-10-30
+### Cambiado
+- Aspecto visual Stone en todas las pantallas: reproductor, biblioteca, MiniPlayer, inicio.
+- MiniPlayer flotante con borde dorado, fondo ámbar oscuro y botón circular Stone.
+- Reproductor: fondo plano oscuro, portada con radio 24dp, deslizador dorado.
+- Biblioteca: chips de tabs estilo Stone (azul activo), filas de canciones con portada redonda.
+- Inicio: fondo oscuro, títulos de sección en gris Stone, tarjetas de álbum oscuras.
+
 ## [0.3.0] - 2026-10-30
 ### Cambiado
 - **Identidad visual Stone**: nombre "Stone", amarillo dorado `#F5C518` como color primario (antes naranja Lica), paleta completa de Stone 1.3.2 (fondo `#0A0A0E`, surface `#1C1C24`, azul de tabs `#339CFF`).

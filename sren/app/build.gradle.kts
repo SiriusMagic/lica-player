@@ -15,8 +15,8 @@ android {
         minSdk = 25
         targetSdk = 35
         // Subir los dos en cada versión publicada (ver docs/COMPILAR.md y CHANGELOG.md).
-        versionCode = 3
-        versionName = "0.3.0"
+        versionCode = 4
+        versionName = "0.3.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
         // DOOM mode: strip library translations we do not ship (smaller APK).
