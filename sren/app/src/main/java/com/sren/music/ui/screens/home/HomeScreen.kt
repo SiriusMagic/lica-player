@@ -32,8 +32,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
+import com.sren.music.ui.theme.SrenBackground
 import com.sren.music.ui.theme.SrenBannerBottom
 import com.sren.music.ui.theme.SrenBannerTop
+import com.sren.music.ui.theme.SrenOnSurfaceVariant
+import com.sren.music.ui.theme.SrenSurface
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -61,7 +64,9 @@ fun HomeScreen(
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SrenBackground),
         contentPadding = PaddingValues(vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
@@ -80,7 +85,7 @@ fun HomeScreen(
                 Text(
                     stringResource(R.string.home_hint),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = SrenOnSurfaceVariant,
                     modifier = Modifier.padding(horizontal = 16.dp),
                 )
             }
@@ -101,9 +106,11 @@ private fun androidx.compose.foundation.lazy.LazyListScope.songRow(
     if (songs.isEmpty()) return
     item(key = key) {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            // Stone: section titles in SrenOnSurfaceVariant, uppercase
             Text(
-                stringResource(title),
+                stringResource(title).uppercase(),
                 style = MaterialTheme.typography.titleMedium,
+                color = SrenOnSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
             LazyRow(
@@ -194,6 +201,7 @@ private fun SuggestionCard(song: Song, onClick: () -> Unit, onLongClick: () -> U
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun SongCard(song: Song, onClick: () -> Unit, onLongClick: () -> Unit) {
+    // Stone: album cards with SrenSurface background and 12dp corner radius
     Column(
         Modifier
             .width(CARD_WIDTH)
@@ -201,12 +209,18 @@ private fun SongCard(song: Song, onClick: () -> Unit, onLongClick: () -> Unit) {
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         // 128 dp on screen; 256 px decode is sharp on xxhdpi without a large bitmap.
-        AlbumArt(albumId = song.albumId, size = CARD_WIDTH, sizePx = 256)
+        // Wrap in a Card to apply Stone's SrenSurface + 12dp radius
+        Card(
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(containerColor = SrenSurface),
+        ) {
+            AlbumArt(albumId = song.albumId, size = CARD_WIDTH, sizePx = 256)
+        }
         Text(song.title, style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
         Text(
             song.artist,
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = SrenOnSurfaceVariant,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
         )
