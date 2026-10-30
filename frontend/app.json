@@ -1,17 +1,57 @@
 {
   "expo": {
-    "name": "frontend",
-    "slug": "frontend",
-    "version": "1.0.0",
-    "orientation": "portrait",
+    "name": "Stone",
+    "slug": "stone",
+    "version": "1.3.2",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
-    "scheme": "frontend",
+    "scheme": "stone",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false,
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "package": "com.zirakusa.stone",
+      "permissions": [
+        "MODIFY_AUDIO_SETTINGS",
+        "POST_NOTIFICATIONS",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_MEDIA_PLAYBACK",
+        "VIBRATE"
+      ],
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "category": [
+            "DEFAULT"
+          ],
+          "data": [
+            {
+              "mimeType": "audio/*",
+              "scheme": "content"
+            },
+            {
+              "mimeType": "audio/*",
+              "scheme": "file"
+            },
+            {
+              "mimeType": "video/*",
+              "scheme": "content"
+            },
+            {
+              "mimeType": "video/*",
+              "scheme": "file"
+            },
+            {
+              "mimeType": "audio/*"
+            },
+            {
+              "mimeType": "video/*"
+            }
+          ]
+        }
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#000000"
@@ -34,10 +74,19 @@
           "backgroundColor": "#000000"
         }
       ],
-      "expo-audio"
+      [
+        "expo-audio",
+        {
+          "enableBackgroundPlayback": true,
+          "recordAudioAndroid": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "apiBaseUrl": ""
     }
   }
 }

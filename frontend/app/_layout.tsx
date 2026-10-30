@@ -8,6 +8,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useIconFonts } from "@/src/hooks/use-icon-fonts";
 import { LanguageProvider } from "@/src/contexts/LanguageContext";
 import { AudioProvider } from "@/src/contexts/AudioContext";
+import { PlaybackToolsProvider } from "@/src/contexts/PlaybackToolsContext";
 
 LogBox.ignoreAllLogs(true);
 
@@ -30,8 +31,9 @@ export default function RootLayout() {
       <SafeAreaProvider>
         <LanguageProvider>
           <AudioProvider>
-            <StatusBar barStyle="light-content" backgroundColor="#0A0A0E" />
-            <Stack
+            <PlaybackToolsProvider>
+              <StatusBar barStyle="light-content" backgroundColor="#0A0A0E" />
+              <Stack
               screenOptions={{
                 headerShown: false,
                 contentStyle: { backgroundColor: "#0A0A0E" },
@@ -46,7 +48,8 @@ export default function RootLayout() {
                 name="player"
                 options={{ presentation: "modal", animation: "slide_from_bottom" }}
               />
-            </Stack>
+              </Stack>
+            </PlaybackToolsProvider>
           </AudioProvider>
         </LanguageProvider>
       </SafeAreaProvider>
