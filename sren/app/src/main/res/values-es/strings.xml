@@ -1,7 +1,7 @@
 <resources>
     <string name="tab_settings">Ajustes</string>
     <string name="perm_title">Se necesita acceso a tu música</string>
-    <string name="perm_body">Sren music necesita acceso al audio y video de tu teléfono para crear tu biblioteca. Nada sale de tu teléfono.</string>
+    <string name="perm_body">Stone necesita acceso al audio y video de tu teléfono para crear tu biblioteca. Nada sale de tu teléfono.</string>
     <string name="perm_grant">Dar acceso</string>
 
     <string name="settings_audio_profile">Audio y batería</string>
