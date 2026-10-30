@@ -14,21 +14,34 @@ android {
         applicationId = "com.sren.music"
         minSdk = 25
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1.0"
+        // Subir los dos en cada versión publicada (ver docs/COMPILAR.md y CHANGELOG.md).
+        versionCode = 2
+        versionName = "0.2.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
         // DOOM mode: strip library translations we do not ship (smaller APK).
         resourceConfigurations += listOf("en", "es")
     }
 
+    // Release key from environment variables (GitHub secrets in CI, or exported in the
+    // Codespace). Never committed. Without them, release builds fall back to the debug key.
+    val releaseKeystore = System.getenv("SREN_KEYSTORE_FILE")?.let(::file)?.takeIf { it.exists() }
+    signingConfigs {
+        if (releaseKeystore != null) {
+            create("release") {
+                storeFile = releaseKeystore
+                storePassword = System.getenv("SREN_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("SREN_KEY_ALIAS")
+                keyPassword = System.getenv("SREN_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            // Personal test builds: debug key so the APK installs over the debug one.
-            // Replace with a private release key before publishing to a store.
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -79,4 +92,6 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.coil.video)
     implementation(libs.androidx.palette.ktx)
+
+    testImplementation(libs.junit)
 }

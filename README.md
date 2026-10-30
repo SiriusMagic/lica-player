@@ -5,7 +5,13 @@
 ## Dónde está cada cosa
 
 - [`sren/`](./sren): la app Android (Kotlin + Jetpack Compose + Media3).
-- [`sren-music/`](./sren-music): copia de referencia del código original de Sren, mientras sus funciones se pasan a la app. No se compila.
+- [`docs/`](./docs): cómo está hecha ([arquitectura](docs/ARQUITECTURA.md), [gestos](docs/GESTOS.md)), [cómo compilarla](docs/COMPILAR.md), [historia de versiones](docs/VERSIONES.md) e [inventario de carpetas](docs/INVENTARIO.md).
+- [`legado/`](./legado): código de las versiones anteriores (Sren Kotlin, Sren-source, Sren Flutter). Solo referencia.
+- [`CHANGELOG.md`](./CHANGELOG.md): qué cambió en cada versión.
+
+## Descargar la app
+
+La última versión está en la sección **[Releases](https://github.com/SiriusMagic/lica-player/releases)** (archivo `sren-music-X.Y.Z.apk`).
 
 ## Objetivo
 
