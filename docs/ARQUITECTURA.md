@@ -1,6 +1,6 @@
-# Arquitectura de Sren music
+# Arquitectura de Stone
 
-Mapa del código de la app, para saber **qué hace cada parte y en qué archivo seguir escribiendo**. Todo el código está en `sren/app/src/main/java/com/sren/music/` (en este documento se omite ese prefijo).
+Mapa del código de la app, para saber **qué hace cada parte y en qué archivo seguir escribiendo**. Todo el código está en `stone/app/src/main/java/com/zirakusa/stone/` (en este documento se omite ese prefijo).
 
 ## La idea en una frase
 Sren lee la música que Android ya conoce (MediaStore), la guarda en una base de datos local para abrir al instante, y la reproduce desde un **servicio** que sigue sonando con la pantalla apagada, gastando lo mínimo.
@@ -25,7 +25,7 @@ Pantallas ──► playback/PlayerViewModel ──► playback/PlaybackConnecti
 | Archivo | Clase | Qué guarda | ¿Se puede borrar? |
 |---|---|---|---|
 | `library.db` | `data/local/db/LibraryDatabase` | Copia de la biblioteca (canciones, videos) | **Sí.** Es una caché: si cambia su estructura se borra y se vuelve a escanear sola. |
-| `stats.db` | `data/user/UserDatabase` | Datos del usuario: veces escuchada, última vez, **favoritas** | **Nunca.** Cada cambio de estructura necesita una migración (`MIGRATION_x_y`) y su esquema se guarda en `sren/app/schemas/`. |
+| `stats.db` | `data/user/UserDatabase` | Datos del usuario: veces escuchada, última vez, **favoritas** | **Nunca.** Cada cambio de estructura necesita una migración (`MIGRATION_x_y`) y su esquema se guarda en `stone/app/schemas/`. |
 
 Preferencias pequeñas (perfil de audio, orden, recomendación diaria…) van en SharedPreferences, en `data/settings/AppSettings`.
 
@@ -34,8 +34,14 @@ Preferencias pequeñas (perfil de audio, orden, recomendación diaria…) van en
 ### Arranque
 | Archivo | Qué hace |
 |---|---|
-| `SrenApplication.kt` | Inicia Hilt (inyección de dependencias) y configura Coil (portadas: 10 % de memoria, 32 MB en disco). |
-| `MainActivity.kt` | La única pantalla de Android. Limita a 60 Hz en el perfil "Máxima duración", abre la canción de la notificación diaria y reprograma esa notificación. |
+| `StoneApplication.kt` | Inicia Hilt (inyección de dependencias) y configura Coil (portadas: 10 % de memoria, 32 MB en disco). |
+| `MainActivity.kt` | La única pantalla de Android. Muestra la bienvenida la primera vez (idioma → "Permitir acceso"), aplica el idioma elegido (`attachBaseContext`), limita a 60 Hz en el perfil "Máxima duración", abre la canción de la notificación diaria y reprograma esa notificación. |
+
+### `core/` — utilidades
+| Archivo | Qué hace |
+|---|---|
+| `locale/AppLanguage.kt` | Los 6 idiomas de Stone: guarda el elegido y lo aplica a los textos (sin AppCompat). |
+| `permissions/MediaPermissions.kt` | Qué permiso de música pedir según la versión de Android. |
 
 ### `data/` — datos
 | Archivo | Qué hace |
@@ -45,7 +51,7 @@ Preferencias pequeñas (perfil de audio, orden, recomendación diaria…) van en
 | `local/db/LibraryDatabase.kt`, `dao/SongDao.kt`, `dao/VideoDao.kt` | Caché `library.db` y sus consultas (álbumes, artistas, carpetas, búsqueda). |
 | `model/` | `Song`, `Video`, `Album`, `Artist`, `Folder`. |
 | `repository/MediaRepository.kt` (+`Impl`) | Punto único para leer la biblioteca y sincronizarla. |
-| `settings/AppSettings.kt` | Preferencias: perfil de audio, orden de canciones, recomendación diaria. |
+| `settings/AppSettings.kt` | Preferencias: perfil de audio, orden de canciones, recomendación diaria, si ya pasó la bienvenida. |
 | `settings/AudioProfile.kt` | Perfiles Máxima duración / Equilibrado / Alta fidelidad. |
 | `settings/SongSort.kt` | Órdenes de la lista de canciones (con reglas del idioma: "Álvaro" junto a "Alvaro"). |
 | `user/UserDatabase.kt` | `stats.db`: tablas `play_stats` y `favorites`, y sus migraciones. |
@@ -68,8 +74,9 @@ Preferencias pequeñas (perfil de audio, orden, recomendación diaria…) van en
 ### `ui/` — pantallas
 | Archivo | Qué hace |
 |---|---|
-| `navigation/SrenNavHost.kt` | Estructura de la app: barra superior, mini reproductor, pestañas y rutas (`home`, `library`, `search`, `settings`, `player`, `collection/{tipo}/{clave}`). |
+| `navigation/StoneNavHost.kt` | Estructura de la app: barra superior, mini reproductor, pestañas y rutas (`home`, `library`, `search`, `settings`, `player`, `collection/{tipo}/{clave}`). |
 | `navigation/Destinations.kt` | Las pestañas de abajo: Inicio, Biblioteca, Buscar, Ajustes. |
+| `screens/onboarding/Onboarding.kt` | Bienvenida de Stone: `LanguageScreen` (elegir idioma, Términos y Privacidad) y `WelcomeScreen` ("Reproduce tu música", Permitir acceso). |
 | `screens/PermissionGate.kt` | Pide el permiso de música antes de mostrar la app. |
 | `screens/home/` | Inicio: bienvenida, recomendación, filas de historial y favoritas. |
 | `screens/library/LibraryScreen.kt` | Biblioteca y sus subpestañas (Canciones, Favoritas, Carpetas, Artistas, Álbumes, Videos). |
@@ -84,16 +91,16 @@ Preferencias pequeñas (perfil de audio, orden, recomendación diaria…) van en
 | `components/AlbumArt.kt` | Portada con tamaño de decodificación limitado. |
 | `theme/` | Colores y tema. |
 
-### Recursos (`sren/app/src/main/res/`)
+### Recursos (`stone/app/src/main/res/`)
 - Textos: `values/strings.xml` (inglés) y `values-es/strings.xml` (español). **Todo texto visible va aquí**, nunca escrito en el código.
 - Íconos: `drawable/ic_launcher_*`, `mipmap*/`, `drawable/ic_stat_music.xml` (barra de estado).
 
 ## Dónde agregar cada cosa
 | Quiero… | Dónde |
 |---|---|
-| Una pantalla nueva | `ui/screens/<nombre>/` + su ruta en `ui/navigation/SrenNavHost.kt` (y en `Destinations.kt` si es pestaña). |
+| Una pantalla nueva | `ui/screens/<nombre>/` + su ruta en `ui/navigation/StoneNavHost.kt` (y en `Destinations.kt` si es pestaña). |
 | Un ajuste nuevo | Valor en `data/settings/AppSettings.kt` + fila en `ui/screens/settings/SettingsScreen.kt`. |
-| Guardar datos del usuario | Entidad y DAO en `data/user/UserDatabase.kt`, **subir la versión y escribir la migración**; compilar para regenerar `sren/app/schemas/`. |
+| Guardar datos del usuario | Entidad y DAO en `data/user/UserDatabase.kt`, **subir la versión y escribir la migración**; compilar para regenerar `stone/app/schemas/`. |
 | Una consulta de la biblioteca | `data/local/db/dao/SongDao.kt` + `MediaRepository`. |
 | Una acción del reproductor | `playback/PlayerViewModel.kt` (si necesita ExoPlayer directamente, en `PlaybackService.kt`). |
 | Una opción del menú de canción | `ui/components/SongActionsSheet.kt`. |

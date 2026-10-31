@@ -1,0 +1,124 @@
+<resources>
+    <string name="tab_settings">Impostazioni</string>
+    <string name="perm_title">Serve l\'accesso ai contenuti multimediali</string>
+    <string name="perm_body">Stone ha bisogno di accedere all\'audio e ai video del dispositivo per creare la tua libreria. Niente esce dal tuo telefono.</string>
+    <string name="perm_grant">Consenti l\'accesso</string>
+
+    <string name="settings_audio_profile">Audio e batteria</string>
+    <string name="profile_long_life">Massima durata della batteria</string>
+    <string name="profile_long_life_body">Il chip audio del telefono riproduce la musica mentre il processore è in sospensione. Tra un brano e l\'altro può esserci una brevissima pausa. Lo schermo funziona a 60 Hz.</string>
+    <string name="profile_balanced">Bilanciato</string>
+    <string name="profile_balanced_body">Risparmia batteria con il chip audio solo se i brani continuano a susseguirsi senza interruzioni. Consigliato.</string>
+    <string name="profile_high_fidelity">Alta fedeltà</string>
+    <string name="profile_high_fidelity_body">Audio a piena precisione (32 bit) per file ad alta risoluzione, senza risparmio di batteria. Per audiofili.</string>
+
+    <string name="settings_advanced">Controllo avanzato</string>
+    <string name="setting_daily_suggestion">Suggerimento del giorno</string>
+    <string name="setting_daily_suggestion_body">Una volta al giorno, un brano dagli album che ascolti di più. Tocca la notifica per ascoltarlo.</string>
+    <string name="suggestion_channel">Suggerimento del giorno</string>
+    <string name="suggestion_channel_body">Un brano al giorno dai tuoi album preferiti</string>
+    <string name="suggestion_text">Dall\'album %1$s · Tocca per ascoltare</string>
+
+    <string name="tab_home">Home</string>
+    <string name="home_for_you">Per te oggi</string>
+    <string name="home_from_album">Dall\'album %1$s</string>
+    <string name="home_recently_played">Ascoltati di recente</string>
+    <string name="home_most_played">I più ascoltati</string>
+    <string name="home_favorites">Preferiti</string>
+    <string name="home_recently_added">Aggiunti di recente</string>
+    <string name="home_hint">Ascolta qualche brano e questa schermata si riempirà con la tua cronologia. Tieni premuto un brano per aggiungerlo ai Preferiti.</string>
+    <string name="action_favorite">Aggiungi ai Preferiti</string>
+    <string name="action_unfavorite">Rimuovi dai Preferiti</string>
+    <string name="songs_scanning">Analisi della libreria…</string>
+    <string name="songs_empty">Nessun brano trovato su questo dispositivo.</string>
+
+    <string name="player_close">Chiudi il lettore</string>
+    <string name="player_play">Riproduci</string>
+    <string name="player_pause">Pausa</string>
+    <string name="player_next">Successivo</string>
+    <string name="player_previous">Precedente</string>
+    <string name="player_shuffle">Casuale</string>
+    <string name="player_repeat">Ripeti</string>
+    <string name="player_speed">Velocità di riproduzione</string>
+    <string name="player_queue">Coda</string>
+    <string name="player_queue_count">Coda · %1$d brani</string>
+    <string name="player_queue_remove">Rimuovi dalla coda</string>
+    <string name="timer_title">Timer di spegnimento</string>
+    <string name="timer_body">La musica si ferma alla fine del brano in riproduzione in quel momento, così nessun brano viene interrotto a metà.</string>
+    <string name="timer_minutes">%1$d minuti</string>
+    <string name="timer_end_of_song">Alla fine di questo brano</string>
+    <string name="timer_cancel">Disattiva timer</string>
+    <string name="timer_off_short">Timer</string>
+    <string name="timer_end_of_song_short">Dopo questo brano</string>
+    <string name="timer_until">Fino alle %1$s</string>
+
+    <string name="tab_library">Libreria</string>
+    <string name="home_tagline">Prima di tutto la tua musica locale. Niente pubblicità, nessun cloud obbligatorio e un vero controllo sui tuoi file.</string>
+    <string name="action_rescan">Cerca musica</string>
+
+    <string name="tab_search">Cerca</string>
+    <string name="library_songs">Brani</string>
+    <string name="library_folders">Cartelle</string>
+    <string name="library_artists">Artisti</string>
+    <string name="library_albums">Album</string>
+    <string name="library_videos">Video</string>
+    <string name="library_root_folder">Memoria principale</string>
+    <string name="favorites_empty">Ancora nessun preferito. Tieni premuto un brano per aggiungerlo.</string>
+    <string name="action_play_all">Riproduci tutto</string>
+    <string name="sort_recent">Aggiunti di recente</string>
+    <string name="sort_title">Titolo</string>
+    <string name="sort_artist">Artista</string>
+    <string name="sort_album">Album</string>
+    <string name="sort_duration">Più lunghi</string>
+    <string name="search_hint">Brani, artisti o album</string>
+    <string name="search_clear">Cancella</string>
+    <string name="search_empty_query">Scrivi per cercare nella tua musica.</string>
+    <string name="search_no_results">Nessun risultato.</string>
+    <plurals name="song_count">
+        <item quantity="one">%d brano</item>
+        <item quantity="other">%d brani</item>
+    </plurals>
+    <plurals name="album_count">
+        <item quantity="one">%d album</item>
+        <item quantity="other">%d album</item>
+    </plurals>
+
+    <!-- Bienvenida de Stone (app/onboarding/*.tsx). -->
+    <string name="onb_choose_language">Scegli la tua lingua</string>
+    <string name="onb_start">Inizia</string>
+    <string name="onb_terms_notice">Toccando \"Inizia\", riconosci di aver letto e accettato i nostri</string>
+    <string name="onb_terms">Termini di Servizio</string>
+    <string name="onb_and">e</string>
+    <string name="onb_privacy">Informativa sulla privacy</string>
+    <string name="onb_title_1">Riproduci</string>
+    <string name="onb_title_2">la tua musica</string>
+    <string name="onb_subtitle_a">Lasciaci accedere alla </string>
+    <string name="onb_subtitle_b">tua musica</string>
+    <string name="onb_subtitle_c"> per riprodurre i tuoi brani.</string>
+    <string name="onb_allow_access">Consenti l\'accesso</string>
+    <string name="settings_language">Lingua</string>
+
+    <!-- Ajustes y menú de canción (traídos de main) -->
+    <string name="settings_playback">Riproduzione</string>
+    <string name="setting_gapless">Riproduzione senza pause</string>
+    <string name="setting_gapless_body">Nessun silenzio tra i brani. Attiva l\'offload sul chip audio con la riproduzione senza pause, indipendentemente dal profilo.</string>
+    <string name="setting_default_speed">Velocità di riproduzione predefinita</string>
+    <string name="settings_library">Libreria</string>
+    <string name="setting_rescan">Cerca musica</string>
+    <string name="setting_sleep_timer">Timer di spegnimento</string>
+    <string name="setting_sleep_timer_open_player">Apri prima il lettore</string>
+    <string name="settings_preferences">Preferenze</string>
+    <string name="setting_notifications">Notifiche</string>
+    <string name="settings_about">Informazioni</string>
+    <string name="setting_version">Versione</string>
+    <string name="setting_send_feedback">Invia un parere</string>
+    <string name="home_now_playing">In riproduzione</string>
+    <string name="action_share">Condividi</string>
+    <string name="action_play_next">Riproduci dopo</string>
+    <string name="action_add_to_queue">Aggiungi alla coda</string>
+    <string name="action_delete">Elimina</string>
+    <string name="delete_confirm_title">Eliminare il brano?</string>
+    <string name="delete_confirm_body">\"%1$s\" verrà eliminato definitivamente dal tuo dispositivo.</string>
+    <string name="delete_confirm_ok">Elimina</string>
+    <string name="delete_confirm_cancel">Annulla</string>
+</resources>

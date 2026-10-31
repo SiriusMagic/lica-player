@@ -13,6 +13,6 @@ apk/
 ```
 
 ## Reglas
-- Una carpeta por versión: `vX.Y.Z/<nombre>-X.Y.Z.apk`, con la versión de `versionName` en `sren/app/build.gradle.kts`.
+- Una carpeta por versión: `vX.Y.Z/<nombre>-X.Y.Z.apk`, con la versión de `versionName` en `stone/app/build.gradle.kts`.
 - Aquí no van APK de otras apps.
 - Cómo se compila: [`docs/COMPILAR.md`](../docs/COMPILAR.md).

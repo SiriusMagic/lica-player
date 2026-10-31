@@ -1,8 +1,20 @@
-# Cambios de Sren music
+# Cambios de Stone (antes Sren music)
 
 Todas las versiones de la app, de la más nueva a la más vieja. Cada versión publicada tiene su APK en la pestaña **Releases** de GitHub y en `/apk/` del Codespace.
 
 ## [Sin publicar]
+Camino a **Stone 1.4** (lista completa en `docs/STONE-1.4.md`).
+
+### Cambiado
+- La app pasa a ser **Stone**: nombre, ícono del pingüino, ícono de notificación y colores de Stone 1.3.2.
+  Paquete `com.zirakusa.stone` (el de Stone), `versionCode` 20. La carpeta del código pasa de `sren/` a `stone/`.
+
+### Añadido
+- **Bienvenida de Stone**: elegir idioma (Empezar), Términos y Privacidad con páginas reales
+  (`docs/TERMINOS.md`, `docs/PRIVACIDAD.md`), y "Reproduce tu música" con **Permitir acceso**. Solo sale la primera vez.
+- **6 idiomas**: español, inglés, portugués, francés, italiano y alemán; también se cambia en Ajustes → Idioma.
+- **Verificador de apartados** (`herramientas/verificar_stone.py`, también en la CI): cada apartado marcado como
+  hecho debe citar su código, y los 6 idiomas deben estar completos. Skill del proyecto: `/verificar-stone`.
 
 ## [0.3.1] - 2026-10-30
 ### Cambiado

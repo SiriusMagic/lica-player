@@ -26,15 +26,15 @@ jobs:
           KEYSTORE_BASE64: ${{ secrets.SREN_KEYSTORE_BASE64 }}
         run: |
           if [ -n "$KEYSTORE_BASE64" ]; then
-            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/sren.jks"
-            echo "SREN_KEYSTORE_FILE=$RUNNER_TEMP/sren.jks" >> "$GITHUB_ENV"
-            echo "FIRMA=Firmado con la clave de Sren." >> "$GITHUB_ENV"
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/stone.jks"
+            echo "SREN_KEYSTORE_FILE=$RUNNER_TEMP/stone.jks" >> "$GITHUB_ENV"
+            echo "FIRMA=Firmado con la clave de Stone." >> "$GITHUB_ENV"
           else
             echo "::warning::Sin clave propia: el APK se firma con una clave de prueba."
             echo "FIRMA=Firmado con una clave de prueba: para instalarlo puede que haya que desinstalar la versión anterior." >> "$GITHUB_ENV"
           fi
       - name: Compilar el APK final
-        working-directory: sren
+        working-directory: stone
         env:
           SREN_KEYSTORE_PASSWORD: ${{ secrets.SREN_KEYSTORE_PASSWORD }}
           SREN_KEY_ALIAS: ${{ secrets.SREN_KEY_ALIAS }}
@@ -46,8 +46,8 @@ jobs:
           TAG: ${{ github.ref_name }}
         run: |
           VERSION="${TAG#v}"
-          cp sren/app/build/outputs/apk/release/app-release.apk "sren-music-$VERSION.apk"
+          cp stone/app/build/outputs/apk/release/app-release.apk "stone-$VERSION.apk"
           # Notas: la sección de esta versión en CHANGELOG.md.
           awk -v v="$VERSION" '$0 ~ "^## \\[" v "\\]" {on=1; next} /^## \[/ {on=0} on' CHANGELOG.md > notas.md
           printf '\n%s\n' "$FIRMA" >> notas.md
-          gh release create "$TAG" "sren-music-$VERSION.apk" --title "Sren music $VERSION" --notes-file notas.md
+          gh release create "$TAG" "stone-$VERSION.apk" --title "Stone $VERSION" --notes-file notas.md
