@@ -3,7 +3,7 @@
 Todo lo necesario para **reconstruir la app desde cero, saber dónde queda cada APK y continuar el código** sin perder nada.
 
 ## Requisitos
-- **JDK 21.** Gradle 8.11 no funciona con JDK 25.
+- **JDK 21.** Probado con Gradle 9.8.2 y AGP 9.5 (AGP 9 pide JDK 17 o más nuevo).
 - **Android SDK** con la plataforma 35. La ruta va en `stone/local.properties` (`sdk.dir=...`), que no se sube a git.
 - En el Codespace ya está todo: el SDK en `/home/codespace/android-sdk` y el JDK 21 en `/home/codespace/java/21.0.12+1-ms`.
 

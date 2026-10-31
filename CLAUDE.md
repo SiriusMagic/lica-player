@@ -76,7 +76,7 @@ its cost. Rules already applied (keep them):
   (`repeatOnLifecycle(STARTED)` in `StoneNavHost`).
 - Deletes in batches of 500 (SQLite 999-variable limit on old Android).
 - No sync without read permission (would save an "empty library" stamp).
-- `resourceConfigurations` en + es; minify + shrinkResources in release.
+- `androidResources.localeFilters` with the 6 Stone languages; minify + shrinkResources in release.
 
 Corrected claims from the pasted messages, for the record:
 - `getVersion()` alone does NOT change when songs are added; `getGeneration()` is required.
@@ -86,9 +86,10 @@ Corrected claims from the pasted messages, for the record:
 
 ## Stack
 
-Kotlin 2.0.21, AGP 8.7.3, Gradle 8.11.1, compileSdk/targetSdk 35, minSdk 25,
-Compose BOM 2024.12.01 (Material 3), Navigation Compose, Media3 1.5.1, Hilt 2.52 + KSP,
-Room 2.6.1, Coil 2.7.0 (+ coil-video), Palette. Package/applicationId `com.zirakusa.stone`
+Kotlin 2.4.21 (built into AGP 9: no `kotlin-android` plugin, compiler options in `kotlin { compilerOptions }`),
+AGP 9.5.0, Gradle 9.8.2, compileSdk 37 (Compose 2026.09 requires it), targetSdk 35, minSdk 25,
+Compose BOM 2026.09.00 (Material 3), Navigation Compose, Media3 1.5.1, Hilt 2.60.1 + KSP 2.3.13,
+Room 2.8.5, Coil 2.7.0 (+ coil-video), Palette. Package/applicationId `com.zirakusa.stone`
 (replaces Stone 1.3.2 once installed, after a one-time uninstall because the signing key differs). Cache DB file `library.db` (`LibraryDatabase`).
 
 ## Status (v0.2.0, 2026-10-29)

@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
@@ -8,7 +7,8 @@ plugins {
 
 android {
     namespace = "com.zirakusa.stone"
-    compileSdk = 35
+    // Compose 2026.09 pide compilar contra Android 37; targetSdk no cambia (la app se comporta igual).
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.zirakusa.stone"
@@ -19,8 +19,6 @@ android {
         versionName = "1.4.0-alfa.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
-        // Solo los 6 idiomas de Stone: quita las traducciones de las librerías (APK más pequeño).
-        resourceConfigurations += listOf("en", "es", "pt", "fr", "it", "de")
     }
 
     // Release key from environment variables (GitHub secrets in CI, or exported in the
@@ -56,7 +54,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = "17" }
+    // Solo los 6 idiomas de Stone: quita las traducciones de las librerías (APK más pequeño).
+    // AGP 9: localeFilters reemplaza a resourceConfigurations.
+    androidResources { localeFilters += listOf("en", "es", "pt", "fr", "it", "de") }
     buildFeatures { compose = true; buildConfig = true }
     packaging {
         resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" }
@@ -94,4 +94,9 @@ dependencies {
     implementation(libs.androidx.palette.ktx)
 
     testImplementation(libs.junit)
+}
+
+// AGP 9 trae Kotlin incluido: las opciones del compilador van aquí (antes, kotlinOptions dentro de android).
+kotlin {
+    compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
 }
