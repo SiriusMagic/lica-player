@@ -1,5 +1,11 @@
 package com.sren.music.data.repository
 
+import android.content.ContentUris
+import android.content.Context
+import android.content.IntentSender
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.util.Log
 import com.sren.music.data.local.db.dao.SongDao
 import com.sren.music.data.local.db.dao.VideoDao
@@ -10,7 +16,9 @@ import com.sren.music.data.model.Artist
 import com.sren.music.data.model.Folder
 import com.sren.music.data.model.Song
 import com.sren.music.data.model.Video
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,12 +26,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withContext
+import java.io.File
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class MediaRepositoryImpl @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val scanner: MediaStoreScanner,
     private val stampStore: LibraryStampStore,
     private val songDao: SongDao,
@@ -114,6 +125,32 @@ class MediaRepositoryImpl @Inject constructor(
         // MediaStore fires many notifications while it indexes a folder;
         // wait for a quiet moment and sync once.
         scanner.changes().debounce(CHANGE_DEBOUNCE_MS).collect { syncLibrary() }
+    }
+
+    override suspend fun deleteSong(song: Song): IntentSender? = withContext(Dispatchers.IO) {
+        val uri = ContentUris.withAppendedId(
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+            song.id,
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // API 30+: the system shows its own confirmation dialog.
+            // The caller must launch this IntentSender via an ActivityResultLauncher.
+            MediaStore.createDeleteRequest(context.contentResolver, listOf(uri)).intentSender
+        } else {
+            // API 25–29: delete directly. READ_EXTERNAL_STORAGE is sufficient for
+            // files the app owns; for files from other apps WRITE_EXTERNAL_STORAGE
+            // would be needed (but we already hold READ_EXTERNAL_STORAGE ≤ API 32).
+            try {
+                val deleted = context.contentResolver.delete(uri, null, null)
+                if (deleted == 0) {
+                    // ContentResolver returned nothing; try as a raw file path.
+                    File(Uri.parse(song.path).path ?: "").delete()
+                }
+            } catch (_: Exception) { /* best-effort on older Android */ }
+            // Remove from cache immediately so the UI updates without waiting for a scan.
+            songDao.deleteByIds(listOf(song.id))
+            null
+        }
     }
 
     private suspend fun syncAudio(sinceGeneration: Long?) {

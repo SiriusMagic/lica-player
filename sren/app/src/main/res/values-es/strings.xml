@@ -5,6 +5,22 @@
     <string name="perm_grant">Dar acceso</string>
 
     <string name="settings_audio_profile">Audio y batería</string>
+    <string name="settings_playback">Reproducción</string>
+    <string name="setting_gapless">Reproducción sin pausas</string>
+    <string name="setting_gapless_body">Sin silencio entre canciones. Activa el offload del chip de audio con gapless, independientemente del perfil.</string>
+    <string name="setting_default_speed">Velocidad de reproducción por defecto</string>
+    <string name="settings_library">Biblioteca</string>
+    <string name="setting_rescan">Buscar música</string>
+    <string name="setting_sleep_timer">Temporizador para dormir</string>
+    <string name="setting_sleep_timer_open_player">Abre el reproductor primero</string>
+
+    <string name="settings_preferences">Preferencias</string>
+    <string name="setting_language">Idioma</string>
+    <string name="setting_notifications">Notificaciones</string>
+
+    <string name="settings_about">Acerca de</string>
+    <string name="setting_version">Versión</string>
+    <string name="setting_send_feedback">Enviar opinión</string>
     <string name="profile_long_life">Máxima duración de batería</string>
     <string name="profile_long_life_body">El chip de audio del teléfono reproduce la música mientras el procesador duerme. Puede haber un mínimo silencio entre canciones. La pantalla funciona a 60 Hz.</string>
     <string name="profile_balanced">Equilibrado</string>
@@ -21,6 +37,7 @@
 
     <string name="tab_home">Inicio</string>
     <string name="home_for_you">Para ti hoy</string>
+    <string name="home_now_playing">Reproduciendo</string>
     <string name="home_from_album">Del álbum %1$s</string>
     <string name="home_recently_played">Escuchadas recientemente</string>
     <string name="home_most_played">Las que más escuchas</string>
@@ -29,6 +46,14 @@
     <string name="home_hint">Escucha algunas canciones y esta pantalla se llenará con tu historial. Mantén pulsada una canción para añadirla a Favoritas.</string>
     <string name="action_favorite">Añadir a Favoritas</string>
     <string name="action_unfavorite">Quitar de Favoritas</string>
+    <string name="action_share">Compartir</string>
+    <string name="action_play_next">Reproducir siguiente</string>
+    <string name="action_add_to_queue">Añadir a la cola</string>
+    <string name="action_delete">Borrar</string>
+    <string name="delete_confirm_title">¿Borrar canción?</string>
+    <string name="delete_confirm_body">"%1$s" se eliminará permanentemente de tu teléfono.</string>
+    <string name="delete_confirm_ok">Borrar</string>
+    <string name="delete_confirm_cancel">Cancelar</string>
     <string name="songs_scanning">Buscando tu música…</string>
     <string name="songs_empty">No se encontraron canciones en este teléfono.</string>
 

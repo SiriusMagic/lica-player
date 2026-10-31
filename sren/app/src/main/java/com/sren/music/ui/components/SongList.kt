@@ -28,11 +28,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.sren.music.R
 import com.sren.music.data.model.Song
+import com.sren.music.playback.PlayerViewModel
+import com.sren.music.ui.theme.SrenOnSurfaceVariant
 
 /**
  * A list of songs: tap plays the list from that song, long-press opens the
@@ -42,6 +47,7 @@ import com.sren.music.data.model.Song
 fun SongList(
     songs: List<Song>,
     onPlay: (songs: List<Song>, index: Int) -> Unit,
+    playerViewModel: PlayerViewModel,
     modifier: Modifier = Modifier,
     header: LazyListScope.() -> Unit = {},
 ) {
@@ -52,7 +58,13 @@ fun SongList(
             SongRow(song, onClick = { onPlay(songs, index) }, onLongClick = { actionsFor = song })
         }
     }
-    actionsFor?.let { SongActionsSheet(song = it, onDismiss = { actionsFor = null }) }
+    actionsFor?.let {
+        SongActionsSheet(
+            song = it,
+            onDismiss = { actionsFor = null },
+            playerViewModel = playerViewModel,
+        )
+    }
 }
 
 /** "Play all" and "Shuffle" buttons for the top of a list. */
@@ -83,17 +95,27 @@ fun SongRow(song: Song, onClick: () -> Unit, onLongClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        AlbumArt(albumId = song.albumId, size = 48.dp)
+        // Stone 1.3.2: portada 56dp, borderRadius 12dp
+        AlbumArt(albumId = song.albumId, size = 56.dp, cornerRadius = 12.dp)
         Column(modifier = Modifier.weight(1f)) {
-            Text(song.title, style = MaterialTheme.typography.bodyLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+            // Stone 1.3.2: título blanco, 17sp, Bold
+            Text(
+                song.title,
+                color = Color.White,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+            // Stone 1.3.2: artista SrenOnSurfaceVariant, 13sp
             Text(
                 song.artist,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = SrenOnSurfaceVariant,
+                fontSize = 13.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -101,7 +123,7 @@ fun SongRow(song: Song, onClick: () -> Unit, onLongClick: () -> Unit) {
         Text(
             song.duration.toReadableDuration(),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = SrenOnSurfaceVariant,
         )
     }
 }

@@ -15,8 +15,8 @@ android {
         minSdk = 25
         targetSdk = 35
         // Subir los dos en cada versión publicada (ver docs/COMPILAR.md y CHANGELOG.md).
-        versionCode = 2
-        versionName = "0.2.0"
+        versionCode = 6
+        versionName = "0.3.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
         // DOOM mode: strip library translations we do not ship (smaller APK).
@@ -57,7 +57,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions { jvmTarget = "17" }
-    buildFeatures { compose = true }
+    buildFeatures { compose = true; buildConfig = true }
     packaging {
         resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" }
     }
