@@ -165,6 +165,22 @@ class PlayerViewModel @Inject constructor(
 
     fun removeQueueItem(index: Int) { attached?.removeMediaItem(index) }
 
+    /**
+     * Inserts [song] immediately after the currently playing item so it plays next.
+     * If nothing is playing, the song is added at the end of the queue.
+     */
+    fun playNext(song: Song) {
+        val c = attached ?: return
+        val insertAt = if (c.mediaItemCount == 0) 0 else c.currentMediaItemIndex + 1
+        c.addMediaItem(insertAt, song.toMediaItem())
+    }
+
+    /** Appends [song] at the end of the queue. */
+    fun addToQueue(song: Song) {
+        val c = attached ?: return
+        c.addMediaItem(song.toMediaItem())
+    }
+
     fun toggleShuffle() {
         val c = attached ?: return
         c.shuffleModeEnabled = !c.shuffleModeEnabled

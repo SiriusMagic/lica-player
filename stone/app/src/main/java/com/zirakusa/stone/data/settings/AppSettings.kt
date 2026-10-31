@@ -37,6 +37,30 @@ class AppSettings @Inject constructor(
     private val _dailySuggestion = MutableStateFlow(prefs.getBoolean(KEY_DAILY_SUGGESTION, true))
     val dailySuggestion: StateFlow<Boolean> = _dailySuggestion.asStateFlow()
 
+    /**
+     * Gapless playback override: when true, forces offload with gapless regardless of the
+     * audio profile. PlaybackService reads this to decide the gapless flag.
+     */
+    private val _gapless = MutableStateFlow(prefs.getBoolean(KEY_GAPLESS, false))
+    val gapless: StateFlow<Boolean> = _gapless.asStateFlow()
+
+    fun setGapless(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_GAPLESS, enabled).apply()
+        _gapless.value = enabled
+    }
+
+    /**
+     * Default playback speed. Stored as a Float; the player reads this on start.
+     * Valid values: 0.5, 0.75, 1.0, 1.25, 1.5, 2.0.
+     */
+    private val _defaultSpeed = MutableStateFlow(prefs.getFloat(KEY_DEFAULT_SPEED, 1f))
+    val defaultSpeed: StateFlow<Float> = _defaultSpeed.asStateFlow()
+
+    fun setDefaultSpeed(speed: Float) {
+        prefs.edit().putFloat(KEY_DEFAULT_SPEED, speed).apply()
+        _defaultSpeed.value = speed
+    }
+
     /** The last song suggested, so the next day suggests a different one. */
     var lastSuggestedSongId: Long
         get() = prefs.getLong(KEY_LAST_SUGGESTION, -1L)
@@ -80,5 +104,7 @@ class AppSettings @Inject constructor(
         const val KEY_NOTIF_ASKED = "notification_permission_asked"
         const val KEY_LANGUAGE_CHOSEN = "language_chosen"
         const val KEY_ONBOARDED = "onboarded"
+        const val KEY_GAPLESS = "gapless_playback"
+        const val KEY_DEFAULT_SPEED = "default_speed"
     }
 }

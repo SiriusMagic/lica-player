@@ -98,4 +98,28 @@
     <string name="onb_subtitle_c"> zugreifen, um deine Songs abzuspielen.</string>
     <string name="onb_allow_access">Zugriff erlauben</string>
     <string name="settings_language">Sprache</string>
+
+    <!-- Ajustes y menú de canción (traídos de main) -->
+    <string name="settings_playback">Wiedergabe</string>
+    <string name="setting_gapless">Lückenlose Wiedergabe</string>
+    <string name="setting_gapless_body">Keine Stille zwischen den Titeln. Aktiviert das Offload auf den Audiochip mit lückenloser Wiedergabe, unabhängig vom Profil.</string>
+    <string name="setting_default_speed">Standard-Wiedergabegeschwindigkeit</string>
+    <string name="settings_library">Bibliothek</string>
+    <string name="setting_rescan">Musik suchen</string>
+    <string name="setting_sleep_timer">Schlaf-Timer</string>
+    <string name="setting_sleep_timer_open_player">Öffne zuerst den Player</string>
+    <string name="settings_preferences">Einstellungen</string>
+    <string name="setting_notifications">Benachrichtigungen</string>
+    <string name="settings_about">Über</string>
+    <string name="setting_version">Version</string>
+    <string name="setting_send_feedback">Feedback senden</string>
+    <string name="home_now_playing">Läuft gerade</string>
+    <string name="action_share">Teilen</string>
+    <string name="action_play_next">Als Nächstes abspielen</string>
+    <string name="action_add_to_queue">Zur Warteschlange hinzufügen</string>
+    <string name="action_delete">Löschen</string>
+    <string name="delete_confirm_title">Titel löschen?</string>
+    <string name="delete_confirm_body">\"%1$s\" wird dauerhaft von deinem Gerät gelöscht.</string>
+    <string name="delete_confirm_ok">Löschen</string>
+    <string name="delete_confirm_cancel">Abbrechen</string>
 </resources>

@@ -19,18 +19,18 @@ jobs:
       run:
         working-directory: stone
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Apartados de Stone 1.4 e idiomas
         working-directory: .
         run: python3 -I herramientas/verificar_stone.py
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: "21"
           cache: gradle
       - name: Pruebas y APK de prueba
         run: ./gradlew --no-daemon :app:testDebugUnitTest :app:assembleDebug
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: stone-debug
           path: stone/app/build/outputs/apk/debug/*.apk

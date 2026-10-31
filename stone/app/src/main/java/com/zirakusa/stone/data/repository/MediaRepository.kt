@@ -55,4 +55,13 @@ interface MediaRepository {
      * until cancelled; the caller runs it only while the UI is visible.
      */
     suspend fun watchLibrary()
+
+    /**
+     * Removes [song] from the device via MediaStore and from the Room cache.
+     * On API 30+ uses [MediaStore.createDeleteRequest] (the system shows a
+     * confirmation dialog; the caller must launch the resulting IntentSender).
+     * Returns an [IntentSender] on API 30+, or null on older devices (where
+     * the file is deleted directly via [File.delete] and no dialog is needed).
+     */
+    suspend fun deleteSong(song: com.zirakusa.stone.data.model.Song): android.content.IntentSender?
 }

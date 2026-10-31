@@ -97,4 +97,28 @@
     <string name="onb_subtitle_c"> pour lire vos chansons.</string>
     <string name="onb_allow_access">Autoriser l\'accès</string>
     <string name="settings_language">Langue</string>
+
+    <!-- Ajustes y menú de canción (traídos de main) -->
+    <string name="settings_playback">Lecture</string>
+    <string name="setting_gapless">Lecture sans blanc</string>
+    <string name="setting_gapless_body">Aucun silence entre les pistes. Active le déchargement sur la puce audio avec la lecture sans blanc, quel que soit le profil.</string>
+    <string name="setting_default_speed">Vitesse de lecture par défaut</string>
+    <string name="settings_library">Bibliothèque</string>
+    <string name="setting_rescan">Rechercher de la musique</string>
+    <string name="setting_sleep_timer">Minuterie de mise en veille</string>
+    <string name="setting_sleep_timer_open_player">Ouvrez d\'abord le lecteur</string>
+    <string name="settings_preferences">Préférences</string>
+    <string name="setting_notifications">Notifications</string>
+    <string name="settings_about">À propos</string>
+    <string name="setting_version">Version</string>
+    <string name="setting_send_feedback">Envoyer un avis</string>
+    <string name="home_now_playing">En cours de lecture</string>
+    <string name="action_share">Partager</string>
+    <string name="action_play_next">Lire ensuite</string>
+    <string name="action_add_to_queue">Ajouter à la file d\'attente</string>
+    <string name="action_delete">Supprimer</string>
+    <string name="delete_confirm_title">Supprimer le morceau ?</string>
+    <string name="delete_confirm_body">\"%1$s\" sera supprimé définitivement de votre appareil.</string>
+    <string name="delete_confirm_ok">Supprimer</string>
+    <string name="delete_confirm_cancel">Annuler</string>
 </resources>

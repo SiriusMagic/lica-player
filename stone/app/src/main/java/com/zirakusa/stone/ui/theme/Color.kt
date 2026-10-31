@@ -13,6 +13,7 @@ val StoneSurface = Color(0xFF1C1C24)
 val StoneSurfaceHighlight = Color(0xFF2A2A35)
 val StoneTextSecondary = Color(0xFFA0A0A5)
 val StoneError = Color(0xFFFF4C4C)
+val StoneBlue = Color(0xFF339CFF) // pestaña y portada activas
 
 // Tarjetas de la bienvenida (language.tsx / welcome.tsx).
 val StoneCard = Color(0xFF15151B)

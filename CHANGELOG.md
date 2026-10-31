@@ -16,6 +16,21 @@ Camino a **Stone 1.4** (lista completa en `docs/STONE-1.4.md`).
 - **Verificador de apartados** (`herramientas/verificar_stone.py`, también en la CI): cada apartado marcado como
   hecho debe citar su código, y los 6 idiomas deben estar completos. Skill del proyecto: `/verificar-stone`.
 
+## [0.3.1] - 2026-10-30
+### Cambiado
+- Aspecto visual Stone en todas las pantallas: reproductor, biblioteca, MiniPlayer, inicio.
+- MiniPlayer flotante con borde dorado, fondo ámbar oscuro y botón circular Stone.
+- Reproductor: fondo plano oscuro, portada con radio 24dp, deslizador dorado.
+- Biblioteca: chips de tabs estilo Stone (azul activo), filas de canciones con portada redonda.
+- Inicio: fondo oscuro, títulos de sección en gris Stone, tarjetas de álbum oscuras.
+
+## [0.3.0] - 2026-10-30
+### Cambiado
+- **Identidad visual Stone**: nombre "Stone", amarillo dorado `#F5C518` como color primario (antes naranja Lica), paleta completa de Stone 1.3.2 (fondo `#0A0A0E`, surface `#1C1C24`, azul de tabs `#339CFF`).
+- **Ícono**: pingüino Stone en todas las densidades, reemplaza el diseño de auriculares de Lica.
+### Corregido
+- Dependabot PR #20 había subido kotlin/ksp/hilt/navigation/coreKtx a versiones incompatibles con AGP 8.7.3 y compileSdk 35; revertidas al último set compatible.
+
 ## [0.2.0] - 2026-10-29
 Primera versión como **Sren music** (antes Lica Player).
 

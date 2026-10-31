@@ -97,4 +97,28 @@
     <string name="onb_subtitle_c"> para reproduzir suas canções.</string>
     <string name="onb_allow_access">Permitir acesso</string>
     <string name="settings_language">Idioma</string>
+
+    <!-- Ajustes y menú de canción (traídos de main) -->
+    <string name="settings_playback">Reprodução</string>
+    <string name="setting_gapless">Reprodução sem pausas</string>
+    <string name="setting_gapless_body">Sem silêncio entre as faixas. Ativa o offload do chip de áudio com gapless, independentemente do perfil.</string>
+    <string name="setting_default_speed">Velocidade de reprodução padrão</string>
+    <string name="settings_library">Biblioteca</string>
+    <string name="setting_rescan">Procurar música</string>
+    <string name="setting_sleep_timer">Temporizador para dormir</string>
+    <string name="setting_sleep_timer_open_player">Abra o reprodutor primeiro</string>
+    <string name="settings_preferences">Preferências</string>
+    <string name="setting_notifications">Notificações</string>
+    <string name="settings_about">Sobre</string>
+    <string name="setting_version">Versão</string>
+    <string name="setting_send_feedback">Enviar opinião</string>
+    <string name="home_now_playing">Tocando agora</string>
+    <string name="action_share">Compartilhar</string>
+    <string name="action_play_next">Tocar em seguida</string>
+    <string name="action_add_to_queue">Adicionar à fila</string>
+    <string name="action_delete">Apagar</string>
+    <string name="delete_confirm_title">Apagar música?</string>
+    <string name="delete_confirm_body">\"%1$s\" será apagada permanentemente do seu aparelho.</string>
+    <string name="delete_confirm_ok">Apagar</string>
+    <string name="delete_confirm_cancel">Cancelar</string>
 </resources>

@@ -97,4 +97,28 @@
     <string name="onb_subtitle_c"> per riprodurre i tuoi brani.</string>
     <string name="onb_allow_access">Consenti l\'accesso</string>
     <string name="settings_language">Lingua</string>
+
+    <!-- Ajustes y menú de canción (traídos de main) -->
+    <string name="settings_playback">Riproduzione</string>
+    <string name="setting_gapless">Riproduzione senza pause</string>
+    <string name="setting_gapless_body">Nessun silenzio tra i brani. Attiva l\'offload sul chip audio con la riproduzione senza pause, indipendentemente dal profilo.</string>
+    <string name="setting_default_speed">Velocità di riproduzione predefinita</string>
+    <string name="settings_library">Libreria</string>
+    <string name="setting_rescan">Cerca musica</string>
+    <string name="setting_sleep_timer">Timer di spegnimento</string>
+    <string name="setting_sleep_timer_open_player">Apri prima il lettore</string>
+    <string name="settings_preferences">Preferenze</string>
+    <string name="setting_notifications">Notifiche</string>
+    <string name="settings_about">Informazioni</string>
+    <string name="setting_version">Versione</string>
+    <string name="setting_send_feedback">Invia un parere</string>
+    <string name="home_now_playing">In riproduzione</string>
+    <string name="action_share">Condividi</string>
+    <string name="action_play_next">Riproduci dopo</string>
+    <string name="action_add_to_queue">Aggiungi alla coda</string>
+    <string name="action_delete">Elimina</string>
+    <string name="delete_confirm_title">Eliminare il brano?</string>
+    <string name="delete_confirm_body">\"%1$s\" verrà eliminato definitivamente dal tuo dispositivo.</string>
+    <string name="delete_confirm_ok">Elimina</string>
+    <string name="delete_confirm_cancel">Annulla</string>
 </resources>

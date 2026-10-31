@@ -27,6 +27,9 @@ import com.zirakusa.stone.core.media.MediaUris
  * is tiny even for large cover files.
  *
  * Falls back to a music-note icon on error or while loading.
+ *
+ * [cornerRadius] defaults to 6.dp (general UI); callers that follow Stone 1.3.2
+ * list style pass 12.dp.
  */
 @Composable
 fun AlbumArt(
@@ -34,6 +37,7 @@ fun AlbumArt(
     modifier: Modifier = Modifier,
     size: Dp = 48.dp,
     sizePx: Int = 128,  // Low-res for lists; caller passes 512 for Now Playing.
+    cornerRadius: Dp = 6.dp,
 ) {
     val artUri = MediaUris.albumArt(albumId)
 
@@ -48,17 +52,17 @@ fun AlbumArt(
         contentScale = ContentScale.Crop,
         modifier = modifier
             .size(size)
-            .clip(RoundedCornerShape(6.dp)),
-        error = { ArtPlaceholder(modifier = Modifier.size(size)) },
-        loading = { ArtPlaceholder(modifier = Modifier.size(size)) },
+            .clip(RoundedCornerShape(cornerRadius)),
+        error = { ArtPlaceholder(modifier = Modifier.size(size), cornerRadius = cornerRadius) },
+        loading = { ArtPlaceholder(modifier = Modifier.size(size), cornerRadius = cornerRadius) },
     )
 }
 
 @Composable
-private fun ArtPlaceholder(modifier: Modifier = Modifier) {
+private fun ArtPlaceholder(modifier: Modifier = Modifier, cornerRadius: Dp = 6.dp) {
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(6.dp))
+            .clip(RoundedCornerShape(cornerRadius))
             .background(MaterialTheme.colorScheme.surfaceVariant),
         contentAlignment = Alignment.Center,
     ) {
