@@ -10,8 +10,18 @@
     <string name="setting_gapless">Gapless playback</string>
     <string name="setting_gapless_body">No silence between tracks. Enables audio-chip offload with gapless, regardless of profile.</string>
     <string name="setting_default_speed">Default playback speed</string>
+    <string name="settings_library">Library</string>
+    <string name="setting_rescan">Search for music</string>
+    <string name="setting_sleep_timer">Sleep timer</string>
+    <string name="setting_sleep_timer_open_player">Open the player first</string>
+
+    <string name="settings_preferences">Preferences</string>
+    <string name="setting_language">Language</string>
+    <string name="setting_notifications">Notifications</string>
+
     <string name="settings_about">About</string>
     <string name="setting_version">Version</string>
+    <string name="setting_send_feedback">Send feedback</string>
     <string name="profile_long_life">Longest battery life</string>
     <string name="profile_long_life_body">The phone\'s audio chip plays the music while the processor sleeps. Track changes may have a tiny gap. The screen runs at 60 Hz.</string>
     <string name="profile_balanced">Balanced</string>
