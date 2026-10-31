@@ -152,6 +152,7 @@ fun SrenNavHost() {
                     onPlay = player::playSongs,
                     onPlayAlbumOf = player::playAlbumOf,
                     onOpenLibrary = { navController.navigateToTab(Destination.Library) },
+                    playerViewModel = player,
                 )
             }
             composable(Destination.Library.route) {
@@ -159,6 +160,7 @@ fun SrenNavHost() {
                     onPlay = player::playSongs,
                     onShuffle = player::playShuffled,
                     onOpen = { kind, key, title -> navController.navigate(collectionRoute(kind, key, title)) },
+                    playerViewModel = player,
                 )
             }
             composable(
@@ -173,10 +175,11 @@ fun SrenNavHost() {
                     title = entry.arguments?.getString(ARG_TITLE).orEmpty(),
                     onPlay = player::playSongs,
                     onShuffle = player::playShuffled,
+                    playerViewModel = player,
                 )
             }
             composable(Destination.Search.route) {
-                SearchScreen(onPlay = player::playSongs)
+                SearchScreen(onPlay = player::playSongs, playerViewModel = player)
             }
             composable(Destination.Settings.route) {
                 SettingsScreen()

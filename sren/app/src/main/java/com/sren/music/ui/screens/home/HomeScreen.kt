@@ -45,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sren.music.R
 import com.sren.music.data.model.Song
+import com.sren.music.playback.PlayerViewModel
 import com.sren.music.ui.components.AlbumArt
 import com.sren.music.ui.components.SongActionsSheet
 
@@ -53,6 +54,7 @@ fun HomeScreen(
     onPlay: (songs: List<Song>, index: Int) -> Unit,
     onPlayAlbumOf: (songId: Long) -> Unit,
     onOpenLibrary: () -> Unit,
+    playerViewModel: PlayerViewModel,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -92,7 +94,13 @@ fun HomeScreen(
         }
     }
 
-    actionsFor?.let { SongActionsSheet(song = it, onDismiss = { actionsFor = null }) }
+    actionsFor?.let {
+        SongActionsSheet(
+            song = it,
+            onDismiss = { actionsFor = null },
+            playerViewModel = playerViewModel,
+        )
+    }
 }
 
 /** A titled, horizontally scrolling row of covers. Skipped entirely when empty. */

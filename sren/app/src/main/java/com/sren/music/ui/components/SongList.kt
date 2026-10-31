@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sren.music.R
 import com.sren.music.data.model.Song
+import com.sren.music.playback.PlayerViewModel
 import com.sren.music.ui.theme.SrenOnSurfaceVariant
 
 /**
@@ -46,6 +47,7 @@ import com.sren.music.ui.theme.SrenOnSurfaceVariant
 fun SongList(
     songs: List<Song>,
     onPlay: (songs: List<Song>, index: Int) -> Unit,
+    playerViewModel: PlayerViewModel,
     modifier: Modifier = Modifier,
     header: LazyListScope.() -> Unit = {},
 ) {
@@ -56,7 +58,13 @@ fun SongList(
             SongRow(song, onClick = { onPlay(songs, index) }, onLongClick = { actionsFor = song })
         }
     }
-    actionsFor?.let { SongActionsSheet(song = it, onDismiss = { actionsFor = null }) }
+    actionsFor?.let {
+        SongActionsSheet(
+            song = it,
+            onDismiss = { actionsFor = null },
+            playerViewModel = playerViewModel,
+        )
+    }
 }
 
 /** "Play all" and "Shuffle" buttons for the top of a list. */

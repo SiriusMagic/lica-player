@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sren.music.R
 import com.sren.music.data.model.Song
+import com.sren.music.playback.PlayerViewModel
 import com.sren.music.ui.components.EmptyMessage
 import com.sren.music.ui.components.SongList
 import com.sren.music.ui.components.playButtons
@@ -35,13 +36,14 @@ fun CollectionScreen(
     title: String,
     onPlay: (songs: List<Song>, index: Int) -> Unit,
     onShuffle: (songs: List<Song>) -> Unit,
+    playerViewModel: PlayerViewModel,
     viewModel: CollectionViewModel = hiltViewModel(),
 ) {
     val songs = viewModel.songs.collectAsStateWithLifecycle().value
     when {
         songs == null -> Loading()
         songs.isEmpty() -> EmptyMessage(stringResource(R.string.songs_empty))
-        else -> SongList(songs, onPlay) {
+        else -> SongList(songs, onPlay, playerViewModel = playerViewModel) {
             item(key = "title") {
                 Column(Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
                     Text(
@@ -66,6 +68,7 @@ fun CollectionScreen(
 @Composable
 fun SearchScreen(
     onPlay: (songs: List<Song>, index: Int) -> Unit,
+    playerViewModel: PlayerViewModel,
     viewModel: SearchViewModel = hiltViewModel(),
 ) {
     val query by viewModel.query.collectAsStateWithLifecycle()
@@ -93,7 +96,7 @@ fun SearchScreen(
             query.isBlank() -> EmptyMessage(stringResource(R.string.search_empty_query))
             results == null -> Loading()
             results.isEmpty() -> EmptyMessage(stringResource(R.string.search_no_results))
-            else -> SongList(results, onPlay)
+            else -> SongList(results, onPlay, playerViewModel = playerViewModel)
         }
     }
 }
