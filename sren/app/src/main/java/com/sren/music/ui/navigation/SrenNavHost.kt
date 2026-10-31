@@ -182,7 +182,12 @@ fun SrenNavHost() {
                 SearchScreen(onPlay = player::playSongs, playerViewModel = player)
             }
             composable(Destination.Settings.route) {
-                SettingsScreen()
+                SettingsScreen(
+                    onRescan = library::rescan,
+                    onOpenPlayer = {
+                        navController.navigate(PLAYER_ROUTE) { launchSingleTop = true }
+                    },
+                )
             }
         }
     }

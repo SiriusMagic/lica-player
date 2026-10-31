@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
@@ -105,7 +106,11 @@ private fun formatSpeed(speed: Float): String =
     if (speed % 1f == 0f) "${speed.toInt()}x" else "${speed}x"
 
 @Composable
-fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
+fun SettingsScreen(
+    viewModel: SettingsViewModel = hiltViewModel(),
+    onRescan: () -> Unit = {},
+    onOpenPlayer: () -> Unit = {},
+) {
     val selected by viewModel.profile.collectAsStateWithLifecycle()
     val dailySuggestion by viewModel.dailySuggestion.collectAsStateWithLifecycle()
     val gapless by viewModel.gapless.collectAsStateWithLifecycle()
@@ -117,6 +122,10 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
     val askPermission = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { ok ->
         if (!ok) context.openNotificationSettings()
     }
+
+    // Message for the "open player first" toast, captured here so it can be
+    // used inside a lambda without capturing context directly.
+    val openPlayerFirst = stringResource(R.string.setting_sleep_timer_open_player)
 
     Column(
         Modifier
@@ -141,6 +150,26 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
             }
         }
 
+        // ── Sección: Biblioteca ───────────────────────────────────────────────
+        SectionTitle(R.string.settings_library)
+        SettingsCard {
+            TapRow(
+                title = R.string.setting_rescan,
+                showDivider = true,
+                onClick = onRescan,
+            )
+            TapRow(
+                title = R.string.setting_sleep_timer,
+                showDivider = false,
+                onClick = {
+                    // The sleep timer lives inside the player. If it is not
+                    // open yet we show a toast so the user knows why.
+                    Toast.makeText(context, openPlayerFirst, Toast.LENGTH_SHORT).show()
+                    onOpenPlayer()
+                },
+            )
+        }
+
         // ── Sección: Reproducción ─────────────────────────────────────────────
         SectionTitle(R.string.settings_playback)
         SettingsCard {
@@ -156,6 +185,28 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
                 meta = formatSpeed(defaultSpeed),
                 showDivider = false,
                 onClick = { showSpeedSheet = true },
+            )
+        }
+
+        // ── Sección: Preferencias ─────────────────────────────────────────────
+        SectionTitle(R.string.settings_preferences)
+        SettingsCard {
+            TapRow(
+                title = R.string.setting_language,
+                showDivider = true,
+                onClick = {
+                    runCatching {
+                        context.startActivity(
+                            Intent(Settings.ACTION_LOCALE_SETTINGS)
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                        )
+                    }
+                },
+            )
+            TapRow(
+                title = R.string.setting_notifications,
+                showDivider = false,
+                onClick = { context.openNotificationSettings() },
             )
         }
 
@@ -186,6 +237,21 @@ fun SettingsScreen(viewModel: SettingsViewModel = hiltViewModel()) {
             InfoRow(
                 title = R.string.setting_version,
                 meta = BuildConfig.VERSION_NAME,
+                showDivider = true,
+            )
+            TapRow(
+                title = R.string.setting_send_feedback,
+                showDivider = false,
+                onClick = {
+                    runCatching {
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://github.com/SiriusMagic/lica-player/issues"),
+                            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                        )
+                    }
+                },
             )
         }
     }
@@ -306,10 +372,36 @@ private fun ActionRow(
     if (showDivider) RowDivider()
 }
 
+// ── Row: tappable, title only (no meta) ──────────────────────────────────────
+
+@Composable
+private fun TapRow(
+    @StringRes title: Int,
+    showDivider: Boolean,
+    onClick: () -> Unit,
+) {
+    Row(
+        Modifier
+            .fillMaxWidth()
+            .heightIn(min = 56.dp)
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            stringResource(title),
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.White,
+            modifier = Modifier.weight(1f),
+        )
+    }
+    if (showDivider) RowDivider()
+}
+
 // ── Row: static info (no interaction) ────────────────────────────────────────
 
 @Composable
-private fun InfoRow(@StringRes title: Int, meta: String) {
+private fun InfoRow(@StringRes title: Int, meta: String, showDivider: Boolean = false) {
     Row(
         Modifier
             .fillMaxWidth()
@@ -329,6 +421,7 @@ private fun InfoRow(@StringRes title: Int, meta: String) {
             color = SrenOnSurfaceVariant,
         )
     }
+    if (showDivider) RowDivider()
 }
 
 // ── Row: radio button (audio profile) ────────────────────────────────────────
@@ -432,9 +525,12 @@ private fun Context.notificationsAllowed(): Boolean =
 
 private fun Context.openNotificationSettings() {
     val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+        Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+            .putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     } else {
         Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null))
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
     runCatching { startActivity(intent) }
 }
