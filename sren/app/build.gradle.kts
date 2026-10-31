@@ -1,6 +1,5 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
@@ -8,7 +7,8 @@ plugins {
 
 android {
     namespace = "com.sren.music"
-    compileSdk = 35
+    // Compose 2026.09 pide compilar contra Android 37; targetSdk no cambia (la app se comporta igual).
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.sren.music"
@@ -19,8 +19,6 @@ android {
         versionName = "0.3.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables { useSupportLibrary = true }
-        // DOOM mode: strip library translations we do not ship (smaller APK).
-        resourceConfigurations += listOf("en", "es")
     }
 
     // Release key from environment variables (GitHub secrets in CI, or exported in the
@@ -56,7 +54,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = "17" }
+    // DOOM mode: strip library translations we do not ship (smaller APK).
+    // AGP 9: localeFilters reemplaza a resourceConfigurations.
+    androidResources { localeFilters += listOf("en", "es") }
     buildFeatures { compose = true; buildConfig = true }
     packaging {
         resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" }
@@ -94,4 +94,9 @@ dependencies {
     implementation(libs.androidx.palette.ktx)
 
     testImplementation(libs.junit)
+}
+
+// AGP 9 trae Kotlin incluido: las opciones del compilador van aquí (antes, kotlinOptions dentro de android).
+kotlin {
+    compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) }
 }

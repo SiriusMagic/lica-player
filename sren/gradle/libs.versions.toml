@@ -1,16 +1,16 @@
 [versions]
 agp = "9.5.0"
-kotlin = "2.0.21"
+kotlin = "2.4.21"
 coreKtx = "1.15.0"
 lifecycle = "2.8.7"
 activityCompose = "1.9.3"
 composeBom = "2026.09.00"
 navigation = "2.8.5"
 media3 = "1.5.1"
-hilt = "2.52"
+hilt = "2.60.1"
 hiltNavigation = "1.2.0"
-room = "2.6.1"
-ksp = "2.0.21-1.0.28"
+room = "2.8.5"
+ksp = "2.3.13"
 coil = "2.7.0"
 palette = "1.0.0"
 junit = "4.13.2"
@@ -42,7 +42,6 @@ androidx-palette-ktx = { group = "androidx.palette", name = "palette-ktx", versi
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
