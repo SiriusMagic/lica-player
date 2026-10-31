@@ -36,6 +36,14 @@
     <string name="home_hint">Escucha algunas canciones y esta pantalla se llenará con tu historial. Mantén pulsada una canción para añadirla a Favoritas.</string>
     <string name="action_favorite">Añadir a Favoritas</string>
     <string name="action_unfavorite">Quitar de Favoritas</string>
+    <string name="action_share">Compartir</string>
+    <string name="action_play_next">Reproducir siguiente</string>
+    <string name="action_add_to_queue">Añadir a la cola</string>
+    <string name="action_delete">Borrar</string>
+    <string name="delete_confirm_title">¿Borrar canción?</string>
+    <string name="delete_confirm_body">"%1$s" se eliminará permanentemente de tu teléfono.</string>
+    <string name="delete_confirm_ok">Borrar</string>
+    <string name="delete_confirm_cancel">Cancelar</string>
     <string name="songs_scanning">Buscando tu música…</string>
     <string name="songs_empty">No se encontraron canciones en este teléfono.</string>
 

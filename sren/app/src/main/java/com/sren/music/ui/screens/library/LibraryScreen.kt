@@ -48,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sren.music.R
 import com.sren.music.data.model.Song
 import com.sren.music.data.settings.SongSort
+import com.sren.music.playback.PlayerViewModel
 import com.sren.music.ui.components.AlbumArt
 import com.sren.music.ui.components.EmptyMessage
 import com.sren.music.ui.components.SongList
@@ -75,13 +76,14 @@ fun LibraryScreen(
     onPlay: (songs: List<Song>, index: Int) -> Unit,
     onShuffle: (songs: List<Song>) -> Unit,
     onOpen: (kind: CollectionKind, key: String, title: String) -> Unit,
+    playerViewModel: PlayerViewModel,
 ) {
     var tab by rememberSaveable { mutableStateOf(LibraryTab.SONGS) }
     Column(Modifier.fillMaxSize()) {
         LibraryChips(current = tab, onSelect = { tab = it })
         when (tab) {
-            LibraryTab.SONGS -> SongsTab(onPlay, onShuffle)
-            LibraryTab.FAVORITES -> FavoritesTab(onPlay, onShuffle)
+            LibraryTab.SONGS -> SongsTab(onPlay, onShuffle, playerViewModel = playerViewModel)
+            LibraryTab.FAVORITES -> FavoritesTab(onPlay, onShuffle, playerViewModel = playerViewModel)
             LibraryTab.FOLDERS -> FoldersTab(onOpen)
             LibraryTab.ARTISTS -> ArtistsTab(onOpen)
             LibraryTab.ALBUMS -> AlbumsTab(onOpen)
@@ -132,13 +134,14 @@ private fun LibraryChips(current: LibraryTab, onSelect: (LibraryTab) -> Unit) {
 private fun SongsTab(
     onPlay: (List<Song>, Int) -> Unit,
     onShuffle: (List<Song>) -> Unit,
+    playerViewModel: PlayerViewModel,
     viewModel: SongsViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value
     when {
         state == null || (state.syncing && state.songs.isEmpty()) -> Loading()
         state.songs.isEmpty() -> EmptyMessage(stringResource(R.string.songs_empty))
-        else -> SongList(state.songs, onPlay) {
+        else -> SongList(state.songs, onPlay, playerViewModel = playerViewModel) {
             item(key = "sort") {
                 SortRow(count = state.songs.size, sort = state.sort, onSort = viewModel::setSort)
             }
@@ -151,13 +154,14 @@ private fun SongsTab(
 private fun FavoritesTab(
     onPlay: (List<Song>, Int) -> Unit,
     onShuffle: (List<Song>) -> Unit,
+    playerViewModel: PlayerViewModel,
     viewModel: FavoritesViewModel = hiltViewModel(),
 ) {
     val songs = viewModel.songs.collectAsStateWithLifecycle().value
     when {
         songs == null -> Loading()
         songs.isEmpty() -> EmptyMessage(stringResource(R.string.favorites_empty))
-        else -> SongList(songs, onPlay) {
+        else -> SongList(songs, onPlay, playerViewModel = playerViewModel) {
             playButtons(onPlayAll = { onPlay(songs, 0) }, onShuffle = { onShuffle(songs) })
         }
     }

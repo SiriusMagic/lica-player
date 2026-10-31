@@ -37,6 +37,14 @@
     <string name="home_hint">Play some songs and this screen fills with your history. Long-press a song to add it to Favorites.</string>
     <string name="action_favorite">Add to Favorites</string>
     <string name="action_unfavorite">Remove from Favorites</string>
+    <string name="action_share">Share</string>
+    <string name="action_play_next">Play next</string>
+    <string name="action_add_to_queue">Add to queue</string>
+    <string name="action_delete">Delete</string>
+    <string name="delete_confirm_title">Delete song?</string>
+    <string name="delete_confirm_body">"%1$s" will be permanently deleted from your device.</string>
+    <string name="delete_confirm_ok">Delete</string>
+    <string name="delete_confirm_cancel">Cancel</string>
     <string name="songs_scanning">Scanning your library…</string>
     <string name="songs_empty">No songs found on this device.</string>
 
