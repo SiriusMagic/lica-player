@@ -1,0 +1,125 @@
+<resources>
+    <string name="tab_settings">Einstellungen</string>
+    <string name="perm_title">Zugriff auf Medien erforderlich</string>
+    <string name="perm_body">Stone braucht Zugriff auf Audio und Videos auf deinem Gerät, um deine Mediathek zu erstellen. Nichts verlässt dein Handy.</string>
+    <string name="perm_grant">Zugriff erlauben</string>
+
+    <string name="settings_audio_profile">Audio und Akku</string>
+    <string name="profile_long_life">Längste Akkulaufzeit</string>
+    <string name="profile_long_life_body">Der Audiochip des Handys spielt die Musik ab, während der Prozessor schläft. Beim Titelwechsel kann eine winzige Pause entstehen. Der Bildschirm läuft mit 60 Hz.</string>
+    <string name="profile_balanced">Ausgewogen</string>
+    <string name="profile_balanced_body">Spart Akku mit dem Audiochip nur, wenn die Titel weiterhin lückenlos ineinander übergehen. Empfohlen.</string>
+    <string name="profile_high_fidelity">High Fidelity</string>
+    <string name="profile_high_fidelity_body">Audio in voller Präzision (32 Bit) für Hi-Res-Dateien, ohne Akkusparen. Für Audiophile.</string>
+
+    <string name="settings_advanced">Erweiterte Steuerung</string>
+    <string name="setting_daily_suggestion">Tagesempfehlung</string>
+    <string name="setting_daily_suggestion_body">Einmal am Tag ein Titel aus den Alben, die du am meisten hörst. Tippe auf die Benachrichtigung, um ihn abzuspielen.</string>
+    <string name="suggestion_channel">Tagesempfehlung</string>
+    <string name="suggestion_channel_body">Ein Titel pro Tag aus deinen Lieblingsalben</string>
+    <string name="suggestion_text">Aus %1$s · Zum Abspielen tippen</string>
+
+    <string name="tab_home">Start</string>
+    <string name="home_for_you">Für dich heute</string>
+    <string name="home_from_album">Aus %1$s</string>
+    <string name="home_recently_played">Zuletzt gehört</string>
+    <string name="home_most_played">Deine meistgehörten</string>
+    <string name="home_favorites">Favoriten</string>
+    <string name="home_recently_added">Zuletzt hinzugefügt</string>
+    <string name="home_hint">Hör ein paar Titel und dieser Bildschirm füllt sich mit deinem Verlauf. Halte einen Titel gedrückt, um ihn zu den Favoriten hinzuzufügen.</string>
+    <string name="action_favorite">Zu Favoriten hinzufügen</string>
+    <string name="action_unfavorite">Aus Favoriten entfernen</string>
+    <string name="songs_scanning">Mediathek wird durchsucht…</string>
+    <string name="songs_empty">Keine Titel auf diesem Gerät gefunden.</string>
+
+    <string name="player_close">Player schließen</string>
+    <string name="player_play">Abspielen</string>
+    <string name="player_pause">Pause</string>
+    <string name="player_next">Weiter</string>
+    <string name="player_previous">Zurück</string>
+    <string name="player_shuffle">Zufall</string>
+    <string name="player_repeat">Wiederholen</string>
+    <string name="player_speed">Wiedergabegeschwindigkeit</string>
+    <string name="player_queue">Warteschlange</string>
+    <string name="player_queue_count">Warteschlange · %1$d Titel</string>
+    <string name="player_queue_remove">Aus Warteschlange entfernen</string>
+    <string name="timer_title">Sleep-Timer</string>
+    <string name="timer_body">Die Musik stoppt, wenn der zu diesem Zeitpunkt laufende Titel endet, damit kein Titel mittendrin abgeschnitten wird.</string>
+    <string name="timer_minutes">%1$d Minuten</string>
+    <string name="timer_end_of_song">Wenn dieser Titel endet</string>
+    <string name="timer_cancel">Timer ausschalten</string>
+    <string name="timer_off_short">Timer</string>
+    <string name="timer_end_of_song_short">Nach diesem Titel</string>
+    <string name="timer_until">Bis %1$s</string>
+
+    <string name="tab_library">Mediathek</string>
+    <string name="home_tagline">Deine lokale Musik zuerst. Keine Werbung, keine Cloud-Pflicht und echte Kontrolle über deine Dateien.</string>
+    <string name="action_rescan">Nach Musik suchen</string>
+
+    <string name="tab_search">Suche</string>
+    <string name="library_songs">Titel</string>
+    <string name="library_folders">Ordner</string>
+    <string name="library_artists">Künstler</string>
+    <string name="library_albums">Alben</string>
+    <string name="library_videos">Videos</string>
+    <string name="library_root_folder">Hauptspeicher</string>
+    <string name="favorites_empty">Noch keine Favoriten. Halte einen Titel gedrückt, um ihn hinzuzufügen.</string>
+    <string name="action_play_all">Alle abspielen</string>
+    <string name="sort_recent">Zuletzt hinzugefügt</string>
+    <string name="sort_title">Titel</string>
+    <string name="sort_artist">Künstler</string>
+    <string name="sort_album">Album</string>
+    <string name="sort_duration">Längste zuerst</string>
+    <string name="search_hint">Titel, Künstler oder Alben</string>
+    <string name="search_clear">Löschen</string>
+    <string name="search_empty_query">Tippe, um deine Musik zu durchsuchen.</string>
+    <string name="search_no_results">Nichts gefunden.</string>
+    <plurals name="song_count">
+        <item quantity="one">%d Titel</item>
+        <item quantity="other">%d Titel</item>
+    </plurals>
+    <plurals name="album_count">
+        <item quantity="one">%d Album</item>
+        <item quantity="other">%d Alben</item>
+    </plurals>
+
+    <!-- Bienvenida de Stone (app/onboarding/*.tsx). -->
+    <string name="onb_choose_language">Wähle deine Sprache</string>
+    <string name="onb_start">Loslegen</string>
+    <!-- El texto original de Stone 1.3.2 quedaba incompleto ("…dass du unsere" + términos, sin verbo final). -->
+    <string name="onb_terms_notice">Mit dem Tippen auf \"Loslegen\" bestätigst du, dass du Folgendes gelesen hast und akzeptierst: unsere</string>
+    <string name="onb_terms">Nutzungsbedingungen</string>
+    <string name="onb_and">und</string>
+    <string name="onb_privacy">Datenschutzrichtlinie</string>
+    <string name="onb_title_1">Spiele</string>
+    <string name="onb_title_2">deine Musik</string>
+    <string name="onb_subtitle_a">Lass uns auf </string>
+    <string name="onb_subtitle_b">deine Musik</string>
+    <string name="onb_subtitle_c"> zugreifen, um deine Songs abzuspielen.</string>
+    <string name="onb_allow_access">Zugriff erlauben</string>
+    <string name="settings_language">Sprache</string>
+
+    <!-- Ajustes y menú de canción (traídos de main) -->
+    <string name="settings_playback">Wiedergabe</string>
+    <string name="setting_gapless">Lückenlose Wiedergabe</string>
+    <string name="setting_gapless_body">Keine Stille zwischen den Titeln. Aktiviert das Offload auf den Audiochip mit lückenloser Wiedergabe, unabhängig vom Profil.</string>
+    <string name="setting_default_speed">Standard-Wiedergabegeschwindigkeit</string>
+    <string name="settings_library">Bibliothek</string>
+    <string name="setting_rescan">Musik suchen</string>
+    <string name="setting_sleep_timer">Schlaf-Timer</string>
+    <string name="setting_sleep_timer_open_player">Öffne zuerst den Player</string>
+    <string name="settings_preferences">Einstellungen</string>
+    <string name="setting_notifications">Benachrichtigungen</string>
+    <string name="settings_about">Über</string>
+    <string name="setting_version">Version</string>
+    <string name="setting_send_feedback">Feedback senden</string>
+    <string name="home_now_playing">Läuft gerade</string>
+    <string name="action_share">Teilen</string>
+    <string name="action_play_next">Als Nächstes abspielen</string>
+    <string name="action_add_to_queue">Zur Warteschlange hinzufügen</string>
+    <string name="action_delete">Löschen</string>
+    <string name="delete_confirm_title">Titel löschen?</string>
+    <string name="delete_confirm_body">\"%1$s\" wird dauerhaft von deinem Gerät gelöscht.</string>
+    <string name="delete_confirm_ok">Löschen</string>
+    <string name="delete_confirm_cancel">Abbrechen</string>
+</resources>

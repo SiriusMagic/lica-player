@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fondo del ícono adaptativo (igual que Stone 1.3.2). -->
+    <color name="iconBackground">#FF000000</color>
+    <color name="stone_background">#FF0A0A0E</color>
+</resources>

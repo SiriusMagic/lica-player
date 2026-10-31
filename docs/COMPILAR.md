@@ -1,13 +1,13 @@
-# Compilar Sren music y seguir programando
+# Compilar Stone y seguir programando
 
 Todo lo necesario para **reconstruir la app desde cero, saber dónde queda cada APK y continuar el código** sin perder nada.
 
 ## Requisitos
 - **JDK 21.** Gradle 8.11 no funciona con JDK 25.
-- **Android SDK** con la plataforma 35. La ruta va en `sren/local.properties` (`sdk.dir=...`), que no se sube a git.
+- **Android SDK** con la plataforma 35. La ruta va en `stone/local.properties` (`sdk.dir=...`), que no se sube a git.
 - En el Codespace ya está todo: el SDK en `/home/codespace/android-sdk` y el JDK 21 en `/home/codespace/java/21.0.12+1-ms`.
 
-## Comandos (desde `sren/`)
+## Comandos (desde `stone/`)
 
 ```bash
 cd sren
@@ -31,17 +31,17 @@ Las opciones `--max-workers=1` e `in-process` existen porque el Codespace tiene 
 
 | Qué | Dónde |
 |---|---|
-| APK de prueba | `sren/app/build/outputs/apk/debug/app-debug.apk` |
-| APK final | `sren/app/build/outputs/apk/release/app-release.apk` |
-| Resultados de las pruebas | `sren/app/build/reports/tests/testDebugUnitTest/index.html` |
-| **Copia guardada por versión** (Codespace) | `/apk/vX.Y.Z/sren-music-X.Y.Z.apk`, explicado en `apk/README.md` |
+| APK de prueba | `stone/app/build/outputs/apk/debug/app-debug.apk` |
+| APK final | `stone/app/build/outputs/apk/release/app-release.apk` |
+| Resultados de las pruebas | `stone/app/build/reports/tests/testDebugUnitTest/index.html` |
+| **Copia guardada por versión** (Codespace) | `/apk/vX.Y.Z/stone-X.Y.Z.apk`, explicado en `apk/README.md` |
 | **Copia permanente** (GitHub) | Pestaña **Releases** del repositorio, una por versión |
 | APK de cada PR | Pestaña **Actions** → la ejecución "App Android" del PR → *Artifacts* (30 días) |
 
-`sren/app/build/` se borra y regenera sola; nunca guardes nada a mano ahí.
+`stone/app/build/` se borra y regenera sola; nunca guardes nada a mano ahí.
 
 ## Publicar una versión nueva
-1. Sube `versionCode` (+1) y `versionName` en `sren/app/build.gradle.kts`.
+1. Sube `versionCode` (+1) y `versionName` en `stone/app/build.gradle.kts`.
 2. Añade la sección `## [X.Y.Z] - fecha` en `CHANGELOG.md`.
 3. Fusiona el PR a `main`.
 4. Crea y sube la etiqueta: `git tag vX.Y.Z && git push origin vX.Y.Z`.

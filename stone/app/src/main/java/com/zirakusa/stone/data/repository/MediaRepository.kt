@@ -1,0 +1,67 @@
+package com.zirakusa.stone.data.repository
+
+import com.zirakusa.stone.data.model.Album
+import com.zirakusa.stone.data.model.Artist
+import com.zirakusa.stone.data.model.Folder
+import com.zirakusa.stone.data.model.Song
+import com.zirakusa.stone.data.model.Video
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
+
+interface MediaRepository {
+    /** Live-updating list of all songs (from Room cache). */
+    fun songs(): Flow<List<Song>>
+
+    /** Live-updating list of all videos (from Room cache). */
+    fun videos(): Flow<List<Video>>
+
+    /** Number of songs in the library, live. */
+    fun songCount(): Flow<Int>
+
+    /** The [limit] most recently added songs, live. */
+    fun recentlyAdded(limit: Int): Flow<List<Song>>
+
+    /** Albums derived from the song cache — no extra MediaStore query. */
+    fun albums(): Flow<List<Album>>
+
+    /** The album that contains [songId], in track order, or empty if the song is gone. */
+    suspend fun albumOf(songId: Long): List<Song>
+
+    fun artists(): Flow<List<Artist>>
+
+    fun folders(): Flow<List<Folder>>
+
+    fun songsOfAlbum(albumId: Long): Flow<List<Song>>
+
+    fun songsOfArtist(artist: String): Flow<List<Song>>
+
+    fun songsInFolder(folder: String): Flow<List<Song>>
+
+    /** Songs whose title, artist or album contains [text] (case-insensitive), at most 200. */
+    fun search(text: String): Flow<List<Song>>
+
+    /** True while a scan is writing to Room. */
+    val isSyncing: StateFlow<Boolean>
+
+    /**
+     * Brings Room up to date with MediaStore, doing as little as possible:
+     * nothing if the library is unchanged, only the changed rows if it can,
+     * a full scan only when it must. [force] always does a full scan.
+     */
+    suspend fun syncLibrary(force: Boolean = false)
+
+    /**
+     * Syncs once, then re-syncs whenever the device library changes. Suspends
+     * until cancelled; the caller runs it only while the UI is visible.
+     */
+    suspend fun watchLibrary()
+
+    /**
+     * Removes [song] from the device via MediaStore and from the Room cache.
+     * On API 30+ uses [MediaStore.createDeleteRequest] (the system shows a
+     * confirmation dialog; the caller must launch the resulting IntentSender).
+     * Returns an [IntentSender] on API 30+, or null on older devices (where
+     * the file is deleted directly via [File.delete] and no dialog is needed).
+     */
+    suspend fun deleteSong(song: com.zirakusa.stone.data.model.Song): android.content.IntentSender?
+}

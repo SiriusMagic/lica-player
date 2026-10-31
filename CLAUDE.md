@@ -1,6 +1,6 @@
 # lica-player
 
-Espacio del reproductor de música Lica. El código de la app Android (Sren music) está en `sren/` (notas técnicas abajo). La meta es **Stone 1.4**: la apariencia de Stone 1.3.2 (`legado/stone/`) sobre la base de Lica. Plan en `docs/VERSIONES.md`.
+Espacio del reproductor de música Lica. El código de la app Android (Stone 1.4, antes Sren music) está en `stone/` (notas técnicas abajo). La meta es **Stone 1.4**: la apariencia de Stone 1.3.2 (`legado/stone/`) sobre la base de Lica. Especificación completa (cada apartado, gesto y señal): `docs/STONE-1.4.md`.
 
 ## Reglas del dueño (aplican a todo cambio)
 
@@ -22,7 +22,12 @@ direction, but check their technical claims (several have been wrong, see below)
 
 ## What this workspace is
 
-- `sren/` — **Sren music** (formerly Lica Player; renamed 2026-10-29: package `com.sren.music`).
+- `stone/` — **Stone 1.4** (formerly Lica Player → Sren music; renamed to Stone 2026-10-30: package
+  `com.zirakusa.stone`, same as Stone 1.3.2; versionCode 20).
+- **Verify the spec:** `python3 -I herramientas/verificar_stone.py` (CI runs it). Every ✅ row in
+  `docs/STONE-1.4.md` must cite its code as `` `stone/path:text` ``. Project skill: `/verificar-stone`.
+- Language: `core/locale/AppLanguage` (own prefs file, wraps the Activity context; no AppCompat).
+  Onboarding (language → welcome) is gated by `AppSettings.languageChosen/onboarded` in `MainActivity`.
   The only app. **Read `docs/ARQUITECTURA.md` (code map) and `docs/COMPILAR.md` (build, APK paths,
   releases, signing) first.** Gestures are listed in `docs/GESTOS.md` — keep it updated.
 - `docs/` — architecture, gestures, build guide, version history (`VERSIONES.md`), folder inventory
@@ -34,7 +39,7 @@ direction, but check their technical claims (several have been wrong, see below)
 ## Goal: Stone 1.4 (user decision, 2026-10-30)
 Take Stone 1.3.2 and rebuild it on the Lica base: same name, icons, colors, screens and features, but native
 Kotlin (Lica player/service, event-driven updates, zero-scan, battery profiles), far less RAM/battery/size.
-Screen-by-screen table: `docs/VERSIONES.md`. Not ported: Stone's YouTube downloader (`backend/`, yt-dlp).
+Full spec (every screen, gesture, signal, setting): `docs/STONE-1.4.md` — update its Estado column in every PR. Not ported: Stone's YouTube downloader (`backend/`, yt-dlp).
 Keep Lica extras (Home "Para ti hoy", stats, favorites, daily suggestion, audio profiles).
 
 ## Clean-room boundary (do not cross)
@@ -68,7 +73,7 @@ its cost. Rules already applied (keep them):
   (`GENERATION_MODIFIED > saved`) / full scan. Below API 30: count + newest
   DATE_MODIFIED signature. Stamp stored in SharedPreferences `library_sync`.
   A ContentObserver watches for changes only while the app is visible
-  (`repeatOnLifecycle(STARTED)` in `SrenNavHost`).
+  (`repeatOnLifecycle(STARTED)` in `StoneNavHost`).
 - Deletes in batches of 500 (SQLite 999-variable limit on old Android).
 - No sync without read permission (would save an "empty library" stamp).
 - `resourceConfigurations` en + es; minify + shrinkResources in release.
@@ -83,8 +88,8 @@ Corrected claims from the pasted messages, for the record:
 
 Kotlin 2.0.21, AGP 8.7.3, Gradle 8.11.1, compileSdk/targetSdk 35, minSdk 25,
 Compose BOM 2024.12.01 (Material 3), Navigation Compose, Media3 1.5.1, Hilt 2.52 + KSP,
-Room 2.6.1, Coil 2.7.0 (+ coil-video), Palette. Package/applicationId `com.sren.music`
-(installs as a new app next to old Lica builds). Cache DB file `library.db` (`LibraryDatabase`).
+Room 2.6.1, Coil 2.7.0 (+ coil-video), Palette. Package/applicationId `com.zirakusa.stone`
+(replaces Stone 1.3.2 once installed, after a one-time uninstall because the signing key differs). Cache DB file `library.db` (`LibraryDatabase`).
 
 ## Status (v0.2.0, 2026-10-29)
 
@@ -101,7 +106,7 @@ Technical decisions worth keeping (details in the code's KDoc):
   CPU sleeps in offload); on player events it sets `pauseAtEndOfMediaItems` when time runs out during
   the current song. UI shows the end time.
 - User data in `UserDatabase` (file `stats.db`, v2: `play_stats`, `favorites`; real migrations only,
-  schemas in `sren/app/schemas/`). `PlayTracker` counts a play after 30 s or half the track.
+  schemas in `stone/app/schemas/`). `PlayTracker` counts a play after 30 s or half the track.
 - Daily suggestion: inexact non-wakeup `AlarmManager.RTC` ~18:00, re-armed on app start and by
   `BootReceiver`; least-played song of one of the 5 most-played albums; skipped while music plays.
 - Library cache `LibraryDatabase` (`library.db`, v2 adds `songs.folder` from RELATIVE_PATH/DATA) is

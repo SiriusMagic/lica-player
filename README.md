@@ -1,17 +1,19 @@
-# Sren music — Reproductor de música
+# Stone — Reproductor de música
 
-**Sren music** es un reproductor de música y video para Android, sin anuncios, pensado para gastar lo mínimo de batería, memoria y datos. Antes se llamaba **Lica**.
+**Stone** es un reproductor de música y video para Android, sin anuncios, pensado para gastar lo mínimo de batería, memoria y datos. **Stone 1.4** (en curso) tiene el aspecto de Stone 1.3.2 y el motor de Lica (antes Sren music).
+
+Para ver qué apartados de Stone ya están: `python3 herramientas/verificar_stone.py` (lista completa en [docs/STONE-1.4.md](docs/STONE-1.4.md)).
 
 ## Dónde está cada cosa
 
-- [`sren/`](./sren): la app Android (Kotlin + Jetpack Compose + Media3).
-- [`docs/`](./docs): cómo está hecha ([arquitectura](docs/ARQUITECTURA.md), [gestos](docs/GESTOS.md)), [cómo compilarla](docs/COMPILAR.md), [historia de versiones](docs/VERSIONES.md) e [inventario de carpetas](docs/INVENTARIO.md).
+- [`stone/`](./stone): la app Android (Kotlin + Jetpack Compose + Media3).
+- [`docs/`](./docs): cómo está hecha ([arquitectura](docs/ARQUITECTURA.md), [gestos](docs/GESTOS.md)), [cómo compilarla](docs/COMPILAR.md), [**especificación de Stone 1.4**](docs/STONE-1.4.md), [historia de versiones](docs/VERSIONES.md) e [inventario de carpetas](docs/INVENTARIO.md).
 - [`legado/stone/`](./legado/stone): código de **Stone 1.3.2**, la referencia de aspecto y funciones que se pasan a la app. Solo referencia.
 - [`CHANGELOG.md`](./CHANGELOG.md): qué cambió en cada versión.
 
 ## Descargar la app
 
-La última versión está en la sección **[Releases](https://github.com/SiriusMagic/lica-player/releases)** (archivo `sren-music-X.Y.Z.apk`).
+La última versión está en la sección **[Releases](https://github.com/SiriusMagic/lica-player/releases)** (archivo `stone-X.Y.Z.apk`).
 
 ## Objetivo
 

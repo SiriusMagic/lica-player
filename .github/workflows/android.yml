@@ -4,10 +4,10 @@ name: App Android
 
 on:
   pull_request:
-    paths: ["sren/**", ".github/workflows/android.yml"]
+    paths: ["stone/**", "docs/STONE-1.4.md", "herramientas/verificar_stone.py", ".github/workflows/android.yml"]
   push:
     branches: [main]
-    paths: ["sren/**", ".github/workflows/android.yml"]
+    paths: ["stone/**", "docs/STONE-1.4.md", "herramientas/verificar_stone.py", ".github/workflows/android.yml"]
 
 permissions:
   contents: read
@@ -17,9 +17,12 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: sren
+        working-directory: stone
     steps:
       - uses: actions/checkout@v7
+      - name: Apartados de Stone 1.4 e idiomas
+        working-directory: .
+        run: python3 -I herramientas/verificar_stone.py
       - uses: actions/setup-java@v6
         with:
           distribution: temurin
@@ -29,6 +32,6 @@ jobs:
         run: ./gradlew --no-daemon :app:testDebugUnitTest :app:assembleDebug
       - uses: actions/upload-artifact@v7
         with:
-          name: sren-music-debug
-          path: sren/app/build/outputs/apk/debug/*.apk
+          name: stone-debug
+          path: stone/app/build/outputs/apk/debug/*.apk
           retention-days: 30
